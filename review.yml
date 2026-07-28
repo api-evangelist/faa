@@ -1,0 +1,492 @@
+aid: faa
+name: Federal Aviation Administration
+review:
+  question: >-
+    What would it cost a consumer of Federal Aviation Administration data or APIs
+    to leave, and what does a developer actually have to sign to get in?
+  date: '2026-07-28'
+  reviewer: API Evangelist
+  sector: Travel & Aviation
+  tier: regulator
+  homeMarket: United States
+  method: >-
+    Live HTTP probing of faa.gov and its subdomains plus harvest of the public
+    Gravitee developer portal catalog API. Every URL below records the HTTP status
+    observed on 2026-07-28. No endpoint, spec, host or scope in this file was
+    inferred; each was either fetched or explicitly recorded as unreachable.
+
+findings:
+  summary: |
+    The FAA is not a distribution participant. It sells no inventory, is not a GDS,
+    is not an NDC party, and has no channel-manager or OTA relationship. It is the
+    upstream source of the aeronautical facts that the entire US travel chain
+    depends on, so the switching-cost question inverts: nobody can leave the FAA,
+    because there is no second US civil aviation authority — but the FAA imposes
+    almost no contractual friction on the data it does publish openly.
+
+    The public surface is real and better than most regulators. api.faa.gov
+    redirects (HTTP 301) to a Gravitee APIM developer portal at
+    portal.apic4e.faa.gov (HTTP 200) whose portal catalog API is itself
+    unauthenticated and returns seven public API records. Four of those carry
+    attached OpenAPI documents, all four of which were harvested verbatim and all
+    four of which parse. Two of the APIs — the Airport Status Web Service and the
+    Aeronautic Product Release API — answer unauthenticated with real data, and the
+    ASWS OpenAPI declares a Creative Commons Zero (CC0) licence in
+    info.license. Beyond the portal the FAA runs a CKAN 2.11.4 catalog, two ArcGIS
+    Open Data hubs with DCAT-US 1.1 feeds and full bulk export, a 73 MB releasable
+    aircraft registry ZIP, and unauthenticated JSON/XML feeds for TFRs and national
+    airspace status.
+
+    The gated half is equally real. The NOTAM API returns a structured HTTP 401 on
+    an unauthenticated GET, the Air Carrier PRD API requires client_id and
+    client_secret headers and is restricted by regulation to specific operator
+    classes, and SWIM requires an executed agreement. And in one place the FAA
+    deliberately runs an intermediated model that rhymes with the GDS structure:
+    LAANC drone airspace authorization is only obtainable through FAA-Approved UAS
+    Service Suppliers, never directly from the agency.
+
+  probes:
+    - url: https://api.faa.gov/
+      status: 301
+      redirectsTo: https://portal.apic4e.faa.gov/
+      note: Official FAA developer portal. Gravitee.io APIM portal (Apache-2.0 header in served HTML).
+    - url: https://portal.apic4e.faa.gov/
+      status: 200
+      note: Angular SPA portal shell. Returns 200 for arbitrary paths, so SPA 200s are not treated as evidence.
+    - url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis?page=1&size=200
+      status: 200
+      note: Unauthenticated Gravitee portal catalog API. 7 public API records returned.
+    - url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/configuration
+      status: 200
+      note: >-
+        Portal config confirms userCreation.enabled=true and
+        applicationCreation.enabled=true — self-serve developer signup and API key
+        issuance. apikeyHeader is X-Gravitee-Api-Key.
+    - url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/categories
+      status: 200
+      note: Single category "Public" — "Publicly available APIs", total_apis 2.
+    - url: https://external-api.faa.gov/asws/api/airport/delays
+      status: 200
+      note: Unauthenticated. Real JSON ground delay / ground stop payload keyed on IATA codes.
+    - url: https://external-api.faa.gov/asws/api/airport/status/ATL
+      status: 200
+      note: Unauthenticated.
+    - url: https://external-api.faa.gov/apra/vfr/sectional/info?edition=current&format=json&geoname=Seattle
+      status: 200
+      note: Unauthenticated. XML in FAA-proprietary namespace http://arpa.ait.faa.gov/arpa_response.
+    - url: https://external-api.faa.gov/apra/nfdc/nasr/info?edition=current
+      status: 200
+      note: NASR 28-day subscription edition 7, edition date 07/09/2026.
+    - url: https://external-api.faa.gov/notamapi/v1/notams
+      status: 401
+      note: >-
+        Body {"message":"Unauthorized","http_status_code":401}. The bare host
+        https://external-api.faa.gov/ returns 404, so the 401 confirms the route
+        exists behind credentials. No public OpenAPI attached in the portal catalog.
+    - url: https://external-api.faa.gov/
+      status: 404
+      note: Control probe establishing that 401s on this host are route-specific.
+    - url: https://nasstatus.faa.gov/api/airport-status-information
+      status: 200
+      note: Unauthenticated XML feed. Real ground stop and ground delay program data.
+    - url: https://tfr.faa.gov/tfrapi/exportTfrList
+      status: 200
+      note: Unauthenticated application/json, 28,701 bytes. NOTAM ids, ARTCC facility ids, states.
+    - url: https://catalog.data.faa.gov/api/3/action/status_show
+      status: 200
+      note: 'CKAN 2.11.4, site_title "Federal Aviation Administration".'
+    - url: https://catalog.data.faa.gov/api/3/action/package_list
+      status: 200
+      note: 6 datasets, all aeronautical chart products.
+    - url: https://catalog.data.faa.gov/data.json
+      status: 200
+      note: DCAT-US 1.1 (project-open-data.cio.gov/v1.1/schema), 6 datasets.
+    - url: https://ais-faa.opendata.arcgis.com/data.json
+      status: 200
+      note: >-
+        DCAT-US 1.1, 73 datasets, publisher "Federal Aviation Administration - AIS".
+        Distributions include ArcGIS GeoServices REST API, CSV, ZIP, GeoJSON, KML.
+    - url: https://udds-faa.opendata.arcgis.com/api/feed/dcat-us/1.1.json
+      status: 200
+      note: DCAT-US 1.1, 28 UAS datasets including the UAS Facility Map LAANC altitude grid.
+    - url: https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services?f=json
+      status: 200
+      note: ArcGIS Online feature service directory backing both FAA open data hubs.
+    - url: https://registry.faa.gov/database/ReleasableAircraft.zip
+      status: 200
+      note: 72,996,601 bytes, application/x-zip-compressed. Full releasable US aircraft registry.
+    - url: https://registry.faa.gov/aircraftinquiry/Search/NNumberInquiry
+      status: 200
+    - url: https://www.faa.gov/data
+      status: 200
+      note: >-
+        FAA Data Portal. Verbatim — "Developers can easily integrate FAA dataset
+        into software applications thanks to the FAA's Application Programming
+        Interfaces (APIs). Get started by creating an API key" and "Request access
+        to SWIM via the Agreement Portal."
+    - url: https://www.faa.gov/air_traffic/technology/swim
+      status: 200
+    - url: https://www.faa.gov/air_traffic/technology/swim/products/get_connected
+      status: 200
+      note: >-
+        Verbatim — "The SWIFT Portal is a publicly accessible cloud-based system
+        dedicated to providing near real-time FAA SWIM data via Solace JMS
+        messaging." Non-SWIFT services (CDM data elements, TFMS Request/Reply, TFMS
+        International Data Provider) require a request to Data-To-Industry@faa.gov
+        "reviewed in accordance with FAA policy."
+    - url: https://www.faa.gov/air_traffic/technology/swim/sfdps
+      status: 200
+      note: >-
+        Verbatim — SFDPS "provides additional functionality including transformation
+        of data into Flight Information Exchange Model (FIXM) and Aeronautical
+        Information Exchange Model (AIXM), flight-matching across centers, and
+        Globally Unique Flight Identifier (GUFI) generation."
+    - url: https://www.faa.gov/air_traffic/technology/swim/stdds
+      status: 200
+      note: References "FIXM-Mediated STDDS Data Overview".
+    - url: https://www.faa.gov/air_traffic/technology/swim/governance/standards
+      status: 200
+      note: >-
+        FAA-STD-065B (Web Service Description Documents), FAA-STD-073A (Java
+        Messaging Service Description Documents), FAA-STD-074, SWIM-002.
+    - url: https://portal.swim.faa.gov/
+      status: 200
+      note: SWIFT Portal reachable but renders a browser-compatibility gate; catalog not machine-readable to an unauthenticated client.
+    - url: https://www.faa.gov/uas/programs_partnerships/data_exchange
+      status: 200
+      note: >-
+        Verbatim — "Companies approved to provide LAANC Services are known as FAA
+        Approved UAS Service Suppliers (USS)."
+    - url: https://drs.faa.gov/browse
+      status: 200
+    - url: https://drs.faa.gov/api/drs/search
+      status: 403
+      note: Dynamic Regulatory System search API present but rejects unauthenticated/unbrowsered calls. Not listed.
+    - url: https://adip.faa.gov/agis/public/
+      status: 200
+      note: Airport Data and Information Portal, AngularJS app. No public REST contract found; /agis/rest/services returns the SPA shell, not an ArcGIS directory. Not listed.
+    - url: https://developer.faa.gov/
+      status: 000
+      note: Does not resolve.
+    - url: https://developers.faa.gov/
+      status: 000
+      note: Does not resolve.
+    - url: https://docs.faa.gov/
+      status: 000
+      note: Does not resolve.
+    - url: https://swim.faa.gov/
+      status: 000
+      note: Does not resolve. SWIM lives under www.faa.gov and portal.swim.faa.gov.
+    - url: https://www.faa.gov/api
+      status: 404
+    - url: https://www.faa.gov/developers
+      status: 404
+    - url: https://api.github.com/users/faa
+      status: 200
+      note: >-
+        NEGATIVE FINDING — github.com/faa is an unrelated individual user account
+        (type User, repos include Monero research and NASA WorldWind forks), NOT the
+        Federal Aviation Administration. Deliberately excluded from apis.yml.
+
+  portal:
+    url: https://api.faa.gov/
+    confirmed: true
+    software: Gravitee.io APIM Developer Portal
+    selfServe: true
+    evidence: >-
+      Portal configuration endpoint reports userCreation.enabled=true and
+      applicationCreation.enabled=true; the FAA Data Portal page instructs
+      developers to "Get started by creating an API key". Two of the catalogued
+      APIs additionally need no key at all.
+    publicApisListed: 7
+    publicApisWithOpenAPI: 4
+    excludedFromApisYml:
+      - name: demosub
+        reason: Obvious internal demo artifact. Internal entrypoint only, no description, no spec.
+      - name: Data Set API
+        reason: Entrypoint internal-api.faa.gov only, no description, no attached specification.
+
+  specsHarvested:
+    - file: openapi/faa-airport-status-web-service-openapi.yml
+      title: Airport Status Web Service
+      version: 1.2.1
+      openapi: 3.0.1
+      operations: 2
+      sourceURL: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/a4c8271d-a54a-4dcc-8827-1da54a4dccad/pages/c8fa6cc8-447d-4ba0-ba6c-c8447dbba0a1/content
+      httpStatus: 200
+      fetchedDate: '2026-07-28'
+      parses: true
+      note: >-
+        info.license.name "Creative Commons 0 (CC0)",
+        info.license.url https://creativecommons.org/publicdomain/zero/1.0/legalcode.
+        No securitySchemes declared; unauthenticated calls confirmed working.
+    - file: openapi/faa-aeronautic-product-release-api-openapi.yml
+      title: Aeronautic Product Release API
+      version: 1.4.0
+      openapi: 3.0.1
+      operations: 34
+      sourceURL: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/d8790d55-9ecc-4d72-b90d-559eccad7286/pages/719dfd44-f165-4f07-9dfd-44f1658f07e6/content
+      httpStatus: 200
+      fetchedDate: '2026-07-28'
+      parses: true
+      note: No securitySchemes declared; unauthenticated calls confirmed working.
+    - file: openapi/faa-air-carrier-prd-api-openapi.yml
+      title: PRD Air Carrier API
+      version: v1
+      openapi: 3.0.0
+      operations: 8
+      sourceURL: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/51c35874-3873-4124-8358-743873012421/pages/8c9a2541-aa78-4642-9a25-41aa7856421e/content
+      httpStatus: 200
+      fetchedDate: '2026-07-28'
+      parses: true
+      note: >-
+        Every operation declares required client_id and client_secret header
+        parameters rather than a components.securitySchemes entry.
+    - file: openapi/faa-safety-assurance-system-api-openapi.yml
+      title: sas-api
+      version: 1.0.0
+      openapi: 3.0.0
+      operations: 1
+      sourceURL: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/4f7eeb3e-2012-4095-beeb-3e2012e09593/pages/bd564db4-8c26-49cc-964d-b48c26c9cc7b/content
+      httpStatus: 200
+      fetchedDate: '2026-07-28'
+      parses: true
+      note: components.securitySchemes declares apiKey and appId. Server URL is relative ("/").
+
+switchingCost:
+  interfaceShape:
+    value: standard-plus-proprietary
+    standardsNamed:
+      - name: OpenAPI
+        version: 3.0.0 / 3.0.1
+        where: All four harvested FAA specs.
+      - name: FIXM (Flight Information Exchange Model)
+        version: not stated on the public SWIM pages
+        where: SWIM SFDPS and STDDS, per faa.gov/air_traffic/technology/swim/sfdps and /stdds.
+      - name: AIXM (Aeronautical Information Exchange Model)
+        version: not stated on the public SWIM pages
+        where: SWIM SFDPS transformation output.
+      - name: DCAT-US
+        version: '1.1'
+        where: catalog.data.faa.gov/data.json, ais-faa.opendata.arcgis.com/data.json, udds-faa.opendata.arcgis.com.
+      - name: CKAN Action API
+        version: CKAN 2.11.4
+        where: catalog.data.faa.gov/api/3/action.
+      - name: Esri ArcGIS GeoServices REST
+        version: not stated
+        where: services6.arcgis.com/ssFJjBXIUyZDrSYZ, both FAA open data hubs.
+      - name: Java Message Service (JMS) over Solace
+        version: n/a
+        where: SWIM Cloud Distribution Service, governed by FAA-STD-073A.
+      - name: GeoJSON / KML / CSV / Shapefile
+        version: n/a
+        where: ArcGIS hub bulk download distributions.
+    proprietaryElements:
+      - >-
+        APRA responses use the FAA-only XML namespace
+        http://arpa.ait.faa.gov/arpa_response — a shape no other party implements.
+      - >-
+        ASWS, PRD, SAS and DMS are FAA-designed REST resource shapes. They are
+        documented in OpenAPI, but no second implementer exists.
+      - >-
+        FAA-STD-065B / FAA-STD-073A / FAA-STD-074 / SWIM-002 are FAA-authored
+        service description standards, not industry ones.
+    reasoning: >-
+      Where the FAA touches international aviation information exchange it uses the
+      ICAO-lineage open models (FIXM, AIXM) and generic government open-data
+      standards (DCAT-US, CKAN, ArcGIS/GeoJSON). Where it publishes its own product
+      APIs it uses proprietary resource shapes described with an open specification
+      language. Documented in a standard, not standardised.
+
+  secondSource:
+    value: no-alternative
+    reasoning: >-
+      There is exactly one civil aviation authority for the United States. NOTAMs,
+      TFRs, the NASR 28-day subscription, terminal procedures, N-Number registration,
+      airman certification, the Pilot Records Database and LAANC authorization have
+      no lawful substitute source. Every commercial provider of this data is a
+      redistributor of FAA output.
+    alternativesConsidered:
+      - name: NOAA Aviation Weather Center (aviationweather.gov)
+        verdict: >-
+          Different US agency, adjacent data only (METAR/TAF/PIREP). Verified live
+          (HTTP 200 on /api/data/metar?ids=KATL) but does not substitute for any
+          FAA product.
+      - name: EUROCONTROL EAD / EASA
+        verdict: European AIS. Not a substitute for US airspace or US registry data.
+      - name: Jeppesen, ForeFlight, Garmin, Lido, NavBlue
+        verdict: >-
+          Commercial chart and nav-data vendors. Genuine alternatives to each other
+          for packaging and delivery, but all derive from FAA source data. Switching
+          between them is a project; switching away from the FAA is impossible.
+      - name: FlightAware, Flightradar24, Cirium, OAG
+        verdict: >-
+          Flight-tracking and schedule aggregators. Alternatives to each other for
+          derived flight status, and they blend ADS-B and airline feeds, but the
+          regulatory layer still traces to the FAA.
+      - name: Aloft, Avision, UASidekick and other FAA-Approved USS
+        verdict: >-
+          Interchangeable with one another for LAANC submission — the FAA approves
+          multiple suppliers on the same authorization pathway — but the pathway
+          itself has no alternative.
+
+  exitPath:
+    value: bulk-export-documented
+    operationsCited:
+      - 'GET https://external-api.faa.gov/apra/nfdc/nasr/chart — NASR 28-day subscription ZIP (edition endpoint verified 200, edition 7, 07/09/2026).'
+      - 'GET https://external-api.faa.gov/apra/{product}/chart — 17 chart product families, each with a bulk download operation.'
+      - 'https://registry.faa.gov/database/ReleasableAircraft.zip — 200, 72,996,601 bytes, full releasable aircraft registry.'
+      - 'https://catalog.data.faa.gov/api/3/action/package_list and /data.json — CKAN + DCAT-US 1.1 whole-catalog enumeration.'
+      - 'https://ais-faa.opendata.arcgis.com/api/download/v1/items/{id}/csv?layers=0 — per-dataset bulk CSV; GeoJSON, KML, ZIP shapefile also offered on 73 AIS and 28 UAS datasets.'
+    caveat: >-
+      Export is comprehensive for published reference data. It is not a
+      data-portability right over an account's own records — a Part 121 operator
+      that has submitted pilot records into PRD has no documented bulk retrieval
+      of its own submissions; the PRD API's search operations are per-request, not
+      an export. No GDPR-style portability commitment applies; the applicable
+      regime is the Privacy Act and FOIA, and the FAA publishes a FOIA electronic
+      reading room (https://www.faa.gov/foia/electronic_reading_room, HTTP 200)
+      rather than a self-service export.
+
+  identifierPortability:
+    summary: >-
+      Overwhelmingly shared industry identifiers — the FAA is an issuer of them, not
+      a holder of private keys.
+    identifiersFound:
+      - 'IATA three-letter airport codes — ASWS path parameter airportCode; NAS status feed ARPT elements (ATL, EWR, JFK, LGA, SFO).'
+      - 'ICAO four-letter location indicators — NOTAM API icaoLocation parameter (KATL probed).'
+      - 'US aircraft registration marks (N-Numbers) — registry.faa.gov aircraft inquiry and the releasable registry ZIP.'
+      - 'FAA airman certificate numbers — the join key for the Pilot Records Database.'
+      - 'NOTAM identifiers — e.g. 6/9404, 6/9403 observed live in the TFR list API.'
+      - 'ARTCC facility identifiers — ZSE, ZLC observed live in the TFR list API.'
+      - 'Chart geonames and edition numbers — APRA (geoname "Seattle", editionNumber 97).'
+      - 'GUFI (Globally Unique Flight Identifier) — generated by SWIM SFDPS, an ICAO-aligned flight key.'
+      - 'FAA Designee Numbers and ODA Key IDs — DMS lookup keys; these are FAA-proprietary and do not travel.'
+      - 'ArcGIS item IDs — hub-internal opaque keys on open data downloads; incidental, not the data model.'
+    verdict: >-
+      A consumer's integration is keyed on identifiers that every other aviation
+      system already understands. Rebuilding against a different source would fail
+      on availability of the data, not on translating the keys.
+
+  contractualLockIn:
+    value: essentially none published for the open products; eligibility restrictions and an agreement for the gated ones
+    verbatim:
+      - source: openapi/faa-airport-status-web-service-openapi.yml (info.license)
+        text: 'Creative Commons 0 (CC0) — https://creativecommons.org/publicdomain/zero/1.0/legalcode'
+      - source: api.faa.gov portal catalog record for Air Carrier PRD API
+        text: >-
+          "This API enables data submission to the Pilot Records Database (PRD).
+          Access is restricted to operators under Part 121, 135, 125, 91K, Air Tour,
+          Public Aircraft, or 91 Corporate. Requests for access from any other public
+          or private entities will not be authorized."
+      - source: https://www.faa.gov/data
+        text: '"Request access to SWIM via the Agreement Portal."'
+      - source: https://www.faa.gov/air_traffic/technology/swim/products/get_connected
+        text: >-
+          "To access the following services, please submit your request to
+          Data-To-Industry@faa.gov: Collaborative Decision Making (CDM) Data
+          Elements... TFMS Request/Reply, TFMS International Data Provider. Your
+          request will be reviewed in accordance with FAA policy."
+      - source: https://www.faa.gov/uas/programs_partnerships/data_exchange
+        text: '"Companies approved to provide LAANC Services are known as FAA Approved UAS Service Suppliers (USS)."'
+    notPublished:
+      - No minimum term found.
+      - No exclusivity clause found.
+      - No termination notice period found.
+      - No per-transaction or per-segment fee found on any probed API.
+      - No published revocation-on-account-closure policy for the developer portal.
+    verdict: >-
+      The commercial cost of leaving is zero. The regulatory cost of leaving is
+      absolute — a certificated operator cannot decline to use the PRD API, and a
+      drone operator cannot decline LAANC. Lock-in here is statutory, not contractual.
+
+  accessGate:
+    value: self-serve
+    perSurface:
+      - surface: Airport Status Web Service (ASWS)
+        gate: none — unauthenticated HTTP 200 verified
+      - surface: Aeronautic Product Release API (APRA)
+        gate: none — unauthenticated HTTP 200 verified
+      - surface: NAS Status feed, TFR list API
+        gate: none — unauthenticated HTTP 200 verified
+      - surface: CKAN catalog, AIS and UDDS ArcGIS open data hubs, releasable registry ZIP
+        gate: none — unauthenticated HTTP 200 verified
+      - surface: NOTAM API
+        gate: >-
+          self-serve API key from api.faa.gov — portal permits user and application
+          creation without approval; unauthenticated call returns 401
+      - surface: Air Carrier PRD API
+        gate: >-
+          accredited-or-licensed — restricted by 14 CFR operating certificate class
+          (Part 121, 135, 125, 91K, Air Tour, Public Aircraft, 91 Corporate)
+      - surface: SWIM / SCDS
+        gate: commercial-agreement — executed SWIM agreement via the Agreement Portal
+      - surface: LAANC
+        gate: partner-only — FAA-Approved UAS Service Supplier onboarding
+    whatADeveloperMustSign: >-
+      For the open products, nothing at all. For a portal API key, a Gravitee account
+      and application registration on api.faa.gov, with no published agreement text.
+      For PRD, proof of an FAA operating certificate in an eligible class. For SWIM,
+      an executed FAA SWIM agreement. For LAANC, FAA USS approval.
+
+  distributionModel:
+    value: not-applicable
+    reasoning: >-
+      The FAA is a regulator and air navigation service provider. It does not
+      distribute, resell or intermediate travel inventory. It has no GDS
+      relationship, no channel manager, no OTA presence, and issues no fares.
+    ndcPosture: >-
+      Not applicable. IATA NDC governs airline offer and order distribution; the FAA
+      has no role in it. Consumer disclosure and ticketing rules in the United States
+      sit with the Department of Transportation (14 CFR Parts 250, 259, 399), not the
+      FAA. No NDC reference of any kind was found anywhere on faa.gov during this
+      review.
+    regulatoryCounterweight: >-
+      The FAA's distribution-shaped mandates run the other direction — it compels
+      industry to publish INTO the agency rather than governing how industry sells.
+      14 CFR Part 111 forces air carriers to submit and query pilot records through
+      the Air Carrier PRD API; the SAS API takes passenger discrepancy reports; Remote
+      ID forces drone broadcast. The one place the FAA reproduces an intermediation
+      structure is LAANC, where drone operators cannot obtain airspace authorization
+      directly and must transact through an approved USS — a mandated middle layer
+      that is structurally the same idea as a GDS, but with the intermediaries
+      approved, unpaid by the agency, and mutually interchangeable.
+
+sources:
+  - url: https://api.faa.gov/
+    type: DeveloperPortal
+    note: Redirects 301 to portal.apic4e.faa.gov, a Gravitee APIM developer portal.
+  - url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis
+    type: APIReference
+    note: Unauthenticated portal catalog API; source of all four harvested OpenAPI documents.
+  - url: https://www.faa.gov/data
+    type: Documentation
+    note: FAA Data Portal; names the developer portal, SWIM agreement portal and aeronautical data.
+  - url: https://www.faa.gov/air_traffic/technology/swim
+    type: Documentation
+    note: SWIM program, FIXM/AIXM/GUFI, JMS over Solace, FAA-STD service description standards.
+  - url: https://catalog.data.faa.gov/api/3/action/status_show
+    type: APIReference
+    note: CKAN 2.11.4 Action API.
+  - url: https://ais-faa.opendata.arcgis.com/data.json
+    type: DCAT
+    note: DCAT-US 1.1 catalog, 73 AIS datasets with bulk export distributions.
+  - url: https://udds-faa.opendata.arcgis.com/api/feed/dcat-us/1.1.json
+    type: DCAT
+    note: DCAT-US 1.1 catalog, 28 UAS datasets.
+  - url: https://www.faa.gov/uas/programs_partnerships/data_exchange
+    type: Documentation
+    note: LAANC and the FAA-Approved UAS Service Supplier intermediation model.
+
+actions:
+  apisYmlCreated: true
+  apisListed: 11
+  specsHarvested: 4
+  openapiDirectory: openapi/
+  gated: false
+  status: built
+  notes: >-
+    Bootstrap only — identity, honest public API surface, and spec harvest.
+    Enrichment (plans, rate limits, authentication, security, scopes, blogs,
+    screenshots) runs separately. github.com/faa was checked and is NOT the FAA;
+    no GitHub organization property was recorded.
