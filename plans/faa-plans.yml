@@ -1,0 +1,117 @@
+generated: '2026-07-28'
+method: searched
+source: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/{id}/plans
+source_note: >-
+  Fetched anonymously from the FAA's Gravitee APIM developer-portal REST API on
+  2026-07-28 (HTTP 200 for all five APIs). These are the FAA's own published
+  subscription plans, not an inference.
+summary: >-
+  Every FAA API is free. There is no paid tier, no metered billing and no
+  commercial plan anywhere in the FAA estate — the agency is a US federal
+  regulator publishing public data, and the two flagship open APIs carry a
+  Creative Commons Zero (CC0) licence in their OpenAPI. What the portal DOES
+  publish is a real subscription model: two APIs run a KEY_LESS plan (call them
+  with no credential at all) and three run an API_KEY plan whose subscription
+  requires MANUAL approval by the FAA API owner. So the gate is eligibility and
+  approval, never money.
+currency: USD
+free_tier: true
+paid_tiers: 0
+plans:
+- name: asws keyless plan
+  id: 27289f79-ab9d-46ab-a89f-79ab9db6ab66
+  api: FAA Airport Status Web Service (ASWS)
+  api_id: a4c8271d-a54a-4dcc-8827-1da54a4dccad
+  security: KEY_LESS
+  validation: MANUAL
+  mode: STANDARD
+  price: 0
+  currency: USD
+  rate_limit: none published
+  comment_required: false
+  note: >-
+    No credential required. Unauthenticated HTTP 200 verified against
+    https://external-api.faa.gov/asws/api/airport/delays on 2026-07-28. The ASWS
+    OpenAPI declares a Creative Commons Zero (CC0) licence.
+- name: default keyless plan
+  id: 919c7fc0-7cb2-4179-9c7f-c07cb2d1792f
+  api: FAA Aeronautic Product Release API (APRA)
+  api_id: d8790d55-9ecc-4d72-b90d-559eccad7286
+  security: KEY_LESS
+  validation: MANUAL
+  mode: STANDARD
+  price: 0
+  currency: USD
+  rate_limit: none published
+  comment_required: false
+  note: >-
+    No credential required. Unauthenticated HTTP 200 verified on 2026-07-28. The
+    APRA OpenAPI declares a Creative Commons Zero (CC0) licence.
+- name: API Key Plan
+  id: cec86355-dd0d-37ee-95ec-db2ad5f5016f
+  api: FAA Air Carrier PRD API
+  api_id: 51c35874-3873-4124-8358-743873012421
+  security: API_KEY
+  validation: MANUAL
+  mode: STANDARD
+  price: 0
+  currency: USD
+  comment_required: true
+  rate_limit:
+    limit: 1
+    period_time: 10
+    period_time_unit: SECONDS
+    normalized: 6 requests per minute
+  note: >-
+    The only FAA API that publishes a quantified rate limit. Subscription
+    requires a MANUAL approval AND a mandatory justification comment, matching
+    the portal's stated eligibility restriction — Part 121, 135, 125, 91K, Air
+    Tour, Public Aircraft or 91 Corporate operators only, all other public or
+    private entities will not be authorized.
+- name: SAS APIKey Plan
+  id: c29e9051-4d86-4aa2-9e90-514d861aa202
+  api: FAA Safety Assurance System (SAS) API
+  api_id: 4f7eeb3e-2012-4095-beeb-3e2012e09593
+  security: API_KEY
+  validation: MANUAL
+  mode: STANDARD
+  price: 0
+  currency: USD
+  rate_limit: none published
+  comment_required: false
+  note: >-
+    Key issued on manual approval. The spec expects X-API-KEY and X-APP-ID headers.
+- name: DMS Dev Key Plan
+  id: 1c858f2d-597d-4edb-858f-2d597dbedbc7
+  api: FAA DMS Lookup API
+  api_id: f531a3c2-1dcb-4e68-b1a3-c21dcb6e681e
+  security: API_KEY
+  validation: MANUAL
+  mode: STANDARD
+  price: 0
+  currency: USD
+  rate_limit: none published
+  comment_required: false
+  note: >-
+    Listed in the portal under the "Public" category but the only published
+    entrypoint is https://internal.apic4e.faa.gov/dmsapi, so no externally
+    reachable base URL exists.
+not_covered_by_a_portal_plan:
+- api: FAA NOTAM API (external-api.faa.gov/notamapi/v1)
+  reason: >-
+    Not present in the Gravitee portal catalog at all, yet the route answers 401
+    to an unauthenticated call. Credentials are issued outside the published plan
+    model.
+- api: FAA NOTAM Management Service (NMS) API
+  reason: >-
+    Access is requested by email to notams@faa.gov per https://nms.aim.faa.gov/.
+    No plan, price or quota is published.
+- api: SWIM / SWIM Cloud Distribution Service
+  reason: >-
+    Governed by an executed FAA SWIM agreement through the SWIFT Portal, and by
+    request to Data-To-Industry@faa.gov for CDM, TFMS Request/Reply and TFMS
+    International Data Provider. Not a portal plan.
+- api: LAANC
+  reason: Available only through FAA-Approved UAS Service Suppliers, never directly.
+- api: CKAN data catalog, AIS and UDDS ArcGIS Open Data hubs, TFR list, NAS status feed
+  reason: Open platforms outside the API gateway; no plan and no credential.

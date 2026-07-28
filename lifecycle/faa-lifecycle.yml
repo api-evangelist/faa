@@ -1,0 +1,166 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://nms.aim.faa.gov/ (NOTAM Management Service portal, live probe
+  2026-07-28), the Gravitee portal catalog at
+  https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis, and the four
+  harvested OpenAPI documents in openapi/
+summary: >-
+  The FAA publishes no API versioning policy, no deprecation policy document and no
+  SLA. What it does publish — and this is the real lifecycle story — is a
+  system-level retirement and transition programme: the NOTAM Management Service
+  (NMS) is replacing the legacy United States NOTAM System (USNS) and Federal NOTAM
+  System (FNS), with dated milestones announced on the NMS portal. Underneath that,
+  two APRA operations are marked deprecated in the spec and the Air Carrier PRD spec
+  labels one of its own production hosts a "Production deprecated url". Product
+  cadence, not API version, is the FAA's real clock: aeronautical products publish
+  on the 28-day airspace (AIRAC) cycle.
+versioning:
+  policy_published: false
+  schemes:
+  - api: FAA NOTAM API
+    scheme: uri-path
+    current: v1
+  - api: FAA Data Catalog (CKAN)
+    scheme: uri-path
+    current: /api/3/action
+    platform_version: CKAN 2.11.4
+  - api: FAA Aeronautic Product Release API
+    scheme: spec-level only
+    current: 1.4.0
+  - api: FAA Airport Status Web Service
+    scheme: spec-level only
+    current: 1.2.1
+  - api: FAA Air Carrier PRD API
+    scheme: host-level
+    current: v1
+    detail: >-
+      No version segment in any path. The spec expresses the version transition by
+      declaring a second production host and labelling the old one deprecated.
+  - api: FAA Safety Assurance System (SAS) API
+    scheme: spec-level only
+    current: 1.0.0
+  data_cycle:
+    name: 28-day airspace cycle (AIRAC)
+    detail: >-
+      NASR subscription, terminal procedures and the chart families all publish on
+      the 28-day cycle. Observed on 2026-07-28: NASR edition 7, edition date
+      07/09/2026. The APRA `edition` query parameter (current | next, plus
+      `changeset` on getTPPRelease) is the FAA's version selector for data, and it
+      is the one lifecycle control the agency actually documents per operation.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  sunset_header_note: >-
+    No RFC 8594 Sunset or Deprecation response header is documented or declared in
+    any harvested FAA spec.
+  programme_transition:
+    name: NOTAM Management Service (NMS) replacing USNS and FNS
+    url: https://nms.aim.faa.gov/
+    method: searched
+    probed: '2026-07-28'
+    status: 200
+    verbatim:
+    - >-
+      "The FAA is replacing the current United States NOTAM System (USNS) and
+      Federal NOTAM System (FNS) legacy systems with a new, vendor-provided service
+      in early FY2026. NOTAM Management Service (NMS) will become an authoritative
+      source on September 30; it becomes the authoritative source once both the USNS
+      and FNS transitions are completed in Spring 2026."
+    - >-
+      "There will be a period of time when users will be able to train and
+      transition while both FNS origination tools and NMS origination tools are
+      available. It is expected that all users will have transitioned to originating
+      NOTAMs in NMS in Spring 2026."
+    - >-
+      "Users who currently have access to NOTAMs through NADIN will continue to
+      access them there through the transition to NMS from USNS."
+    - >-
+      "The FAA will adopt the ICAO NOTAM format and replace the current domestic
+      format... Once the NMS transition is completed, the FAA will determine the
+      schedule for the release of the ICAO NOTAM policy and the updated format
+      support within NMS."
+    consumer_impact: >-
+      This is the largest breaking change in the FAA's public data estate. Anything
+      built on the FNS NOTAM feeds — including the FAA's own faa-swim/fns-client
+      reference implementation and the SWIM FNS JMS stream — is on a retirement
+      path, and the eventual domestic-to-ICAO NOTAM format change is a payload
+      break with no announced date.
+  deprecated_operations:
+  - operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getDERSRelease
+    path: GET /ders/chart
+    reason: >-
+      "The Digital Enroute Supplement release has been deprecated and is no longer
+      published by the FAA."
+    behaviour: Returns 404 only. No successful response is declared.
+  - operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getDERSEdition
+    path: GET /ders/info
+    reason: >-
+      "The Digital Enroute Supplement release has been deprecated and is no longer
+      published by the FAA."
+    behaviour: Returns 404 only. No successful response is declared.
+  deprecated_hosts:
+  - host: https://external-api.faa.gov/AirCarrierApi
+    api: FAA Air Carrier PRD API
+    label: 'Production deprecated url'
+    source: openapi/faa-air-carrier-prd-api-openapi.yml servers[1].description
+    replacement: https://external.apic4e.faa.gov
+    note: >-
+      Still advertised as a live entrypoint in the Gravitee portal catalog record
+      for the same API, so the deprecation is declared in the spec but not enforced
+      in the catalog.
+  legacy_systems_named:
+  - {name: USNS, expansion: United States NOTAM System, status: being replaced by NMS}
+  - {name: FNS, expansion: Federal NOTAM System, status: being replaced by NMS}
+  - {name: NADIN, status: remains available through the USNS-to-NMS transition}
+sla:
+  published: false
+  url: null
+  uptime_target: null
+  note: >-
+    No service level agreement, uptime commitment or support-response target is
+    published for any FAA API. The FAA SWIM programme publishes service description
+    standards (FAA-STD-065B, FAA-STD-073A, FAA-STD-074, SWIM-002) but those govern
+    how a service is DESCRIBED, not what it guarantees.
+status_page:
+  url: https://nms.aim.faa.gov/#system-metrics
+  kind: operational metrics dashboard
+  method: searched
+  probed: '2026-07-28'
+  status: 200
+  data_feed: https://nms.aim.faa.gov/data/content.json
+  metrics_published:
+  - NOTAMs Processed (cumulative)
+  - NMS API Onboarded Users (daily, with trend)
+  - NMS API Volume of Data Pulled (per day, with trend)
+  - Number of API Calls (per day, with trend)
+  - Volume of NOTAMs Processed (per day, with trend)
+  - Active NOTAMs (yesterday, with trend)
+  honest_caveat: >-
+    This is the FAA's own live, dated, machine-readable operational dashboard for
+    the NMS API — it is NOT an incident/uptime status page in the statuspage.io
+    sense. There is no incident history, no component health and no subscribe
+    control. It is recorded as the status surface because it is the only published
+    operational-health signal the FAA offers for any of its APIs.
+  other_status_surfaces:
+  - url: https://nasstatus.faa.gov/
+    note: >-
+      National Airspace System status — ground stops, ground delay programs, airport
+      closures. This is the status of the AIRSPACE, not of the API, and must not be
+      read as an API status page.
+support_and_community:
+- {kind: email, value: notams@faa.gov, scope: NMS API access requests and NMS API issue reports}
+- {kind: email, value: edai-aero@faa.gov, scope: ASWS and APRA (OpenAPI info.contact)}
+- {kind: email, value: Data-To-Industry@faa.gov, scope: SWIM services the SWIFT Portal does not cover}
+- {kind: forum, value: 'NOTAM User Forum (registration via faavideo.zoomgov.com)', source: https://nms.aim.faa.gov/#resources-community}
+- {kind: forum, value: 'Software Community Technical Interchange (registration via faavideo.zoomgov.com)', source: https://nms.aim.faa.gov/#resources-community}
+- {kind: web, value: 'https://www.faa.gov/contact', scope: general FAA contact}
+gaps:
+- No published API deprecation policy document and no Sunset/Deprecation header support.
+- No SLA or uptime commitment for any API.
+- No incident/uptime status page for any API.
+- No consistent versioning scheme; four APIs use four different approaches.
+- >-
+  The single largest planned breaking change — the domestic-to-ICAO NOTAM format
+  change — has no announced date.

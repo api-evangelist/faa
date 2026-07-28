@@ -1,0 +1,148 @@
+generated: '2026-07-28'
+method: derived
+status: candidate
+source: >-
+  openapi/faa-airport-status-web-service-openapi.yml,
+  openapi/faa-aeronautic-product-release-api-openapi.yml
+search_note: >-
+  SEARCHED first and found nothing. The FAA publishes NO Model Context Protocol
+  server. No /.well-known/ai-plugin.json on any FAA host (all 404 — see
+  well-known/faa-well-known.yml), no MCP entry in the Gravitee portal catalog, no
+  mcp.faa.gov, and nothing under github.com/faa-swim. Every FAA-branded MCP server
+  on the public registries (aviation-mcp, mcp-faa-delays and similar) is
+  third-party and is deliberately NOT recorded here.
+server:
+  name: faa
+  published_by_faa: false
+  transport: null
+  url: null
+  note: >-
+    CANDIDATE ONLY. This is a derived tool surface showing what an MCP server over
+    the FAA's open APIs would expose. Nothing below is hosted by the FAA.
+scope:
+  included:
+  - FAA Airport Status Web Service (ASWS) — unauthenticated, CC0
+  - FAA Aeronautic Product Release API (APRA) — unauthenticated, CC0
+  excluded:
+  - api: FAA Air Carrier PRD API
+    reason: >-
+      Write API for federally mandated pilot records under 14 CFR Part 111,
+      restricted by operating-certificate class and carrying pilot PII. Unsafe to
+      expose as an agent tool.
+  - api: FAA Safety Assurance System (SAS) API
+    reason: >-
+      Write API carrying passenger PII (name, address, phone, email, PNR locator)
+      with no idempotency contract. Unsafe to expose as an agent tool.
+  - api: FAA NOTAM API / NOTAM Management Service (NMS)
+    reason: Credentialed; no public OpenAPI to ground tool schemas in.
+  rationale: >-
+    Only read-only, unauthenticated, CC0-licensed operations are proposed as tools.
+    See agentic-access/faa-agentic-access.yml for the per-operation execution
+    contract.
+tools:
+- name: get_airport_delays
+  description: >-
+    Get the current national airport delay summary — ground delay programs, ground
+    stops, arrival/departure delays and closures — for the ~40 major US airports the
+    FAA covers.
+  source_operation: openapi/faa-airport-status-web-service-openapi.yml#getDelays
+  input_schema_source: no parameters
+  read_only: true
+- name: get_airport_status
+  description: Get the current status and delay detail for one US airport by IATA code.
+  source_operation: openapi/faa-airport-status-web-service-openapi.yml#getAirportStatus
+  input_schema_source: path parameter airportCode (string, required)
+  read_only: true
+- name: get_nasr_edition
+  description: >-
+    Get the current or next NASR 28-day subscription edition number and edition date.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getNASREdition
+  input_schema_source: query parameter edition (current | next, default current)
+  read_only: true
+- name: get_nasr_subscription
+  description: Get the download link for the NASR 28-day subscription.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getNASRSubscription
+  input_schema_source: query parameter edition (current | next, default current)
+  read_only: true
+- name: get_terminal_procedures_edition
+  description: >-
+    Get the US Terminal Procedures Publication (dTPP) edition information for the US
+    or one state.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getTPPEdition
+  input_schema_source: query parameters edition, geoname
+  read_only: true
+- name: get_terminal_procedures_release
+  description: >-
+    Get terminal procedure chart download URLs for the US or one state; supports the
+    changeset edition for charts changed since the previous release.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getTPPRelease
+  input_schema_source: query parameters edition (current | next | changeset), geoname
+  read_only: true
+- name: get_sectional_chart_info
+  description: Get VFR sectional chart edition information by chart geoname.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getSectionalInfo
+  input_schema_source: query parameters edition, format, geoname
+  read_only: true
+- name: get_sectional_chart
+  description: Get VFR sectional chart download links by chart geoname and format.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getSectionalChart
+  input_schema_source: query parameters edition, format, geoname
+  read_only: true
+- name: get_terminal_area_chart_info
+  description: Get VFR terminal area chart (TAC) edition information.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getTACEdition
+  input_schema_source: query parameters edition, format, geoname
+  read_only: true
+- name: get_terminal_area_chart
+  description: Get VFR terminal area chart (TAC) download links.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getTACRelease
+  input_schema_source: query parameters edition, format, geoname
+  read_only: true
+- name: get_ifr_enroute_edition
+  description: Get IFR enroute chart edition information.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getIFREnrouteEdition
+  input_schema_source: query parameters edition, format, geoname, seriesType
+  read_only: true
+- name: get_ifr_enroute_charts
+  description: >-
+    Get IFR enroute chart download links by format (tiff georeferenced or pdf),
+    geoname (US, Alaska, Pacific, Caribbean) and series type (Low, High, Area).
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getIFREnrouteRelease
+  input_schema_source: query parameters edition, format, geoname, seriesType
+  read_only: true
+- name: get_cifp_edition
+  description: Get Coded Instrument Flight Procedures (CIFP) edition date and number.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getCIFPEdition
+  input_schema_source: query parameter edition
+  read_only: true
+- name: get_cifp_release
+  description: Get the Coded Instrument Flight Procedures (CIFP) release download link.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getCIFPRelease
+  input_schema_source: query parameter edition
+  read_only: true
+- name: get_daily_obstacle_file_edition
+  description: Get the Daily Digital Obstacle File (DDOF) edition information.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getDDOFEdition
+  input_schema_source: no parameters
+  read_only: true
+- name: get_daily_obstacle_file
+  description: Get the Daily Digital Obstacle File (DDOF) download link.
+  source_operation: openapi/faa-aeronautic-product-release-api-openapi.yml#getDDOFRelease
+  input_schema_source: no parameters
+  read_only: true
+excluded_operations:
+- operations: [getDERSRelease, getDERSEdition]
+  reason: >-
+    Marked deprecated:true in the spec; the Digital Enroute Supplement is no longer
+    published by the FAA and both operations return 404 only.
+notes:
+- >-
+  Every tool above inherits its real input contract from the referenced operation's
+  parameters in the OpenAPI — no input schema was invented.
+- >-
+  Both source APIs are Creative Commons Zero (CC0) and answer unauthenticated, so a
+  server built from this manifest needs no credential handling.
+- >-
+  Callers should hit the /info tool first and only then the matching /chart tool —
+  APRA publishes on the 28-day airspace cycle and `edition=next` 404s until the next
+  edition is staged.

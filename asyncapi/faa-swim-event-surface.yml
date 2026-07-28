@@ -1,0 +1,111 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://www.faa.gov/air_traffic/technology/swim,
+  https://www.faa.gov/air_traffic/technology/swim/products/get_connected,
+  https://www.faa.gov/air_traffic/technology/swim/governance/standards,
+  https://github.com/faa-swim, https://nms.aim.faa.gov/ — all probed 2026-07-28
+spec_type: none
+asyncapi_published: false
+webhooks_published: false
+summary: >-
+  The FAA runs one of the largest real-time event surfaces in US government — System
+  Wide Information Management (SWIM) — and describes none of it with AsyncAPI. It is
+  message-broker publish/subscribe over Solace JMS, not HTTP webhooks, so neither an
+  `AsyncAPI` nor a `Webhooks` pointer is emitted in apis.yml: there is no AsyncAPI
+  document and there is no webhook. This artifact records the event surface honestly
+  so a later round does not re-discover it, and so the gap is visible.
+why_no_pointer: >-
+  Emitting type AsyncAPI would claim a spec that does not exist. Emitting type
+  Webhooks would claim an HTTP callback surface that does not exist. The FAA's
+  events are consumed by binding a JMS client to a Solace broker after an executed
+  agreement, and the service contracts are FAA-authored Word/PDF service description
+  documents (FAA-STD-065B for web services, FAA-STD-073A for JMS), not machine-readable
+  event schemas.
+transport:
+  protocol: JMS
+  broker: Solace
+  delivery: near real-time publish/subscribe
+  verbatim: >-
+    "The SWIFT Portal is a publicly accessible cloud-based system dedicated to
+    providing near real-time FAA SWIM data via Solace JMS messaging."
+  source: https://www.faa.gov/air_traffic/technology/swim/products/get_connected
+access:
+  gate: executed FAA SWIM agreement via the SWIFT Portal
+  portal: https://portal.swim.faa.gov/
+  probed_status: 200
+  probe_note: >-
+    Reachable but renders a browser-compatibility gate; the service catalog is not
+    machine-readable to an unauthenticated client.
+  out_of_band_services:
+    contact: Data-To-Industry@faa.gov
+    verbatim: >-
+      "To access the following services, please submit your request to
+      Data-To-Industry@faa.gov: Collaborative Decision Making (CDM) Data Elements...
+      TFMS Request/Reply, TFMS International Data Provider. Your request will be
+      reviewed in accordance with FAA policy."
+    services: [CDM Data Elements, TFMS Request/Reply, TFMS International Data Provider]
+  support: https://support.swim.faa.gov
+  registry:
+    name: NAS Service Registry and Repository (NSRR)
+    url: https://nsrr.faa.gov
+    probed: '2026-07-28'
+    status: 000
+    note: >-
+      Named on the SWIM Getting Access page as where "additional information about
+      SWIM services can be found", but the host did not resolve to this client on
+      2026-07-28. Recorded as named-but-unreachable rather than as a catalog.
+services_named:
+- id: SFDPS
+  name: SWIM Flight Data Publication Service
+  url: https://www.faa.gov/air_traffic/technology/swim/sfdps
+  payload_models: [FIXM, AIXM]
+  note: >-
+    "provides additional functionality including transformation of data into Flight
+    Information Exchange Model (FIXM) and Aeronautical Information Exchange Model
+    (AIXM), flight-matching across centers, and Globally Unique Flight Identifier
+    (GUFI) generation."
+- id: STDDS
+  name: SWIM Terminal Data Distribution System
+  url: https://www.faa.gov/air_traffic/technology/swim/stdds
+  payload_models: [FIXM]
+- id: CSS-FD
+  name: Common Support Services - Flight Data
+- id: FNS
+  name: Federal NOTAM System
+  payload_models: [AIXM 5.1]
+  status: legacy — being replaced by the NOTAM Management Service (NMS)
+  client: https://github.com/faa-swim/fns-client
+  note: >-
+    The FAA publishes a first-party reference implementation that maintains a local
+    FNS NOTAM database from the FNS Initial Load (SFTP) plus the SWIM FNS JMS update
+    stream, including re-initialization after a JMS interruption. See
+    lifecycle/faa-lifecycle.yml — this surface is on a retirement path.
+- id: SCDS
+  name: SWIM Cloud Distribution Service
+  note: >-
+    The cloud delivery layer. General Guideline with Standards v1.1 published as PDF.
+- id: ESM
+  name: Enterprise Service Monitoring
+- id: IAM
+  name: Identity and Access Management
+first_party_clients:
+- {name: jms-client, url: 'https://github.com/faa-swim/jms-client', language: java}
+- {name: fns-client, url: 'https://github.com/faa-swim/fns-client', language: java}
+- {name: aixm-5.1, url: 'https://github.com/faa-swim/aixm-5.1', language: java}
+- {name: swim-utilities, url: 'https://github.com/faa-swim/swim-utilities', language: java}
+- {name: nesg-jumpstart-kit, url: 'https://github.com/faa-swim/nesg-jumpstart-kit'}
+polling_alternatives:
+  note: >-
+    Consumers who cannot execute a SWIM agreement poll HTTP instead. These are all
+    unauthenticated and verified 200 on 2026-07-28.
+  feeds:
+  - {url: 'https://nasstatus.faa.gov/api/airport-status-information', payload: XML, content: ground stops, ground delay programs, closures, arrival/departure delays}
+  - {url: 'https://tfr.faa.gov/tfrapi/exportTfrList', payload: JSON, content: active Temporary Flight Restrictions}
+  - {url: 'https://nms.aim.faa.gov/datanat/nat.json', payload: JSON, content: North Atlantic Track NOTAMs from the NOTAM Management Service}
+  - {url: 'https://external-api.faa.gov/asws/api/airport/delays', payload: JSON or XML, content: national airport delay summary}
+gaps:
+- No AsyncAPI document for any SWIM service.
+- No machine-readable event schema catalog reachable to an unauthenticated client.
+- No HTTP webhook / callback delivery option anywhere in the FAA estate.
+- The NSRR service registry is named in FAA documentation but did not resolve when probed.

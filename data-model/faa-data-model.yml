@@ -1,0 +1,172 @@
+generated: '2026-07-28'
+method: derived
+source: >-
+  openapi/faa-airport-status-web-service-openapi.yml,
+  openapi/faa-safety-assurance-system-api-openapi.yml,
+  openapi/faa-air-carrier-prd-api-openapi.yml,
+  openapi/faa-aeronautic-product-release-api-openapi.yml
+summary: >-
+  Only two of the four FAA specs carry a usable schema graph. The Airport Status Web
+  Service declares 11 components.schemas with real $ref links, and the SAS API
+  declares a four-level nested submission document. The Air Carrier PRD API declares
+  four schemas that are all EMPTY objects (`pilotData_example: {}`), so its real data
+  model is visible only in the response `example` blocks — those examples are the
+  only source for the PRD entity graph and are recorded as such below. The Aeronautic
+  Product Release API declares no components at all: all 34 operations return
+  `content: {}` and the actual payload is XML in the FAA-proprietary namespace
+  http://arpa.ait.faa.gov/arpa_response, so its model is derived from operation
+  semantics rather than from schemas.
+  There is no shared identifier scheme across the four APIs — the FAA's join keys are
+  industry identifiers (IATA/ICAO codes, N-Numbers, airman certificate numbers,
+  ARTCC ids), not FAA-issued object ids with prefixes.
+entities:
+- name: AirportStatus
+  api: FAA Airport Status Web Service
+  schema: openapi/faa-airport-status-web-service-openapi.yml#/components/schemas/AirportStatus
+  identifier: iata
+  identifier_note: >-
+    IATA three-letter code is both the path parameter and the natural key. The ICAO
+    four-letter code is carried alongside it.
+  fields: [name, city, state, icao, iata, supportedAirport, delay, delayCount, status, weather]
+- name: Status
+  api: FAA Airport Status Web Service
+  schema: openapi/faa-airport-status-web-service-openapi.yml#/components/schemas/Status
+  fields: [type, reason, avgDelay, closureEnd, closureBegin, minDelay, trend, maxDelay, endTime]
+- name: Weather
+  api: FAA Airport Status Web Service
+  schema: openapi/faa-airport-status-web-service-openapi.yml#/components/schemas/Weather
+- name: Delays
+  api: FAA Airport Status Web Service
+  schema: openapi/faa-airport-status-web-service-openapi.yml#/components/schemas/Delays
+  note: National roll-up returned by getDelays. Four parallel collections, one per delay class.
+- name: GroundDelay
+  api: FAA Airport Status Web Service
+  identifier: airport
+  fields: [airport, avgTime, reason]
+- name: GroundStop
+  api: FAA Airport Status Web Service
+  identifier: airport
+  fields: [airport, endTime, reason]
+- name: ArriveDepartDelay
+  api: FAA Airport Status Web Service
+  identifier: airport
+  fields: [airport, maxTime, minTime, reason]
+- name: Closure
+  api: FAA Airport Status Web Service
+  identifier: airport
+  fields: [airport, reason, reopen]
+- name: sasRequest
+  api: FAA Safety Assurance System (SAS) API
+  schema: openapi/faa-safety-assurance-system-api-openapi.yml#/components/schemas/sasRequest
+  required: [ReporterName, AirCarrierName, ReporterEmail, ReporterDSGN, Discrepancies]
+  note: The submission envelope. One reporter, one air carrier, many discrepancies.
+- name: Discrepancy
+  api: FAA Safety Assurance System (SAS) API
+  schema: openapi/faa-safety-assurance-system-api-openapi.yml#/components/schemas/Discrepancy
+  required: [HazmatItems]
+  identifier: CarrierRecordId
+  identifier_note: Carrier-supplied record id — the carrier's key, not an FAA-issued one.
+  fields: [AirCarrierDSGN, FlightOperatedByDSGN, CarrierRecordId, AirportCode, LocationOfDiscovery, DiscrepancyDate, PnrLocator, PassengerFullName, PassengerAddress, PassengerCity, PassengerStateCode, PassengerZipCode, PassengerCountryCode, PassengerPhone, PassengerEmail, FlightNumber, DestinationAirportCode]
+  pii: true
+  pii_note: >-
+    Carries passenger name, postal address, phone, email and PNR locator. This is the
+    most PII-dense schema in the FAA public estate and it is submitted over an
+    apiKey-header API with no idempotency contract.
+- name: HazmatItem
+  api: FAA Safety Assurance System (SAS) API
+  schema: openapi/faa-safety-assurance-system-api-openapi.yml#/components/schemas/HazmatItem
+  fields: [HazmatDescription, Quantity, HazmatType, HazmatClass]
+- name: sasResponse
+  api: FAA Safety Assurance System (SAS) API
+  fields: [confirmationMessage, totalDiscrepanciesImported, discrepanciesImportedWithErrors, errorMessage]
+- name: PilotDataTracking
+  api: FAA Air Carrier PRD API
+  schema_declared: openapi/faa-air-carrier-prd-api-openapi.yml#/components/schemas/trackingData_example
+  schema_empty: true
+  derived_from: response example on PUT and POST /AirCarrierApi/PilotDataTracking
+  identifier: Id
+  identifier_type: uuid
+  fields: [Id, UserName, AirCarrierName, AirCarrierCertificate, AirCarrierCode, CreateDate, IsProcessed, ProcessedDate, HasErrors, ErrorDescription, Pilots]
+  envelope_fields: [IsTrackingNumberCallValid, ErrorMessage, ResultPayload]
+- name: Pilot
+  api: FAA Air Carrier PRD API
+  schema_declared: none
+  derived_from: response example nested under PilotDataTracking.ResultPayload.Pilots
+  identifier: Id
+  identifier_type: uuid
+  natural_key: CertificateNumber
+  natural_key_note: FAA airman certificate number — the industry join key for pilot records.
+  fields: [Id, CertificateNumber, LastName, FirstName, CreateDate, IsProcessed, ProcessedDate, HasErrors, ErrorDescription, EmploymentRecords, TrainingRecords, DrugAlcoholRecords, FinalDisciplinaryActions, NDRRecords]
+  pii: true
+- name: EmploymentRecord
+  api: FAA Air Carrier PRD API
+  schema_declared: none
+  derived_from: response example nested under Pilot.EmploymentRecords
+  identifier: Id
+  identifier_type: uuid
+  carrier_key: AirCarrierUniqueRecordId
+  fields: [Id, ExistingPrdRecordId, AirCarrierUniqueRecordId, PrdDateOfHire, CompleteDate, FinalRecordsDate, SeparationDate, KnownSeparationType, SeparationTypeDetail, RelevantDocuments, AssignmentToDuties, Suppressed, CreateDate, IsProcessed, ProcessedDate, HasErrors, ErrorDescription]
+- name: AssignmentToDuty
+  api: FAA Air Carrier PRD API
+  schema_declared: none
+  derived_from: response example nested under EmploymentRecord.AssignmentToDuties
+  identifier: Id
+  identifier_type: uuid
+  fields: [Id, ExistingPrdRecordId, AirCarrierUniqueRecordId, StartDate, EndDate, KnownAircraftMakeModel, KnownDutyPosition, Suppressed, CreateDate, IsProcessed, ProcessedDate, HasErrors, ErrorDescription]
+- name: ChartProductEdition
+  api: FAA Aeronautic Product Release API
+  schema_declared: none
+  derived_from: operation semantics — the 17 /{product}/info operations
+  identifier: editionNumber + editionDate
+  note: >-
+    Returned as XML in the arpa_response namespace. Observed live 2026-07-28 on
+    /nfdc/nasr/info: edition 7, edition date 07/09/2026; on /vfr/sectional/info with
+    geoname Seattle: editionNumber 97.
+- name: ChartProductRelease
+  api: FAA Aeronautic Product Release API
+  schema_declared: none
+  derived_from: operation semantics — the 17 /{product}/chart operations
+  note: Returns download URL(s) for the requested edition. TPP by US state returns many.
+relationships:
+- {from: AirportStatus, to: Status, type: has_many, via: status}
+- {from: AirportStatus, to: Weather, type: has_one, via: weather}
+- {from: Delays, to: GroundDelays, type: has_many, via: GroundDelays}
+- {from: Delays, to: GroundStops, type: has_many, via: GroundStops}
+- {from: Delays, to: ArriveDepartDelays, type: has_many, via: ArriveDepartDelays}
+- {from: Delays, to: Closures, type: has_many, via: Closures}
+- {from: GroundDelays, to: GroundDelay, type: has_many, via: GroundDelay}
+- {from: GroundStops, to: GroundStop, type: has_many, via: GroundStop}
+- {from: ArriveDepartDelays, to: ArriveDepartDelay, type: has_many, via: ArriveDepartDelay}
+- {from: Closures, to: Closure, type: has_many, via: Closure}
+- {from: GroundDelay, to: AirportStatus, type: references, via: airport, note: IATA code, soft reference across operations}
+- {from: GroundStop, to: AirportStatus, type: references, via: airport, note: IATA code}
+- {from: ArriveDepartDelay, to: AirportStatus, type: references, via: airport, note: IATA code}
+- {from: Closure, to: AirportStatus, type: references, via: airport, note: IATA code}
+- {from: sasRequest, to: Discrepancy, type: has_many, via: Discrepancies}
+- {from: Discrepancy, to: HazmatItem, type: has_many, via: HazmatItems}
+- {from: PilotDataTracking, to: Pilot, type: has_many, via: Pilots}
+- {from: Pilot, to: EmploymentRecord, type: has_many, via: EmploymentRecords}
+- {from: EmploymentRecord, to: AssignmentToDuty, type: has_many, via: AssignmentToDuties}
+- {from: EmploymentRecord, to: EmploymentRecord, type: references, via: ExistingPrdRecordId, note: self-reference to a record already in the PRD}
+- {from: ChartProductEdition, to: ChartProductRelease, type: has_many, via: edition, note: 'the /info -> /chart pairing; the FAA''s core APRA convention'}
+shared_identifiers:
+- {id: IATA airport code, used_by: [ASWS, NAS status feed, SAS Discrepancy.AirportCode, SAS Discrepancy.DestinationAirportCode]}
+- {id: ICAO location indicator, used_by: [ASWS AirportStatus.icao, NOTAM API, NMS NAT track feed]}
+- {id: FAA airman certificate number, used_by: [Air Carrier PRD Pilot.CertificateNumber]}
+- {id: FAA air carrier designator (DSGN), used_by: [SAS ReporterDSGN, SAS AirCarrierDSGN, SAS FlightOperatedByDSGN, PRD AirCarrierCode]}
+- {id: N-Number (US aircraft registration mark), used_by: [registry.faa.gov aircraft inquiry, releasable registry bulk ZIP]}
+- {id: NOTAM identifier, used_by: [TFR list API, NMS NAT track feed notam_number_formatted]}
+- {id: ARTCC facility identifier, used_by: [TFR list API]}
+- {id: GUFI, used_by: [SWIM SFDPS]}
+id_prefixes:
+  published: false
+  note: >-
+    The FAA issues no prefixed object ids. Where a synthetic id exists (PRD) it is a
+    bare UUID with no type prefix, so an id carries no information about what it
+    identifies.
+render: null
+render_note: No subway/ visual exists for this provider.
+gaps:
+- The Air Carrier PRD API declares four schemas and all four are empty objects.
+- The Aeronautic Product Release API declares no schemas and no response content at all.
+- No JSON Schema, no shared components library, no cross-API entity reuse.

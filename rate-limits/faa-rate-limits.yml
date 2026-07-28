@@ -1,0 +1,58 @@
+generated: '2026-07-28'
+method: searched
+source: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/{id}/plans
+source_note: >-
+  Read from the FAA's own Gravitee APIM portal plan objects
+  (usage_configuration.rate_limit), fetched anonymously on 2026-07-28. Nothing
+  here is inferred from observed behaviour.
+summary: >-
+  The FAA publishes exactly one quantified rate limit across its whole API estate:
+  the Air Carrier PRD API is capped at 1 request per 10 seconds per subscription.
+  Every other API — including both open CC0 APIs — carries a plan with an empty
+  usage_configuration, so no published quota exists. No FAA API documents
+  RateLimit or X-RateLimit response headers, and no 429 response is declared in
+  any of the four harvested OpenAPI documents, so a client has no documented way
+  to detect throttling other than by observing failures.
+rate_limits:
+- api: FAA Air Carrier PRD API
+  api_id: 51c35874-3873-4124-8358-743873012421
+  plan: API Key Plan
+  limit_count: 1
+  limit_period: 10 seconds
+  normalized_per_minute: 6
+  scope: per subscription (API key)
+  enforced_by: Gravitee APIM gateway
+  source: portal plan usage_configuration.rate_limit
+- api: FAA Airport Status Web Service (ASWS)
+  plan: asws keyless plan
+  limit_count: null
+  note: No rate limit published. Plan usage_configuration is empty and the plan is KEY_LESS.
+- api: FAA Aeronautic Product Release API (APRA)
+  plan: default keyless plan
+  limit_count: null
+  note: >-
+    No rate limit published. Plan usage_configuration is empty and the plan is
+    KEY_LESS. Note that several APRA operations return whole chart sets — the TPP
+    release by US state can return a very large list of download URLs in one call
+    — so the practical constraint is response size, not request count.
+- api: FAA Safety Assurance System (SAS) API
+  plan: SAS APIKey Plan
+  limit_count: null
+  note: No rate limit published.
+- api: FAA DMS Lookup API
+  plan: DMS Dev Key Plan
+  limit_count: null
+  note: No rate limit published; no external entrypoint either.
+headers:
+  documented: false
+  note: >-
+    No RateLimit-Limit / RateLimit-Remaining / RateLimit-Reset (RFC 9331 style) or
+    X-RateLimit-* headers are documented on any FAA API, and no 429 Too Many
+    Requests response is declared in any harvested OpenAPI.
+retry_guidance:
+  published: false
+  note: >-
+    No published backoff or retry guidance. APRA and ASWS are read-only GETs so
+    retries are safe there; the PRD and SAS write operations have no idempotency
+    contract (see conventions/faa-conventions.yml), so blind retries against them
+    risk duplicate records.

@@ -1,0 +1,84 @@
+generated: '2026-07-28'
+method: derived
+source: >-
+  https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis (Gravitee portal
+  created_at / updated_at per API), https://nms.aim.faa.gov/ (NMS transition
+  milestones), and the info.version fields of the four harvested OpenAPI documents —
+  all fetched 2026-07-28
+published_changelog: false
+published_changelog_note: >-
+  The FAA publishes NO dated API changelog, release notes page or version history for
+  any of its APIs. The Gravitee developer portal attaches exactly one page per API
+  and in every case it is the Swagger document — no release notes, no what's-new, no
+  migration guide. This file is therefore a RECONSTRUCTED change record, not a
+  harvested one, and no `ChangeLog` pointer is wired in apis.yml because there is no
+  provider changelog to point at.
+scheme: none
+current_versions:
+- {api: FAA Aeronautic Product Release API, version: 1.4.0, portal_version: 1.4.0}
+- {api: FAA Airport Status Web Service, version: 1.2.1, portal_version: 1.2.1}
+- {api: FAA Air Carrier PRD API, spec_version: v1, portal_version: 1.0.0}
+- {api: FAA Safety Assurance System (SAS) API, version: 1.0.0, portal_version: 1.0.0}
+- {api: FAA DMS Lookup API, portal_version: 1.0.0}
+- {api: FAA Data Catalog, platform: CKAN 2.11.4}
+portal_change_record:
+  note: >-
+    The only dated change signal the FAA publishes per API. These are the portal
+    catalog's own created_at / updated_at timestamps, read anonymously on 2026-07-28.
+    They record that the API DEFINITION changed, not what changed.
+  entries:
+  - {api: FAA Air Carrier PRD API, created: '2026-03-30', updated: '2026-07-09'}
+  - {api: FAA DMS Lookup API, created: '2026-03-04', updated: '2026-07-01'}
+  - {api: FAA Aeronautic Product Release API, created: '2026-03-31', updated: '2026-06-29'}
+  - {api: FAA Airport Status Web Service, created: '2026-03-12', updated: '2026-05-11'}
+  - {api: FAA Safety Assurance System (SAS) API, created: '2026-02-27', updated: '2026-04-21'}
+announced_changes:
+- date: '2026-07-28'
+  source: https://nms.aim.faa.gov/
+  kind: breaking
+  title: NOTAM Management Service (NMS) replaces the USNS and FNS legacy systems
+  detail: >-
+    "The FAA is replacing the current United States NOTAM System (USNS) and Federal
+    NOTAM System (FNS) legacy systems with a new, vendor-provided service in early
+    FY2026. NOTAM Management Service (NMS) will become an authoritative source on
+    September 30; it becomes the authoritative source once both the USNS and FNS
+    transitions are completed in Spring 2026." All users are expected to have
+    transitioned to originating NOTAMs in NMS in Spring 2026.
+- date: '2026-07-28'
+  source: https://nms.aim.faa.gov/
+  kind: breaking
+  status: announced, no date
+  title: Domestic to ICAO NOTAM format change
+  detail: >-
+    "The FAA will adopt the ICAO NOTAM format and replace the current domestic
+    format... Once the NMS transition is completed, the FAA will determine the
+    schedule for the release of the ICAO NOTAM policy and the updated format support
+    within NMS." A payload-shape break with no announced date.
+- date: '2026-07-28'
+  source: openapi/faa-aeronautic-product-release-api-openapi.yml
+  kind: removal
+  title: Digital Enroute Supplement (DERS) discontinued
+  detail: >-
+    getDERSRelease and getDERSEdition are marked deprecated:true and 404 is their only
+    declared response — "This product has been deprecated and is no longer published
+    by the FAA."
+- date: '2026-07-28'
+  source: openapi/faa-air-carrier-prd-api-openapi.yml
+  kind: deprecation
+  title: Air Carrier PRD production host moved
+  detail: >-
+    https://external-api.faa.gov/AirCarrierApi is labelled "Production deprecated url"
+    in the spec; https://external.apic4e.faa.gov is the current production
+    entrypoint. Both are still advertised in the portal catalog.
+data_cadence:
+  name: 28-day airspace (AIRAC) cycle
+  detail: >-
+    For consumers, the FAA's meaningful release cadence is data, not API version. NASR
+    subscription and terminal procedures republish every 28 days; poll the APRA /info
+    operation for a product family to detect a new edition. Observed 2026-07-28: NASR
+    edition 7, edition date 07/09/2026.
+gaps:
+- No changelog, release notes or version history page for any FAA API.
+- No migration guide for the USNS/FNS to NMS transition.
+- No announced date for the domestic-to-ICAO NOTAM format change.
+- No RSS/Atom or email channel for API change notification.

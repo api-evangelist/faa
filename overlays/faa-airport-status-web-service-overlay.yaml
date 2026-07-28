@@ -1,0 +1,61 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for FAA Airport Status Web Service
+  version: 1.0.0
+x-generated: '2026-07-28'
+x-method: generated
+x-source: openapi/faa-airport-status-web-service-openapi.yml
+x-note: >-
+  Non-destructive enhancements only. The harvested FAA spec is never mutated. Every
+  value below is sourced from a repo artifact or a live probe, not invented.
+extends: openapi/faa-airport-status-web-service-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: faa
+    x-apievangelist-api: faa:faa-airport-status-web-service
+    x-apievangelist-artifacts:
+      authentication: authentication/faa-authentication.yml
+      conventions: conventions/faa-conventions.yml
+      errors: errors/faa-problem-types.yml
+      lifecycle: lifecycle/faa-lifecycle.yml
+      plans: plans/faa-plans.yml
+      rate_limits: rate-limits/faa-rate-limits.yml
+      data_model: data-model/faa-data-model.yml
+    x-license-verified: Creative Commons 0 (CC0), declared in info.license
+    x-verified-live: '2026-07-28'
+- target: $.servers
+  update:
+  - url: https://external-api.faa.gov/asws/api
+    description: >-
+      Production entrypoint verified HTTP 200 unauthenticated on 2026-07-28. NOTE the
+      harvested spec declares bare hosts without the /asws/api base path, so a client
+      generated straight from the spec will 404; this overlay records the entrypoint
+      the FAA Gravitee portal actually publishes.
+  - url: https://external.apic4e.faa.gov/asws/api
+    description: Alternate production entrypoint published in the portal catalog.
+- target: $.paths['/api/airport/delays'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      audit: optional
+    x-authentication: none
+    x-plan: asws keyless plan (KEY_LESS)
+    x-rate-limit: none published
+- target: $.paths['/api/airport/status/{airportCode}'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      audit: optional
+    x-authentication: none
+    x-plan: asws keyless plan (KEY_LESS)
+    x-identifier: IATA three-letter airport code; ~40 major US airports supported
+- target: $.paths['/api/airport/status/{airportCode}'].get.parameters[0]
+  update:
+    description: >-
+      IATA three-letter airport code. Supported values observed in the operation
+      description: BOS, LGA, TEB, EWR, JFK, PHL, PIT, IAD, BWI, DCA, RDU, CLT, ATL,
+      MCO, TPA, FLL, MIA, DTW, CLE, MDW, ORD, IND, CVG, BNA, MEM, STL, MCI, MSP, DFW,
+      IAH, DEN, SLC, PHX, LAS, SAN, LAX, SJC, SFO, PDX, SEA. Any other code returns 404.

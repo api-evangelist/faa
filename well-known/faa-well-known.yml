@@ -1,0 +1,91 @@
+generated: '2026-07-28'
+method: probed
+source: live probes of the FAA API, portal and data hosts on 2026-07-28
+summary: >-
+  No /.well-known/ discovery document is published on any FAA host. Absence is
+  valid data. IMPORTANT CAVEAT for re-runs: api.faa.gov 301-redirects every path
+  to portal.apic4e.faa.gov, a Gravitee developer-portal single-page application
+  that answers HTTP 200 with an Angular HTML shell for ANY path — so a naive
+  status-code probe of api.faa.gov reports 200 for all five well-known paths.
+  Each of those 200s was inspected and is the SPA shell (Gravitee copyright
+  banner + <!doctype html>), not a well-known document. They are recorded below
+  as spa_shell so a later round does not mistake them for real hits.
+hosts:
+- host: https://external-api.faa.gov
+  paths:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://external.apic4e.faa.gov
+  paths:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://api.faa.gov
+  note: 301 redirects to https://portal.apic4e.faa.gov (Gravitee developer portal SPA)
+  paths:
+  - {path: /.well-known/security.txt, status: 200, result: spa_shell}
+  - {path: /.well-known/openid-configuration, status: 200, result: spa_shell}
+  - {path: /.well-known/oauth-authorization-server, status: 200, result: spa_shell}
+  - {path: /.well-known/api-catalog, status: 200, result: spa_shell}
+  - {path: /.well-known/ai-plugin.json, status: 200, result: spa_shell}
+- host: https://www.faa.gov
+  paths:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://catalog.data.faa.gov
+  paths:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://nasstatus.faa.gov
+  paths:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://tfr.faa.gov
+  paths:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+documents: []
+security_txt:
+  published: false
+  note: >-
+    No RFC 9116 security.txt on any FAA host. The FAA does publish a human-readable
+    Vulnerability Disclosure Policy at
+    https://www.faa.gov/web_policies/vulnerability_disclosure_policy with the
+    reporting address vulnerabilitydisclosure@faa.gov — captured in
+    security/faa-vulnerability-disclosure.yml.
+alternative_discovery:
+- kind: gravitee-portal-api
+  url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis
+  status: 200
+  description: >-
+    The FAA developer portal is Gravitee, and its anonymous portal REST API is the
+    real machine-readable catalog for api.faa.gov — it returns every published API
+    with id, version, entrypoints and owner, and /apis/{id}/pages exposes the
+    attached SWAGGER page per API. This is the closest thing the FAA has to a
+    /.well-known/api-catalog.
+- kind: dcat-us-1.1
+  url: https://catalog.data.faa.gov/data.json
+  description: DCAT-US 1.1 catalog for the FAA CKAN data clearinghouse.
+- kind: dcat-us-1.1
+  url: https://ais-faa.opendata.arcgis.com/data.json
+  description: DCAT-US 1.1 catalog for the FAA Aeronautical Information Services ArcGIS hub.
+- kind: dcat-us-1.1
+  url: https://udds-faa.opendata.arcgis.com/api/feed/dcat-us/1.1.json
+  description: DCAT-US 1.1 catalog for the FAA UAS Data Delivery System ArcGIS hub.

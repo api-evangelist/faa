@@ -1,0 +1,178 @@
+generated: '2026-07-28'
+method: derived
+source: >-
+  openapi/*.yml in this repo, well-known/faa-well-known.yml,
+  authentication/faa-authentication.yml, errors/faa-problem-types.yml, and the
+  live probe record in review.yml (2026-07-28)
+summary: >-
+  The FAA conforms to the open specification LANGUAGES (OpenAPI 3.0.x) and to the
+  government open-data standards (DCAT-US 1.1, CKAN Action API, Esri GeoServices
+  REST, GeoJSON/KML) but not to the modern HTTP API conventions — no OAuth 2.0, no
+  OpenID Connect, no RFC 9457 problem details, no RFC 9116 security.txt, no RFC 8594
+  sunset headers, no idempotency, no standard pagination. Where the FAA touches
+  international aviation information exchange it uses the ICAO-lineage models (AIXM,
+  FIXM) through SWIM. Its own product APIs are FAA-proprietary resource shapes
+  DOCUMENTED in a standard, not STANDARDISED.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    Four OpenAPI documents published through the Gravitee portal — APRA 3.0.1
+    (34 operations), ASWS 3.0.1 (2 operations), Air Carrier PRD 3.0.0 (8
+    operations), SAS 3.0.0 (1 operation). All four parse.
+- id: openapi-3.1
+  conforms: false
+  evidence: No 3.1 document anywhere in the estate.
+- id: swagger-2.0
+  conforms: partial
+  evidence: >-
+    The ASWS document carries x-original-swagger-version '2.0' — it was converted
+    from Swagger 2.0 to OpenAPI 3.0.1, which shows in the empty `content: {}` error
+    responses.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No AsyncAPI document published. The FAA does run a large event surface (SWIM,
+    Solace JMS pub/sub) but describes it with FAA-authored service description
+    standards instead — see asyncapi/faa-swim-event-surface.yml.
+- id: cc0-1.0
+  conforms: true
+  evidence: >-
+    info.license "Creative Commons 0 (CC0)" with url
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode declared in both the
+    ASWS and APRA OpenAPI documents.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme in any spec and no
+    /.well-known/oauth-authorization-server on any FAA host (all 404). The
+    credentialed APIs use paired client_id/client_secret request HEADERS or apiKey
+    headers, not an OAuth token exchange.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on every FAA host probed.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on every FAA host. The FAA does publish a
+    human-readable Vulnerability Disclosure Policy — see
+    security/faa-vulnerability-disclosure.yml.
+- id: cisa-bod-20-01
+  conforms: true
+  evidence: >-
+    The FAA publishes an agency Vulnerability Disclosure Policy at
+    https://www.faa.gov/web_policies/vulnerability_disclosure_policy covering all
+    public-facing FAA systems, with a 90-day disclosure window, named safe-harbour
+    terms and CISA referral — the shape CISA Binding Operational Directive 20-01
+    requires of federal civilian agencies.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    No application/problem+json anywhere. Error responses are declared as bare
+    status codes with `content: {}`.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header documented or declared, despite two spec-level deprecated operations and one deprecated production host.
+- id: idempotency-key
+  conforms: false
+  evidence: >-
+    No idempotency key on the three write surfaces (PRD PUT/POST/DELETE, SAS POST).
+- id: dcat-us-1.1
+  conforms: true
+  evidence: >-
+    Three DCAT-US 1.1 catalogs verified 200 on 2026-07-28 —
+    https://catalog.data.faa.gov/data.json (6 datasets),
+    https://ais-faa.opendata.arcgis.com/data.json (73 datasets),
+    https://udds-faa.opendata.arcgis.com/api/feed/dcat-us/1.1.json (28 datasets).
+    Schema project-open-data.cio.gov/v1.1/schema.
+- id: ckan-action-api
+  conforms: true
+  evidence: >-
+    catalog.data.faa.gov runs CKAN 2.11.4; status_show and package_list verified 200.
+- id: esri-geoservices-rest
+  conforms: true
+  evidence: >-
+    services6.arcgis.com/ssFJjBXIUyZDrSYZ FeatureServer directory backs both FAA
+    ArcGIS Open Data hubs; every feature dataset is offered as a GeoServices REST
+    FeatureServer.
+- id: geojson
+  conforms: true
+  evidence: GeoJSON is a published bulk-download distribution on the AIS and UDDS hubs.
+- id: kml
+  conforms: true
+  evidence: KML is a published bulk-download distribution on the AIS and UDDS hubs.
+- id: aixm-5.1
+  conforms: true
+  evidence: >-
+    The FAA publishes first-party JAXB bindings for AIXM 5.1 at
+    https://github.com/faa-swim/aixm-5.1 for the SWIM FNS service, and names AIXM as
+    a SWIM SFDPS transformation output.
+- id: fixm
+  conforms: true
+  evidence: >-
+    faa.gov/air_traffic/technology/swim/sfdps names Flight Information Exchange Model
+    (FIXM) transformation and GUFI generation; /stdds references FIXM-mediated STDDS.
+    No version is stated on the public pages.
+- id: icao-notam-format
+  conforms: false
+  status: planned
+  evidence: >-
+    The NMS portal states the FAA "will adopt the ICAO NOTAM format and replace the
+    current domestic format" but that the schedule has not been announced. Domestic
+    format today.
+- id: jms
+  conforms: true
+  evidence: >-
+    SWIM Cloud Distribution Service delivers over Solace JMS, governed by FAA-STD-073A;
+    the FAA publishes a first-party jms-client at https://github.com/faa-swim/jms-client.
+- id: json-api
+  conforms: false
+  evidence: No JSON:API media type or envelope on any surface.
+- id: graphql
+  conforms: false
+  evidence: No GraphQL endpoint found on any FAA host.
+- id: grpc
+  conforms: false
+  evidence: No .proto published in the faa-swim GitHub organization or on buf.build.
+- id: mcp
+  conforms: false
+  evidence: >-
+    No FAA-published Model Context Protocol server. Every FAA-related MCP server on
+    the public registries is third-party.
+- id: fhir-r4
+  conforms: false
+  evidence: Not a healthcare API.
+- id: scim-2.0
+  conforms: false
+- id: odata
+  conforms: false
+- id: fapi
+  conforms: false
+faa_authored_standards:
+- id: FAA-STD-065B
+  title: Web Service Description Documents
+  source: https://www.faa.gov/air_traffic/technology/swim/governance/standards
+- id: FAA-STD-073A
+  title: Java Messaging Service Description Documents
+  source: https://www.faa.gov/air_traffic/technology/swim/governance/standards
+- id: FAA-STD-074
+  source: https://www.faa.gov/air_traffic/technology/swim/governance/standards
+- id: SWIM-002
+  source: https://www.faa.gov/air_traffic/technology/swim/governance/standards
+- id: FAA Order 7930.2
+  title: NOTAM policy (named on the NMS portal as unchanged by the NMS transition)
+  source: https://nms.aim.faa.gov/
+proprietary_shapes:
+- >-
+  APRA responses use the FAA-only XML namespace
+  http://arpa.ait.faa.gov/arpa_response — a shape no other party implements.
+- >-
+  ASWS, PRD, SAS and DMS are FAA-designed REST resource shapes, documented in
+  OpenAPI but with no second implementer.
+compliance_certifications:
+  published: false
+  note: >-
+    No trust center, SOC 2, ISO 27001, PCI DSS, HIPAA or FedRAMP authorization is
+    published for any FAA developer-facing system. probe-security-programs.py found
+    no trust-center hit, and no `Compliance` pointer is emitted in apis.yml because
+    there is no published compliance programme to point at.

@@ -1,0 +1,85 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for FAA Aeronautic Product Release API
+  version: 1.0.0
+x-generated: '2026-07-28'
+x-method: generated
+x-source: openapi/faa-aeronautic-product-release-api-openapi.yml
+x-note: >-
+  Non-destructive enhancements only. The harvested FAA spec is never mutated.
+extends: openapi/faa-aeronautic-product-release-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: faa
+    x-apievangelist-api: faa:faa-aeronautic-product-release-api
+    x-apievangelist-artifacts:
+      authentication: authentication/faa-authentication.yml
+      conventions: conventions/faa-conventions.yml
+      errors: errors/faa-problem-types.yml
+      lifecycle: lifecycle/faa-lifecycle.yml
+      plans: plans/faa-plans.yml
+      rate_limits: rate-limits/faa-rate-limits.yml
+      data_model: data-model/faa-data-model.yml
+      skills: skills/_index.yml
+    x-license-verified: Creative Commons 0 (CC0), declared in info.license
+    x-verified-live: '2026-07-28'
+    x-publication-cycle: >-
+      28-day airspace (AIRAC) cycle. Call the /info operation for a product family
+      before its /chart operation; edition=next returns 404 until the next edition is
+      staged for release.
+    x-response-format: >-
+      XML in the FAA-proprietary namespace http://arpa.ait.faa.gov/arpa_response. The
+      spec declares content:{} on every response, so no schema is available.
+- target: $.paths['/ders/chart'].get
+  update:
+    x-deprecation:
+      deprecated: true
+      reason: The Digital Enroute Supplement is no longer published by the FAA.
+      replacement: none
+      recorded_in: lifecycle/faa-lifecycle.yml
+- target: $.paths['/ders/info'].get
+  update:
+    x-deprecation:
+      deprecated: true
+      reason: The Digital Enroute Supplement is no longer published by the FAA.
+      replacement: none
+      recorded_in: lifecycle/faa-lifecycle.yml
+- target: $.paths['/nfdc/nasr/info'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+    x-observed-live:
+      date: '2026-07-28'
+      edition: 7
+      edition_date: 07/09/2026
+- target: $.paths['/nfdc/nasr/chart'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+    x-note: >-
+      Bulk export path. Returns the NASR 28-day subscription ZIP — the primary exit
+      path for consumers leaving a commercial redistributor of FAA data.
+- target: $.paths['/dtpp/chart'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+    x-response-size-warning: >-
+      Requesting terminal procedures by US state returns a list of download URLs the
+      FAA's own description calls "quite extensive". There is no pagination control.
+- target: $.tags
+  update:
+  - name: US VFR Wall Planning Chart
+    x-product-family: vfr
+  - name: Coded Instrument Flight Procedures (CIFP)
+    x-product-family: procedures
+  - name: NASR 28 Day Subscription
+    x-product-family: nasr
+    x-bulk-export: true
+  - name: US Terminal Procedures Publication (TPP)
+    x-product-family: procedures
+  - name: Digital Enroute Supplement (DERS)
+    x-deprecated: true

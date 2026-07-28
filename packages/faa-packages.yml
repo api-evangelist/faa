@@ -1,0 +1,79 @@
+generated: '2026-07-28'
+method: searched
+source: https://github.com/faa-swim
+summary: >-
+  The FAA publishes no client SDK for its HTTP APIs (ASWS, APRA, NOTAM, PRD, SAS)
+  — those are consumed directly over HTTPS and, for the CC0 ones, without any
+  credential. The FAA's only first-party client libraries live in the faa-swim
+  GitHub organization and target the SWIM message-broker surface, not the REST
+  APIs: Java JMS clients and JAXB bindings for the AIXM 5.1 and FNS NOTAM feeds.
+  They are published as source with Maven coordinates under the us.dot.faa.swim.*
+  groupId in each pom.xml, but no matching artifact was found on Maven Central as
+  of 2026-07-28 — consumers build them from the repository. Everything else on
+  npm/PyPI that references the FAA (aviation-mcp, @squawk/notams, @aeyrium/faa-parser,
+  faa-nms-api, @pipeworx/mcp-faa-delays) is third-party and is NOT recorded here.
+registries_probed:
+- registry: npm
+  first_party_hits: 0
+- registry: pypi
+  first_party_hits: 0
+- registry: maven-central
+  first_party_hits: 0
+  note: >-
+    Searched for "swim", "aixm", "faa", "fns-client" and the us.dot.faa groupId —
+    the only AIXM artifacts on Maven Central are third-party (com.uvic-cfar.swim,
+    org.n52.sensorweb), not FAA-published.
+- registry: rubygems
+  first_party_hits: 0
+- registry: nuget
+  first_party_hits: 0
+- registry: pkg.go.dev
+  first_party_hits: 0
+- registry: packagist
+  first_party_hits: 0
+- registry: crates.io
+  first_party_hits: 0
+packages:
+- language: java
+  registry: github
+  name: us.dot.faa.swim.fns:fns-client
+  url: https://github.com/faa-swim/fns-client
+  install: git clone https://github.com/faa-swim/fns-client && mvn install
+  official: true
+  covers: FAA SWIM Federal NOTAM System (FNS)
+  description: >-
+    Reference implementation for establishing and maintaining a local instance of
+    the FNS NOTAM database from the FNS Initial Load (FIL, over SFTP) plus the SWIM
+    FNS JMS update stream, including re-initialization after a JMS interruption.
+- language: java
+  registry: github
+  name: us.dot.faa.swim.jaxb.aixm:aixm-5.1
+  url: https://github.com/faa-swim/aixm-5.1
+  install: git clone https://github.com/faa-swim/aixm-5.1 && mvn install
+  official: true
+  covers: AIXM 5.1 XML bindings for the SWIM FNS service
+  description: Java XML (JAXB) bindings for the AIXM 5.1 schema as used by the FAA SWIM FNS service.
+- language: java
+  registry: github
+  name: us.dot.faa.swim.jms:jms-client
+  url: https://github.com/faa-swim/jms-client
+  install: git clone https://github.com/faa-swim/jms-client && mvn install
+  official: true
+  covers: FAA SWIM JMS connectivity
+  description: Basic JMS client that simplifies connecting to and consuming from FAA SWIM.
+- language: java
+  registry: github
+  name: us.dot.faa.swim.utilities:swim-utilities
+  url: https://github.com/faa-swim/swim-utilities
+  install: git clone https://github.com/faa-swim/swim-utilities && mvn install
+  official: true
+  covers: FAA SWIM helpers
+  description: Basic set of utilities to help in working with consuming SWIM data.
+- language: multiple
+  registry: github
+  name: nesg-jumpstart-kit
+  url: https://github.com/faa-swim/nesg-jumpstart-kit
+  install: git clone https://github.com/faa-swim/nesg-jumpstart-kit
+  official: true
+  covers: NAS Enterprise Security Gateway (NESG) onboarding
+  description: NESG Jumpstart Kit published by the FAA SWIM organization.

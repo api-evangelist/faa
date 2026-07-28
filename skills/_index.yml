@@ -1,0 +1,36 @@
+generated: '2026-07-28'
+method: generated
+source: >-
+  Generated from the FAA OpenAPI documents in openapi/ plus
+  conventions/faa-conventions.yml, errors/faa-problem-types.yml and
+  lifecycle/faa-lifecycle.yml. Every operationId referenced was grepped out of the
+  spec it names — none is invented.
+search_note: >-
+  SEARCHED first. The FAA publishes no AGENTS.md, no skill files and no agent
+  guidance of any kind. The Gravitee developer portal attaches exactly one page per
+  API and in all four cases it is the Swagger document — no getting-started, no
+  tutorial, no how-to.
+scope_note: >-
+  Skills are written only against the two open, unauthenticated, CC0 APIs. The write
+  APIs (Air Carrier PRD, SAS) are deliberately excluded: both carry regulated PII,
+  both are eligibility-gated, and neither has an idempotency contract or a documented
+  error response, so no safe agent procedure can be written for them.
+skills:
+- file: faa-check-airport-delays.md
+  name: Check US airport delays and ground stops
+  api: openapi/faa-airport-status-web-service-openapi.yml
+  operations: [getDelays, getAirportStatus]
+  auth: none
+  read_only: true
+- file: faa-track-nasr-28-day-cycle.md
+  name: Track and download the NASR 28-day subscription
+  api: openapi/faa-aeronautic-product-release-api-openapi.yml
+  operations: [getNASREdition, getNASRSubscription]
+  auth: none
+  read_only: true
+- file: faa-fetch-terminal-procedures-and-charts.md
+  name: Fetch FAA terminal procedures and VFR/IFR charts
+  api: openapi/faa-aeronautic-product-release-api-openapi.yml
+  operations: [getTPPEdition, getTPPRelease, getSectionalInfo, getSectionalChart, getTACEdition, getTACRelease, getIFREnrouteEdition, getIFREnrouteRelease]
+  auth: none
+  read_only: true

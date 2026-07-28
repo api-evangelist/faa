@@ -1,0 +1,31 @@
+generated: '2026-07-28'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.faa.gov
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  7 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: registry.faa.gov
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Oct  2 23:59:59 2026 GMT
+  hsts: null
+- host: portal.swim.faa.gov
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jan 21 23:59:59 2027 GMT
+  hsts: false
+domains:
+- domain: faa.gov
+  dnssec: false
+  caa:
+  - 0 issue "globalsign.com"
+  - 128 issue "digicert.com"
+  - 128 issue "amazon.com"
+  - 128 iodef "mailto:9-ait-arin-abuse@faa.gov"
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

@@ -1,0 +1,116 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for FAA Air Carrier PRD API
+  version: 1.0.0
+x-generated: '2026-07-28'
+x-method: generated
+x-source: openapi/faa-air-carrier-prd-api-openapi.yml
+x-note: >-
+  Non-destructive enhancements only. The harvested FAA spec is never mutated. This
+  overlay records the credential model, the published rate limit and the regulatory
+  eligibility gate, none of which the spec itself carries.
+extends: openapi/faa-air-carrier-prd-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: faa
+    x-apievangelist-api: faa:faa-air-carrier-prd-api
+    x-apievangelist-artifacts:
+      authentication: authentication/faa-authentication.yml
+      conventions: conventions/faa-conventions.yml
+      errors: errors/faa-problem-types.yml
+      lifecycle: lifecycle/faa-lifecycle.yml
+      plans: plans/faa-plans.yml
+      rate_limits: rate-limits/faa-rate-limits.yml
+      data_model: data-model/faa-data-model.yml
+    x-regulatory-basis: 14 CFR Part 111 — Pilot Records Database
+    x-eligibility: >-
+      Verbatim from the FAA portal catalog record — "Access is restricted to
+      operators under Part 121, 135, 125, 91K, Air Tour, Public Aircraft, or 91
+      Corporate. Requests for access from any other public or private entities will
+      not be authorized."
+    x-plan:
+      name: API Key Plan
+      security: API_KEY
+      validation: MANUAL
+      comment_required: true
+    x-rate-limit:
+      limit: 1
+      period: 10 seconds
+      scope: per subscription
+      source: FAA Gravitee portal plan usage_configuration
+    x-pii: true
+    x-pii-note: >-
+      Carries pilot identity, employment, training, drug/alcohol and disciplinary
+      records.
+- target: $.components.securitySchemes
+  update:
+    clientId:
+      type: apiKey
+      in: header
+      name: client_id
+      description: >-
+        RECOMMENDED. The spec declares client_id as a required header PARAMETER on
+        every operation rather than as a security scheme, so generated clients treat
+        the credential as an ordinary parameter and no tooling recognises this API as
+        authenticated. Modelling it as a scheme fixes that.
+    clientSecret:
+      type: apiKey
+      in: header
+      name: client_secret
+      description: >-
+        RECOMMENDED. Same issue as client_id. Note that carrying a secret as a plain
+        request header with no token exchange is the weakest credential model in the
+        FAA estate, and it guards the most sensitive data in it.
+- target: $.paths['/AirCarrierApi/Pilot'].post
+  update:
+    x-agentic-access:
+      action-class: acting
+      consequence: write
+      audit: required
+      human-in-the-loop: required
+    x-idempotency: >-
+      NONE. No idempotency key is accepted. A retry after a timeout may create
+      duplicate pilot records with no documented de-duplication.
+    x-missing-error-responses: >-
+      Only 200 is declared. No 400, 401, 403, 429 or 5xx contract exists for a write
+      operation carrying regulated pilot records.
+- target: $.paths['/AirCarrierApi/Pilot'].put
+  update:
+    x-agentic-access:
+      action-class: acting
+      consequence: write
+      audit: required
+      human-in-the-loop: required
+    x-idempotency: NONE
+- target: $.paths['/AirCarrierApi/Pilot'].delete
+  update:
+    x-agentic-access:
+      action-class: acting
+      consequence: safety-critical
+      audit: required
+      human-in-the-loop: required
+    x-note: >-
+      Destructive operation against a federally mandated record set, declaring no
+      path or query parameter identifying WHAT is deleted and no error response.
+- target: $.paths['/AirCarrierApi/PilotDataTracking'].delete
+  update:
+    x-agentic-access:
+      action-class: acting
+      consequence: safety-critical
+      audit: required
+      human-in-the-loop: required
+- target: $.servers
+  update:
+  - url: https://external.apic4e.faa.gov
+    description: Production environment.
+  - url: https://external-api.faa.gov/AirCarrierApi
+    description: >-
+      Production deprecated url. Still advertised as a live entrypoint in the FAA
+      Gravitee portal catalog record for this API — see lifecycle/faa-lifecycle.yml.
+    x-deprecated: true
+  - url: https://dev-external.apic4e.faa.gov/Test/AirCarrierApi
+    description: >-
+      Staging environment. Did NOT resolve when probed on 2026-07-28 (HTTP 000), so
+      there is no reachable sandbox for external developers.
+    x-unreachable: '2026-07-28'

@@ -53,6 +53,11 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/faa-airport-status-web-service-openapi.yml
+  - type: Overlay
+    url: overlays/faa-airport-status-web-service-overlay.yaml
+  - type: AgentSkill
+    name: Check US airport delays and ground stops
+    url: skills/faa-check-airport-delays.md
   - type: Documentation
     url: https://api.faa.gov/
   - type: Website
@@ -76,6 +81,14 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/faa-aeronautic-product-release-api-openapi.yml
+  - type: Overlay
+    url: overlays/faa-aeronautic-product-release-api-overlay.yaml
+  - type: AgentSkill
+    name: Track and download the NASR 28-day subscription
+    url: skills/faa-track-nasr-28-day-cycle.md
+  - type: AgentSkill
+    name: Fetch FAA terminal procedures and VFR/IFR charts
+    url: skills/faa-fetch-terminal-procedures-and-charts.md
   - type: Documentation
     url: https://api.faa.gov/
   - type: Website
@@ -99,6 +112,11 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/faa-air-carrier-prd-api-openapi.yml
+  - type: Overlay
+    url: overlays/faa-air-carrier-prd-api-overlay.yaml
+  - type: RateLimits
+    name: 1 request per 10 seconds per subscription (FAA Gravitee plan)
+    url: rate-limits/faa-rate-limits.yml
   - type: Documentation
     url: https://api.faa.gov/
   - type: Website
@@ -119,6 +137,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/faa-safety-assurance-system-api-openapi.yml
+  - type: Overlay
+    url: overlays/faa-safety-assurance-system-api-overlay.yaml
   - type: Documentation
     url: https://api.faa.gov/
 - aid: faa:faa-notam-api
@@ -128,7 +148,10 @@ apis:
     "http_status_code":401} on 2026-07-28, while the bare external-api.faa.gov host
     returns 404, so the route exists behind credentials. Access is via a client_id and
     client_secret issued from the api.faa.gov developer portal. No public OpenAPI was
-    published for this API in the portal's public catalog, so none was harvested.
+    published for this API in the portal's public catalog, so none was harvested — and
+    the API does not appear in that catalog at all, so it has no published plan.
+    Re-verified 401 on 2026-07-28. This surface sits on the legacy side of the FAA's
+    NOTAM modernization; see the NOTAM Management Service (NMS) entry.
   humanURL: https://api.faa.gov/
   baseURL: https://external-api.faa.gov/notamapi/v1
   tags:
@@ -141,6 +164,82 @@ apis:
     url: https://api.faa.gov/
   - type: Website
     url: https://notams.aim.faa.gov/notamSearch/
+  - type: Deprecation
+    name: NOTAM modernization — USNS and FNS retiring in favour of NMS
+    url: https://nms.aim.faa.gov/
+- aid: faa:faa-nms-api
+  name: FAA NOTAM Management Service (NMS) API
+  description: The distribution interface of the FAA's new NOTAM Management Service,
+    the vendor-provided replacement for the legacy United States NOTAM System (USNS)
+    and Federal NOTAM System (FNS). Discovered and verified live 2026-07-28 at
+    nms.aim.faa.gov, an FAA-operated portal publishing system metrics, a transition FAQ
+    and an API access request path. Access is not self-serve — the portal states
+    verbatim "Please contact us at notams@faa.gov to request access to the new
+    NMS-API." No OpenAPI, schema or endpoint documentation is published to
+    unauthenticated visitors, so none was harvested. The portal's own metrics report
+    261 onboarded API users and roughly 338,000 API calls per day.
+  humanURL: https://nms.aim.faa.gov/
+  tags:
+  - NOTAM
+  - Flight Information
+  - Airspace
+  - Aviation
+  - Aeronautical Information
+  properties:
+  - type: Documentation
+    url: https://nms.aim.faa.gov/
+  - type: SignUp
+    name: Request API access (notams@faa.gov)
+    url: https://nms.aim.faa.gov/#api-access
+  - type: StatusPage
+    name: NMS system metrics
+    url: https://nms.aim.faa.gov/#system-metrics
+  - type: Deprecation
+    name: USNS and FNS retirement and NMS transition schedule
+    url: https://nms.aim.faa.gov/
+- aid: faa:faa-nms-nat-track-feed
+  name: FAA NMS North Atlantic Track NOTAM Feed
+  description: Unauthenticated JSON feed of North Atlantic Track NOTAMs published by the
+    FAA NOTAM Management Service. Each record carries accountability and origin ids, the
+    formatted NOTAM number, ICAO id, location code, the full condition message text,
+    start and end datetimes, classification code and transaction type (NAT_TRACK).
+    Verified live 2026-07-28 (HTTP 200, application/json, real NAT track NOTAM data
+    originated by CZQX). No OpenAPI is published for it.
+  humanURL: https://nms.aim.faa.gov/
+  baseURL: https://nms.aim.faa.gov/datanat/nat.json
+  tags:
+  - NOTAM
+  - Airspace
+  - Oceanic
+  - Open Data
+  - Flight Information
+  properties:
+  - type: Documentation
+    url: https://nms.aim.faa.gov/
+  - type: Website
+    url: https://nms.aim.faa.gov/
+- aid: faa:faa-nms-metrics-feed
+  name: FAA NMS System Metrics Feed
+  description: Unauthenticated JSON feed backing the NOTAM Management Service system
+    metrics dashboard — cumulative NOTAMs processed, NMS API onboarded users, NMS API
+    volume of data pulled per day, number of API calls per day, volume of NOTAMs
+    processed per day and active NOTAMs, each with a period, direction and percentage
+    trend, plus an updatedOn timestamp. This is the only published operational-health
+    signal for any FAA API. Verified live 2026-07-28 (HTTP 200).
+  humanURL: https://nms.aim.faa.gov/
+  baseURL: https://nms.aim.faa.gov/data/content.json
+  tags:
+  - Metrics
+  - Operations
+  - NOTAM
+  - Open Data
+  - Observability
+  properties:
+  - type: Documentation
+    url: https://nms.aim.faa.gov/
+  - type: StatusPage
+    name: NMS system metrics dashboard
+    url: https://nms.aim.faa.gov/#system-metrics
 - aid: faa:faa-dms-lookup-api
   name: FAA DMS Lookup API
   description: Retrieves designee information from the FAA Data Management System using
@@ -251,6 +350,81 @@ apis:
   - type: Website
     url: https://tfr.faa.gov/
 common:
+- type: AgenticAccess
+  url: agentic-access/faa-agentic-access.yml
+- type: DomainSecurity
+  url: security/faa-domain-security.yml
+- type: Authentication
+  url: authentication/faa-authentication.yml
+- type: VulnerabilityDisclosure
+  url: security/faa-vulnerability-disclosure.yml
+- type: Security
+  name: FAA Vulnerability Disclosure Policy
+  url: https://www.faa.gov/web_policies/vulnerability_disclosure_policy
+- type: Conventions
+  url: conventions/faa-conventions.yml
+- type: ErrorCatalog
+  url: errors/faa-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/faa-lifecycle.yml
+- type: StatusPage
+  name: FAA NMS system metrics — the only published operational dashboard for an FAA API
+  url: https://nms.aim.faa.gov/#system-metrics
+- type: Deprecation
+  name: NOTAM modernization — USNS and FNS retirement and transition schedule
+  url: https://nms.aim.faa.gov/
+- type: Conformance
+  url: conformance/faa-conformance.yml
+- type: DataModel
+  url: data-model/faa-data-model.yml
+- type: Plans
+  url: plans/faa-plans.yml
+- type: RateLimits
+  url: rate-limits/faa-rate-limits.yml
+- type: Packages
+  url: packages/faa-packages.yml
+- type: SDKs
+  name: FAA SWIM first-party Java clients (fns-client, jms-client, aixm-5.1, swim-utilities)
+  url: packages/faa-packages.yml
+- type: WellKnown
+  url: well-known/faa-well-known.yml
+- type: APICatalog
+  name: FAA Gravitee developer-portal catalog API (unauthenticated, machine-readable)
+  url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis
+- type: MCPServer
+  name: Candidate MCP tool manifest derived from the FAA CC0 OpenAPIs — not published by the FAA
+  url: mcp/faa-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/faa-llms.txt
+- type: Events
+  name: FAA SWIM event surface (Solace JMS; no AsyncAPI published)
+  url: asyncapi/faa-swim-event-surface.yml
+- type: APIReference
+  name: FAA developer portal API reference (Gravitee Swagger pages)
+  url: https://api.faa.gov/
+- type: GettingStarted
+  name: FAA Data Portal — "Get started by creating an API key"
+  url: https://www.faa.gov/data
+- type: SignUp
+  url: https://portal.apic4e.faa.gov/
+- type: Support
+  url: https://www.faa.gov/contact
+- type: Blog
+  name: Cleared for Takeoff
+  url: https://www.faa.gov/blog/cleared_for_takeoff
+- type: GitHubOrganization
+  name: FAA SWIM
+  url: https://github.com/faa-swim
+- type: PrivacyPolicy
+  url: https://www.faa.gov/privacy/
+- type: TermsOfService
+  name: FAA Web Policies and Notices
+  url: https://www.faa.gov/web_policies
+- type: License
+  name: Creative Commons Zero (CC0) — declared in the ASWS and APRA OpenAPI
+  url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 - type: Website
   url: https://www.faa.gov/
 - type: Documentation

@@ -1,0 +1,247 @@
+generated: '2026-07-28'
+method: derived
+source: >-
+  openapi/*.yml in this repo, plus the live probe record in review.yml
+  (2026-07-28) and the Gravitee portal configuration endpoint
+  https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/configuration
+summary: >-
+  The FAA does not publish a cross-cutting API design guide, style guide or
+  developer-conventions page. It publishes FAA-STD-065B, FAA-STD-073A, FAA-STD-074
+  and SWIM-002 as service-description standards, but those govern SWIM service
+  documentation, not the REST estate. Everything below is derived from the four
+  harvested OpenAPI documents and from live probes, and each item states whether
+  the convention is documented by the FAA or merely observed. Where the FAA
+  documents nothing, that is recorded as a gap rather than filled in.
+authentication:
+  documented: partially
+  artifact: authentication/faa-authentication.yml
+  styles:
+  - surface: Airport Status Web Service, Aeronautic Product Release API
+    style: none
+    detail: >-
+      No securitySchemes declared and unauthenticated HTTP 200 verified on both.
+      The ASWS OpenAPI declares a Creative Commons Zero (CC0) licence.
+  - surface: FAA NOTAM API, Air Carrier PRD API
+    style: paired client credentials in request headers
+    headers: [client_id, client_secret]
+    detail: >-
+      The PRD OpenAPI declares client_id and client_secret as required header
+      PARAMETERS on every operation rather than as a components.securityScheme —
+      so generated clients treat the credential as an ordinary parameter. An
+      unauthenticated NOTAM call returns HTTP 401 with
+      {"message":"Unauthorized","http_status_code":401}.
+  - surface: FAA Safety Assurance System (SAS) API
+    style: apiKey headers
+    headers: [X-API-KEY, X-APP-ID]
+    detail: Declared as two apiKey securitySchemes in components.securitySchemes.
+  - surface: Gravitee developer portal gateway
+    style: apiKey header
+    headers: [X-Gravitee-Api-Key]
+    detail: >-
+      The portal configuration endpoint reports the gateway apikeyHeader as
+      X-Gravitee-Api-Key, and userCreation/applicationCreation both enabled — API
+      keys are self-serve.
+  - surface: SWIM / SWIFT Portal
+    style: executed agreement, then JMS credentials over Solace
+    detail: Not an HTTP credential; governed by an FAA SWIM agreement.
+  no_oauth: true
+  no_oauth_note: >-
+    No OAuth 2.0 or OpenID Connect anywhere in the FAA public API estate — no
+    oauth2 securityScheme in any harvested spec and no
+    /.well-known/oauth-authorization-server or /.well-known/openid-configuration on
+    any FAA host (all 404, see well-known/faa-well-known.yml). There is therefore no
+    scope surface and no scopes/ artifact.
+idempotency:
+  supported: false
+  documented: false
+  detail: >-
+    No idempotency key header, parameter or retention policy is documented or
+    declared anywhere in the FAA estate. The two open APIs (ASWS, APRA) are
+    read-only GET surfaces where idempotency is inherent. The three write surfaces
+    are where it matters and none of them offer it: the Air Carrier PRD API exposes
+    unguarded PUT/POST/DELETE on /AirCarrierApi/Pilot and
+    /AirCarrierApi/PilotDataTracking, and the SAS API's single POST
+    /axhsubmitdiscrepancies has no request key — a retried submission after a
+    timeout risks duplicate pilot or discrepancy records with no documented
+    de-duplication contract.
+  no_pointer_note: >-
+    Deliberately NOT wired as type Idempotency in apis.yml. There is no idempotency
+    contract to point at.
+pagination:
+  documented: false
+  api_surfaces:
+  - surface: Aeronautic Product Release API
+    style: none
+    detail: >-
+      Every operation returns either a single edition record or a complete chart
+      set. getTPPRelease by US state can return a long list of download URLs in one
+      response with no paging control — the spec warns the list "can be quite
+      extensive".
+  - surface: Airport Status Web Service
+    style: none
+    detail: Fixed-size responses — one airport, or the current national delay summary.
+  - surface: Air Carrier PRD API, SAS API
+    style: none
+    detail: No paging parameters declared on any operation.
+  - surface: FAA Data Catalog (CKAN 2.11.4)
+    style: platform default
+    detail: >-
+      Inherits the standard CKAN Action API paging (rows/start on package_search,
+      limit/offset on list actions). A CKAN convention, not an FAA-authored one.
+  - surface: AIS and UDDS ArcGIS Open Data hubs
+    style: platform default
+    detail: >-
+      Inherits Esri GeoServices REST paging (resultOffset, resultRecordCount,
+      exceededTransferLimit). An Esri convention, not an FAA-authored one.
+filtering_and_selection:
+  documented: true
+  detail: >-
+    APRA's selection model is a small, enum-constrained query vocabulary reused
+    across all 17 chart product families, which is the one genuinely consistent
+    convention in the FAA REST estate.
+  parameters:
+  - name: edition
+    in: query
+    values: [current, next]
+    extra_values:
+      getTPPRelease: [changeset]
+    default: current
+    detail: >-
+      `changeset` is accepted only by getTPPRelease and returns the charts changed
+      since the previous release.
+  - name: format
+    in: query
+    detail: >-
+      Per-product enum. IFR enroute accepts tiff (georeferenced) and pdf (not
+      georeferenced); other products declare their own file-format enums.
+  - name: geoname
+    in: query
+    detail: >-
+      Geographic selector. US or a full US state name for TPP; named chart areas
+      (for example "Seattle") for sectional and terminal area charts; US, Alaska,
+      Pacific or Caribbean for IFR enroute.
+  - name: seriesType
+    in: query
+    values: [Low, High, Area]
+    detail: IFR enroute chart series.
+  path_parameters:
+  - name: airportCode
+    in: path
+    surface: Airport Status Web Service
+    detail: IATA three-letter code. Roughly 40 major US airports are supported.
+resource_pattern:
+  documented: false
+  detail: >-
+    APRA's 34 operations are 17 product families each split into a /{product}/info
+    edition-metadata lookup and a /{product}/chart download-link operation. Callers
+    are expected to poll /info against the 28-day airspace cycle and only call
+    /chart once a new edition is published. This paired info/chart shape is the
+    provider's core convention and is stable across every product family.
+content_negotiation:
+  documented: partially
+  detail: >-
+    ASWS declares both application/json and application/xml for every response and
+    the response schemas carry XML element names, so the same operation serves both
+    representations. APRA responses are XML in the FAA-proprietary namespace
+    http://arpa.ait.faa.gov/arpa_response, with a `format` query parameter selecting
+    the FILE format of the downloaded chart product, not the response media type.
+    PRD and SAS are application/json only.
+versioning:
+  documented: false
+  schemes:
+  - surface: FAA NOTAM API
+    scheme: uri-path
+    current: v1
+    example: https://external-api.faa.gov/notamapi/v1
+  - surface: Air Carrier PRD API
+    scheme: spec-level only
+    current: v1
+    detail: >-
+      info.version is v1 but no version segment appears in the paths. The spec
+      declares three servers, one of which is explicitly labelled "Production
+      deprecated url" (https://external-api.faa.gov/AirCarrierApi) — versioning is
+      expressed by moving the host, not the path.
+  - surface: Aeronautic Product Release API
+    scheme: spec-level only
+    current: 1.4.0
+  - surface: Airport Status Web Service
+    scheme: spec-level only
+    current: 1.2.1
+  - surface: FAA Data Catalog (CKAN)
+    scheme: uri-path
+    current: /api/3/action
+  data_cycle: >-
+    The meaningful version for FAA aeronautical products is not an API version but
+    the 28-day airspace cycle (AIRAC). NASR subscription and terminal procedures
+    both publish on it; the NASR edition observed on 2026-07-28 was edition 7,
+    edition date 07/09/2026.
+  artifact: lifecycle/faa-lifecycle.yml
+error_envelope:
+  documented: false
+  artifact: errors/faa-problem-types.yml
+  detail: >-
+    No RFC 9457 problem+json. Error responses in the specs are bare status codes
+    with prose descriptions and empty content. The one envelope observed on the wire
+    is the gateway's {"message": ..., "http_status_code": ...}. SAS signals partial
+    failure inside a 200 body via errorMessage / discrepanciesImportedWithErrors.
+rate_limiting:
+  documented: partially
+  artifact: rate-limits/faa-rate-limits.yml
+  detail: >-
+    Exactly one quantified limit exists in the whole estate: the Air Carrier PRD
+    API's Gravitee plan declares usage_configuration.rate_limit of 1 request per 10
+    seconds per subscription (fetched from the portal plans endpoint on
+    2026-07-28). Every other FAA API plan has an empty usage_configuration, so no
+    quota is published. No RateLimit/X-RateLimit response headers are documented
+    anywhere and no 429 response is declared in any harvested spec, so throttling is
+    undetectable except by observing failures. Absence of a published limit is
+    recorded as a gap, not as "unlimited".
+request_tracing:
+  documented: false
+  detail: >-
+    No correlation-id or request-id header is documented or declared in any spec.
+    The PRD API does carry an application-level tracking identity — the
+    PilotDataTracking resource and the IsTrackingNumberCallValid response field —
+    but that tracks a submitted batch, not an HTTP request.
+metadata_and_expansion:
+  documented: false
+  detail: >-
+    No sparse-fieldset, field-expansion or custom-metadata convention on any
+    surface. The APRA /info operations are themselves the metadata projection of the
+    /chart download operations.
+transport:
+  https_only: true
+  detail: >-
+    All FAA API and data hosts answer over HTTPS. Note that the contact and
+    reference URLs INSIDE the harvested specs are plain http:// (http://fly.faa.gov,
+    http://www.faa.gov/got_data, and the arpa_response namespace URI) — cosmetic in
+    the namespace case, stale in the contact-URL case.
+  artifact: security/faa-domain-security.yml
+environments:
+  documented: partially
+  detail: >-
+    The Air Carrier PRD OpenAPI is the only FAA spec that declares more than one
+    environment. It lists three servers — a production host
+    (https://external.apic4e.faa.gov), a host explicitly labelled "Production
+    deprecated url" (https://external-api.faa.gov/AirCarrierApi), and a staging
+    environment (https://dev-external.apic4e.faa.gov/Test/AirCarrierApi). The
+    staging host did NOT resolve when probed on 2026-07-28 (curl exit, HTTP 000),
+    so no reachable FAA sandbox exists for external developers. No test
+    credentials, magic test values or fixture tooling are published for any FAA
+    API, which is why this repo carries no sandbox/ artifact.
+cross_links:
+  authentication: authentication/faa-authentication.yml
+  rate_limits: rate-limits/faa-rate-limits.yml
+  plans: plans/faa-plans.yml
+  errors: errors/faa-problem-types.yml
+  lifecycle: lifecycle/faa-lifecycle.yml
+  well_known: well-known/faa-well-known.yml
+  security: security/faa-vulnerability-disclosure.yml
+  data_model: data-model/faa-data-model.yml
+gaps:
+- No published API design guide, style guide or developer conventions page.
+- No idempotency contract on three write surfaces (PRD PUT/POST/DELETE, SAS POST).
+- No published rate limit or quota policy.
+- No correlation/request-id convention.
+- No consistent versioning scheme across the estate.
+- No machine-readable error contract.

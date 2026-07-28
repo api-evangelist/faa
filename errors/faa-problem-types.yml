@@ -1,0 +1,171 @@
+generated: '2026-07-28'
+method: derived
+source: >-
+  openapi/faa-aeronautic-product-release-api-openapi.yml,
+  openapi/faa-airport-status-web-service-openapi.yml,
+  openapi/faa-air-carrier-prd-api-openapi.yml,
+  openapi/faa-safety-assurance-system-api-openapi.yml, plus one live probe
+format: none
+format_note: >-
+  The FAA publishes no RFC 9457 application/problem+json error contract. Every
+  harvested OpenAPI declares its error responses as bare status codes with a
+  human-readable description and `content: {}` — no error schema, no error media
+  type, no machine-readable error code. The single observed error envelope on the
+  wire is the API gateway's own JSON shape (see envelopes below), not a documented
+  per-API contract. No FAA error-reference documentation page was found.
+envelopes:
+- surface: FAA API gateway (external-api.faa.gov)
+  media_type: application/json
+  observed_on: https://external-api.faa.gov/notamapi/v1/notams
+  observed_date: '2026-07-28'
+  method: searched
+  example: '{"message":"Unauthorized","http_status_code":401}'
+  fields:
+  - name: message
+    description: Human-readable failure reason emitted by the gateway.
+  - name: http_status_code
+    description: HTTP status repeated in the body.
+  note: >-
+    Emitted by the gateway before the request reaches a backing API, so it applies
+    to any credentialed FAA API called without or with bad credentials. It is not
+    declared in any harvested OpenAPI.
+- surface: Aeronautic Product Release API (APRA)
+  media_type: application/xml
+  note: >-
+    APRA success responses use the FAA-proprietary XML namespace
+    http://arpa.ait.faa.gov/arpa_response. The OpenAPI declares no content schema
+    for any 4xx/5xx, so the error body shape is undocumented.
+- surface: FAA Safety Assurance System (SAS) API
+  media_type: application/json
+  note: >-
+    SAS returns errors in-band on a 200 response. The declared response object
+    carries `errorMessage` and `discrepanciesImportedWithErrors` string fields
+    alongside `confirmationMessage`, so partial failure is signalled in the payload
+    rather than by status code.
+problems:
+- status: 400
+  title: Illegal arguments provided to service
+  detail: One or more of the service parameter values is invalid.
+  media_type: none declared
+  applies_to: Aeronautic Product Release API
+  source_operations:
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getCIFPRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getCIFPEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getDDOFRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getDDOFEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getDECRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getDECEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getTPPRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getTPPEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getIFREnrouteRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getIFREnrouteEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getGOMRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getGOMEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getOceanicRouteChart
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getOceanicRouteEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getIfrPlanningChart
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getIfrPlanningInfo
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getNASRSubscription
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getNASREdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getSupplementRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getSupplementEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getGrandCanyonRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getGrandCanyonEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getHelicopterRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getHelicopterEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getGulfCoastRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getGulfCoastEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getSectionalChart
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getSectionalInfo
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getTACRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getTACEdition
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getProductRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getProductEdition
+  remediation: >-
+    Check the enum-constrained query parameters. `edition` accepts current, next
+    and — on getTPPRelease only — changeset. `format` accepts the per-product enum
+    (pdf/tiff/zip/geo-tiff depending on the product). `geoname` accepts US or a
+    full US state name, or a named chart area, per operation.
+- status: 404
+  title: Requested edition not released or not found
+  detail: >-
+    Requested edition has not been released for download or could not be found on
+    the FAA aeronav web site.
+  media_type: none declared
+  applies_to: Aeronautic Product Release API
+  remediation: >-
+    Charts publish on the 28-day airspace cycle. `edition=next` returns 404 until
+    the next edition is staged for release; call the matching /info operation first
+    and only download once an edition is published.
+- status: 500
+  title: Internal service error
+  detail: >-
+    Internal service error occurred which prevented a valid response from being
+    returned.
+  media_type: none declared
+  applies_to: Aeronautic Product Release API
+  remediation: Retry; APRA is a read-only download surface so retries are safe.
+- status: 404
+  title: Product deprecated and no longer published
+  detail: This product has been deprecated and is no longer published by the FAA.
+  media_type: none declared
+  applies_to: Aeronautic Product Release API (Digital Enroute Supplement)
+  source_operations:
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getDERSRelease
+  - openapi/faa-aeronautic-product-release-api-openapi.yml#getDERSEdition
+  note: >-
+    The only 404 the FAA documents as permanent. Both DERS operations are marked
+    `deprecated: true` in the spec and 404 is their ONLY declared response.
+- status: 404
+  title: Airport delays unavailable
+  detail: Airport delays from http://www.fly.faa.gov are unavailable.
+  media_type: none declared
+  applies_to: Airport Status Web Service
+  source_operations:
+  - openapi/faa-airport-status-web-service-openapi.yml#getDelays
+  remediation: Upstream fly.faa.gov dependency is unavailable; retry.
+- status: 500
+  title: Upstream airport information error
+  detail: >-
+    Airport information from http://www.fly.faa.gov returned an error response.
+  media_type: none declared
+  applies_to: Airport Status Web Service
+  source_operations:
+  - openapi/faa-airport-status-web-service-openapi.yml#getDelays
+- status: 404
+  title: Airport not supported
+  detail: Delays are available only for major United States airports.
+  media_type: none declared
+  applies_to: Airport Status Web Service
+  source_operations:
+  - openapi/faa-airport-status-web-service-openapi.yml#getAirportStatus
+  remediation: >-
+    The service covers roughly 40 major US airports keyed on IATA code (BOS, LGA,
+    TEB, EWR, JFK, PHL, PIT, IAD, BWI, DCA, RDU, CLT, ATL, MCO, TPA, FLL, MIA, DTW,
+    CLE, MDW, ORD, IND, CVG, BNA, MEM, STL, MCI, MSP, DFW, IAH, DEN, SLC, PHX, LAS,
+    SAN, LAX, SJC, SFO, PDX, SEA). Any other IATA code 404s.
+- status: 401
+  title: Unauthorized
+  detail: '{"message":"Unauthorized","http_status_code":401}'
+  media_type: application/json
+  method: searched
+  applies_to: >-
+    Any credentialed API behind external-api.faa.gov / external.apic4e.faa.gov —
+    observed on the NOTAM API
+  observed: https://external-api.faa.gov/notamapi/v1/notams
+  observed_date: '2026-07-28'
+  remediation: >-
+    Supply the credentials the surface requires — client_id and client_secret
+    headers for the NOTAM and Air Carrier PRD APIs, X-API-KEY and X-APP-ID for SAS.
+    Keys are issued by registering an application in the Gravitee developer portal
+    at https://api.faa.gov/.
+  note: >-
+    Not declared in any harvested OpenAPI. Recorded here because it was observed
+    live on the wire and is the error a consumer will actually hit first.
+gaps:
+- No RFC 9457 problem+json anywhere in the FAA API estate.
+- No error schema or example is attached to a single 4xx/5xx response in any of the four harvested specs.
+- >-
+  The Air Carrier PRD API and the SAS API declare NO error responses at all — only
+  200/201 — so a client has no documented failure contract for the two write APIs.
+- No published FAA error-code reference page was found for any of the APIs.

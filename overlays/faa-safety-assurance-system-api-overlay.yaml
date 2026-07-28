@@ -1,0 +1,76 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for FAA Safety Assurance System (SAS) API
+  version: 1.0.0
+x-generated: '2026-07-28'
+x-method: generated
+x-source: openapi/faa-safety-assurance-system-api-openapi.yml
+x-note: >-
+  Non-destructive enhancements only. The harvested FAA spec is never mutated. The
+  most important thing this overlay adds is a real server URL — the spec ships
+  servers[0].url of "/", which makes it unusable as published.
+extends: openapi/faa-safety-assurance-system-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    title: FAA Safety Assurance System (SAS) API
+    description: >-
+      Submits passenger discrepancy reports — including hazardous materials found in
+      passenger baggage — into the FAA Safety Assurance System. The harvested spec
+      carries only the title "sas-api" and no description.
+    x-apievangelist-slug: faa
+    x-apievangelist-api: faa:faa-safety-assurance-system-api
+    x-apievangelist-artifacts:
+      authentication: authentication/faa-authentication.yml
+      conventions: conventions/faa-conventions.yml
+      errors: errors/faa-problem-types.yml
+      plans: plans/faa-plans.yml
+      data_model: data-model/faa-data-model.yml
+    x-plan:
+      name: SAS APIKey Plan
+      security: API_KEY
+      validation: MANUAL
+    x-pii: true
+    x-pii-note: >-
+      The Discrepancy schema carries passenger full name, postal address, city, state,
+      zip, country, phone, email and PNR locator. This is the most PII-dense schema in
+      the FAA public estate.
+- target: $.servers
+  update:
+  - url: https://external.apic4e.faa.gov/axh-sasp-api/sas
+    description: >-
+      External production entrypoint published in the FAA Gravitee portal catalog.
+      REPLACES the spec's servers[0].url of "/", which resolves to nothing.
+  - url: https://internal.apic4e.faa.gov/axh-sasp-api/sas
+    description: Internal entrypoint published in the portal catalog. Not externally reachable.
+- target: $.paths['/axhsubmitdiscrepancies'].post
+  update:
+    operationId: submitDiscrepancies
+    summary: Submit passenger discrepancy reports
+    description: >-
+      RECOMMENDED. The harvested operation declares no operationId and no summary, so
+      no generated client, tool or agent skill can name it. operationId
+      submitDiscrepancies is proposed here; it is NOT present in the FAA spec and must
+      not be treated as one.
+    x-proposed: true
+    x-agentic-access:
+      action-class: acting
+      consequence: write
+      audit: required
+      human-in-the-loop: required
+    x-idempotency: >-
+      NONE. No idempotency key. A retry after a timeout may import duplicate
+      discrepancy records; the response reports totalDiscrepanciesImported but offers
+      no way to reconcile a partial submission.
+    x-error-contract: >-
+      Only 200 is declared. Failure is signalled INSIDE the 200 body via errorMessage
+      and discrepanciesImportedWithErrors, so a client must inspect the payload rather
+      than the status code.
+- target: $.security
+  update:
+  - apiKey: []
+    appId: []
+  x-note: >-
+    RECOMMENDED. Two apiKey securitySchemes (X-API-KEY, X-APP-ID) are DEFINED in
+    components but never APPLIED — the spec declares no root or operation-level
+    security, so tooling reads the API as unauthenticated.
