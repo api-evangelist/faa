@@ -36,39 +36,13 @@ created: '2026-07-28'
 modified: '2026-07-28'
 specificationVersion: '0.19'
 apis:
-- aid: faa:faa-airport-status-web-service
-  name: FAA Airport Status Web Service (ASWS)
-  description: Airport delay summaries and per-airport status for 40+ major US national
-    airports, sourced from fly.faa.gov and served as JSON or XML. Keyed on IATA three-letter
-    airport codes. Answers unauthenticated and the OpenAPI declares a Creative Commons
-    Zero (CC0) licence. Verified live 2026-07-28 (HTTP 200, real delay payload).
-  humanURL: https://api.faa.gov/
-  baseURL: https://external-api.faa.gov/asws/api
-  tags:
-  - Airports
-  - Delays
-  - Flight Information
-  - Travel
-  - Open Data
-  properties:
-  - type: OpenAPI
-    url: openapi/faa-airport-status-web-service-openapi.yml
-  - type: Overlay
-    url: overlays/faa-airport-status-web-service-overlay.yaml
-  - type: AgentSkill
-    name: Check US airport delays and ground stops
-    url: skills/faa-check-airport-delays.md
-  - type: Documentation
-    url: https://api.faa.gov/
-  - type: Website
-    url: https://nasstatus.faa.gov/
 - aid: faa:faa-aeronautic-product-release-api
   name: FAA Aeronautic Product Release API (APRA)
-  description: Chart publication metadata and download API from FAA Aeronautical Information
-    Services. Thirty-four operations across VFR sectionals, terminal area charts, IFR
-    enroute and oceanic charts, terminal procedures (dTPP), digital obstacle files, chart
-    supplements, CIFP and the NFDC NASR 28-day subscription — each exposed as an /info
-    edition lookup and a /chart download. Answers unauthenticated; responses use the
+  description: >-
+    Chart publication metadata and download API from FAA Aeronautical Information Services. Thirty-four
+    operations across VFR sectionals, terminal area charts, IFR enroute and oceanic charts, terminal procedures
+    (dTPP), digital obstacle files, chart supplements, CIFP and the NFDC NASR 28-day subscription — each
+    exposed as an /info edition lookup and a /chart download. Answers unauthenticated; responses use the
     FAA-proprietary arpa_response XML namespace. Verified live 2026-07-28 (HTTP 200).
   humanURL: https://api.faa.gov/
   baseURL: https://external-api.faa.gov/apra
@@ -95,12 +69,12 @@ apis:
     url: https://www.faa.gov/air_traffic/flight_info/aeronav
 - aid: faa:faa-air-carrier-prd-api
   name: FAA Air Carrier PRD API
-  description: Machine interface for submitting and searching pilot records in the FAA
-    Pilot Records Database, the reporting obligation created for air carriers by 14 CFR
-    Part 111. Requires client_id and client_secret request headers. The FAA's own portal
-    listing states access is restricted to operators under Part 121, 135, 125, 91K, Air
-    Tour, Public Aircraft or 91 Corporate and that other public or private entities will
-    not be authorized.
+  description: >-
+    Machine interface for submitting and searching pilot records in the FAA Pilot Records Database, the
+    reporting obligation created for air carriers by 14 CFR Part 111. Requires client_id and client_secret
+    request headers. The FAA's own portal listing states access is restricted to operators under Part
+    121, 135, 125, 91K, Air Tour, Public Aircraft or 91 Corporate and that other public or private entities
+    will not be authorized.
   humanURL: https://api.faa.gov/
   baseURL: https://external.apic4e.faa.gov
   tags:
@@ -123,10 +97,10 @@ apis:
     url: https://www.faa.gov/regulations_policies/pilot_records_database/
 - aid: faa:faa-safety-assurance-system-api
   name: FAA Safety Assurance System (SAS) API
-  description: Single-operation API for submitting passenger discrepancy reports into the
-    FAA Safety Assurance System. The harvested OpenAPI declares apiKey and appId header
-    security schemes and carries a relative server URL; the portal lists external and
-    internal Gravitee entrypoints.
+  description: >-
+    Single-operation API for submitting passenger discrepancy reports into the FAA Safety Assurance System.
+    The harvested OpenAPI declares apiKey and appId header security schemes and carries a relative server
+    URL; the portal lists external and internal Gravitee entrypoints.
   humanURL: https://api.faa.gov/
   baseURL: https://external.apic4e.faa.gov/axh-sasp-api/sas
   tags:
@@ -143,15 +117,14 @@ apis:
     url: https://api.faa.gov/
 - aid: faa:faa-notam-api
   name: FAA NOTAM API
-  description: Notices to Air Missions retrieval API. Probe-confirmed live but gated —
-    an unauthenticated GET returned HTTP 401 with the body {"message":"Unauthorized",
-    "http_status_code":401} on 2026-07-28, while the bare external-api.faa.gov host
-    returns 404, so the route exists behind credentials. Access is via a client_id and
-    client_secret issued from the api.faa.gov developer portal. No public OpenAPI was
-    published for this API in the portal's public catalog, so none was harvested — and
-    the API does not appear in that catalog at all, so it has no published plan.
-    Re-verified 401 on 2026-07-28. This surface sits on the legacy side of the FAA's
-    NOTAM modernization; see the NOTAM Management Service (NMS) entry.
+  description: >-
+    Notices to Air Missions retrieval API. Probe-confirmed live but gated — an unauthenticated GET returned
+    HTTP 401 with the body {"message":"Unauthorized", "http_status_code":401} on 2026-07-28, while the
+    bare external-api.faa.gov host returns 404, so the route exists behind credentials. Access is via
+    a client_id and client_secret issued from the api.faa.gov developer portal. No public OpenAPI was
+    published for this API in the portal's public catalog, so none was harvested — and the API does not
+    appear in that catalog at all, so it has no published plan. Re-verified 401 on 2026-07-28. This surface
+    sits on the legacy side of the FAA's NOTAM modernization; see the NOTAM Management Service (NMS) entry.
   humanURL: https://api.faa.gov/
   baseURL: https://external-api.faa.gov/notamapi/v1
   tags:
@@ -169,15 +142,14 @@ apis:
     url: https://nms.aim.faa.gov/
 - aid: faa:faa-nms-api
   name: FAA NOTAM Management Service (NMS) API
-  description: The distribution interface of the FAA's new NOTAM Management Service,
-    the vendor-provided replacement for the legacy United States NOTAM System (USNS)
-    and Federal NOTAM System (FNS). Discovered and verified live 2026-07-28 at
-    nms.aim.faa.gov, an FAA-operated portal publishing system metrics, a transition FAQ
-    and an API access request path. Access is not self-serve — the portal states
-    verbatim "Please contact us at notams@faa.gov to request access to the new
-    NMS-API." No OpenAPI, schema or endpoint documentation is published to
-    unauthenticated visitors, so none was harvested. The portal's own metrics report
-    261 onboarded API users and roughly 338,000 API calls per day.
+  description: >-
+    The distribution interface of the FAA's new NOTAM Management Service, the vendor-provided replacement
+    for the legacy United States NOTAM System (USNS) and Federal NOTAM System (FNS). Discovered and verified
+    live 2026-07-28 at nms.aim.faa.gov, an FAA-operated portal publishing system metrics, a transition
+    FAQ and an API access request path. Access is not self-serve — the portal states verbatim "Please
+    contact us at notams@faa.gov to request access to the new NMS-API." No OpenAPI, schema or endpoint
+    documentation is published to unauthenticated visitors, so none was harvested. The portal's own metrics
+    report 261 onboarded API users and roughly 338,000 API calls per day.
   humanURL: https://nms.aim.faa.gov/
   tags:
   - NOTAM
@@ -199,12 +171,12 @@ apis:
     url: https://nms.aim.faa.gov/
 - aid: faa:faa-nms-nat-track-feed
   name: FAA NMS North Atlantic Track NOTAM Feed
-  description: Unauthenticated JSON feed of North Atlantic Track NOTAMs published by the
-    FAA NOTAM Management Service. Each record carries accountability and origin ids, the
-    formatted NOTAM number, ICAO id, location code, the full condition message text,
-    start and end datetimes, classification code and transaction type (NAT_TRACK).
-    Verified live 2026-07-28 (HTTP 200, application/json, real NAT track NOTAM data
-    originated by CZQX). No OpenAPI is published for it.
+  description: >-
+    Unauthenticated JSON feed of North Atlantic Track NOTAMs published by the FAA NOTAM Management Service.
+    Each record carries accountability and origin ids, the formatted NOTAM number, ICAO id, location code,
+    the full condition message text, start and end datetimes, classification code and transaction type
+    (NAT_TRACK). Verified live 2026-07-28 (HTTP 200, application/json, real NAT track NOTAM data originated
+    by CZQX). No OpenAPI is published for it.
   humanURL: https://nms.aim.faa.gov/
   baseURL: https://nms.aim.faa.gov/datanat/nat.json
   tags:
@@ -220,12 +192,12 @@ apis:
     url: https://nms.aim.faa.gov/
 - aid: faa:faa-nms-metrics-feed
   name: FAA NMS System Metrics Feed
-  description: Unauthenticated JSON feed backing the NOTAM Management Service system
-    metrics dashboard — cumulative NOTAMs processed, NMS API onboarded users, NMS API
-    volume of data pulled per day, number of API calls per day, volume of NOTAMs
-    processed per day and active NOTAMs, each with a period, direction and percentage
-    trend, plus an updatedOn timestamp. This is the only published operational-health
-    signal for any FAA API. Verified live 2026-07-28 (HTTP 200).
+  description: >-
+    Unauthenticated JSON feed backing the NOTAM Management Service system metrics dashboard — cumulative
+    NOTAMs processed, NMS API onboarded users, NMS API volume of data pulled per day, number of API calls
+    per day, volume of NOTAMs processed per day and active NOTAMs, each with a period, direction and percentage
+    trend, plus an updatedOn timestamp. This is the only published operational-health signal for any FAA
+    API. Verified live 2026-07-28 (HTTP 200).
   humanURL: https://nms.aim.faa.gov/
   baseURL: https://nms.aim.faa.gov/data/content.json
   tags:
@@ -242,11 +214,11 @@ apis:
     url: https://nms.aim.faa.gov/#system-metrics
 - aid: faa:faa-dms-lookup-api
   name: FAA DMS Lookup API
-  description: Retrieves designee information from the FAA Data Management System using
-    either a Designee Number or an ODA Key ID. Listed in the api.faa.gov portal under the
-    "Public" category, but the only entrypoint the portal publishes is
-    internal.apic4e.faa.gov, so no externally reachable base URL is documented and no
-    OpenAPI page is attached.
+  description: >-
+    Retrieves designee information from the FAA Data Management System using either a Designee Number
+    or an ODA Key ID. Listed in the api.faa.gov portal under the "Public" category, but the only entrypoint
+    the portal publishes is internal.apic4e.faa.gov, so no externally reachable base URL is documented
+    and no OpenAPI page is attached.
   humanURL: https://api.faa.gov/
   tags:
   - Designees
@@ -257,11 +229,11 @@ apis:
     url: https://api.faa.gov/
 - aid: faa:faa-data-catalog-ckan-api
   name: FAA Data Catalog API (CKAN)
-  description: The FAA's public data clearinghouse at catalog.data.faa.gov runs CKAN
-    2.11.4 and exposes the standard CKAN Action API. Verified 2026-07-28 — status_show
-    returned site_title "Federal Aviation Administration" and ckan_version 2.11.4, and
-    package_list returned six aeronautical chart product datasets. A DCAT-US 1.1
-    /data.json feed is also published.
+  description: >-
+    The FAA's public data clearinghouse at catalog.data.faa.gov runs CKAN 2.11.4 and exposes the standard
+    CKAN Action API. Verified 2026-07-28 — status_show returned site_title "Federal Aviation Administration"
+    and ckan_version 2.11.4, and package_list returned six aeronautical chart product datasets. A DCAT-US
+    1.1 /data.json feed is also published.
   humanURL: https://catalog.data.faa.gov/dataset
   baseURL: https://catalog.data.faa.gov/api/3/action
   tags:
@@ -278,11 +250,11 @@ apis:
     url: https://www.faa.gov/data
 - aid: faa:faa-ais-open-data
   name: FAA Aeronautical Information Services Open Data
-  description: ArcGIS Open Data hub published by "Federal Aviation Administration - AIS"
-    carrying 73 datasets — class airspace, frequencies, runways, navaids, obstacles, VFR
-    and IFR chart tile services. Every feature dataset is offered as an ArcGIS GeoServices
-    REST FeatureServer plus bulk CSV, GeoJSON, KML and shapefile download, and the hub
-    publishes a DCAT-US 1.1 catalog. Verified 2026-07-28 (HTTP 200, 73 datasets).
+  description: >-
+    ArcGIS Open Data hub published by "Federal Aviation Administration - AIS" carrying 73 datasets — class
+    airspace, frequencies, runways, navaids, obstacles, VFR and IFR chart tile services. Every feature
+    dataset is offered as an ArcGIS GeoServices REST FeatureServer plus bulk CSV, GeoJSON, KML and shapefile
+    download, and the hub publishes a DCAT-US 1.1 catalog. Verified 2026-07-28 (HTTP 200, 73 datasets).
   humanURL: https://ais-faa.opendata.arcgis.com/
   baseURL: https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services
   tags:
@@ -298,10 +270,10 @@ apis:
     url: https://ais-faa.opendata.arcgis.com/data.json
 - aid: faa:faa-uas-data-delivery-system
   name: FAA UAS Data Delivery System Open Data
-  description: ArcGIS Open Data hub for unmanned aircraft data — UAS Facility Maps (the
-    LAANC altitude grid), national security UAS flight restrictions, part-time
-    restrictions, FAA-Recognized Identification Areas and the Sporting Event Automated
-    Monitoring System. 28 datasets, ArcGIS GeoServices REST plus CSV/GeoJSON/KML/ZIP
+  description: >-
+    ArcGIS Open Data hub for unmanned aircraft data — UAS Facility Maps (the LAANC altitude grid), national
+    security UAS flight restrictions, part-time restrictions, FAA-Recognized Identification Areas and
+    the Sporting Event Automated Monitoring System. 28 datasets, ArcGIS GeoServices REST plus CSV/GeoJSON/KML/ZIP
     export, DCAT-US 1.1 feed. Verified 2026-07-28 (HTTP 200, 28 datasets).
   humanURL: https://udds-faa.opendata.arcgis.com/
   baseURL: https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services
@@ -318,10 +290,10 @@ apis:
     url: https://udds-faa.opendata.arcgis.com/api/feed/dcat-us/1.1.json
 - aid: faa:faa-nas-status-feed
   name: FAA NAS Status Airport Status Information Feed
-  description: Unauthenticated XML feed of national airspace system status — ground stop
-    programs, ground delay programs, airport closures and arrival/departure delays — as
-    consumed by nasstatus.faa.gov. Verified live 2026-07-28 (HTTP 200, real ground stop
-    and ground delay program data keyed on IATA airport codes).
+  description: >-
+    Unauthenticated XML feed of national airspace system status — ground stop programs, ground delay programs,
+    airport closures and arrival/departure delays — as consumed by nasstatus.faa.gov. Verified live 2026-07-28
+    (HTTP 200, real ground stop and ground delay program data keyed on IATA airport codes).
   humanURL: https://nasstatus.faa.gov/
   baseURL: https://nasstatus.faa.gov/api/airport-status-information
   tags:
@@ -335,9 +307,10 @@ apis:
     url: https://nasstatus.faa.gov/
 - aid: faa:faa-tfr-api
   name: FAA Temporary Flight Restriction (TFR) List API
-  description: Unauthenticated JSON list of active Temporary Flight Restrictions, each
-    carrying a NOTAM id, TFR type, ARTCC facility identifier, state and effective
-    description. Verified live 2026-07-28 (HTTP 200, application/json, 28,701 bytes).
+  description: >-
+    Unauthenticated JSON list of active Temporary Flight Restrictions, each carrying a NOTAM id, TFR type,
+    ARTCC facility identifier, state and effective description. Verified live 2026-07-28 (HTTP 200, application/json,
+    28,701 bytes).
   humanURL: https://tfr.faa.gov/
   baseURL: https://tfr.faa.gov/tfrapi/exportTfrList
   tags:
@@ -349,6 +322,16 @@ apis:
   properties:
   - type: Website
     url: https://tfr.faa.gov/
+- aid: faa:faa-airport-status-web-service-openapi
+  name: Federal Aviation Administration Airport Status Web Service
+  description: >-
+    Federal Aviation Administration Airport Status Web Service from Federal Aviation Administration —
+    2 path(s) described in OpenAPI.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-airport-status-web-service-openapi.yml
 common:
 - type: AgenticAccess
   url: agentic-access/faa-agentic-access.yml
