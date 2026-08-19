@@ -1,0 +1,202 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "PRD Air Carrier API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "POST /AirCarrierApi/Pilot",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/Pilot",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "add new records pilot record database Air carrier Api"
+    },
+    {
+      "info": {
+        "name": "PUT /AirCarrierApi/Pilot",
+        "type": "http"
+      },
+      "http": {
+        "method": "PUT",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/Pilot",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "update existing pilot record database Air carrier Api"
+    },
+    {
+      "info": {
+        "name": "DELETE /AirCarrierApi/Pilot",
+        "type": "http"
+      },
+      "http": {
+        "method": "DELETE",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/Pilot",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ]
+      },
+      "docs": "performs delete on pilot record database air carrier api"
+    },
+    {
+      "info": {
+        "name": "POST /AirCarrierApi/PilotDataTracking",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/PilotDataTracking",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "query pilot tracking record database air carrier api details"
+    },
+    {
+      "info": {
+        "name": "PUT /AirCarrierApi/PilotDataTracking",
+        "type": "http"
+      },
+      "http": {
+        "method": "PUT",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/PilotDataTracking",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "update existing pilot tracking record database Air carrier Api"
+    },
+    {
+      "info": {
+        "name": "DELETE /AirCarrierApi/PilotDataTracking",
+        "type": "http"
+      },
+      "http": {
+        "method": "DELETE",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/PilotDataTracking",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ]
+      },
+      "docs": "performs delete on pilot tracking record database air carrier api"
+    },
+    {
+      "info": {
+        "name": "POST /AirCarrierApi/AcPilotDataSearchRequest",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/AcPilotDataSearchRequest",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "add new records pilot record database Air carrier Api"
+    },
+    {
+      "info": {
+        "name": "POST /AirCarrierApi/AcPilotDataSearchResponse",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://external.apic4e.faa.gov/AirCarrierApi/AcPilotDataSearchResponse",
+        "headers": [
+          {
+            "name": "client_id",
+            "value": ""
+          },
+          {
+            "name": "client_secret",
+            "value": ""
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "add new records pilot record database Air carrier Api"
+    }
+  ],
+  "bundled": true
+}

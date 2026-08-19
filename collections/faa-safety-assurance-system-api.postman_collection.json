@@ -1,0 +1,109 @@
+{
+  "item": [
+    {
+      "id": "49ddbb39-301b-44a8-96d8-db259f561bde",
+      "name": "/axhsubmitdiscrepancies",
+      "request": {
+        "name": "/axhsubmitdiscrepancies",
+        "description": {},
+        "url": {
+          "path": [
+            "axhsubmitdiscrepancies"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "auth": null,
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"AirCarrierName\": \"<string>\",\n  \"Discrepancies\": [\n    {\n      \"HazmatItems\": [\n        {\n          \"HazmatDescription\": \"<string>\",\n          \"Quantity\": \"<string>\",\n          \"HazmatType\": \"<string>\",\n          \"HazmatClass\": \"<string>\"\n        },\n        {\n          \"HazmatDescription\": \"<string>\",\n          \"Quantity\": \"<string>\",\n          \"HazmatType\": \"<string>\",\n          \"HazmatClass\": \"<string>\"\n        }\n      ],\n      \"AirCarrierDSGN\": \"<string>\",\n      \"FlightOperatedByDSGN\": \"<string>\",\n      \"CarrierRecordId\": \"<string>\",\n      \"AirportCode\": \"<string>\",\n      \"LocationOfDiscovery\": \"<string>\",\n      \"DiscrepancyDate\": \"<string>\",\n      \"PnrLocator\": \"<string>\",\n      \"PassengerFullName\": \"<string>\",\n      \"PassengerAddress\": \"<string>\",\n      \"PassengerCity\": \"<string>\",\n      \"PassengerStateCode\": \"<string>\",\n      \"PassengerZipCode\": \"<string>\",\n      \"PassengerCountryCode\": \"<string>\",\n      \"PassengerPhone\": \"<string>\",\n      \"PassengerEmail\": \"<string>\",\n      \"FlightNumber\": \"<string>\",\n      \"DestinationAirportCode\": \"<string>\"\n    },\n    {\n      \"HazmatItems\": [\n        {\n          \"HazmatDescription\": \"<string>\",\n          \"Quantity\": \"<string>\",\n          \"HazmatType\": \"<string>\",\n          \"HazmatClass\": \"<string>\"\n        },\n        {\n          \"HazmatDescription\": \"<string>\",\n          \"Quantity\": \"<string>\",\n          \"HazmatType\": \"<string>\",\n          \"HazmatClass\": \"<string>\"\n        }\n      ],\n      \"AirCarrierDSGN\": \"<string>\",\n      \"FlightOperatedByDSGN\": \"<string>\",\n      \"CarrierRecordId\": \"<string>\",\n      \"AirportCode\": \"<string>\",\n      \"LocationOfDiscovery\": \"<string>\",\n      \"DiscrepancyDate\": \"<string>\",\n      \"PnrLocator\": \"<string>\",\n      \"PassengerFullName\": \"<string>\",\n      \"PassengerAddress\": \"<string>\",\n      \"PassengerCity\": \"<string>\",\n      \"PassengerStateCode\": \"<string>\",\n      \"PassengerZipCode\": \"<string>\",\n      \"PassengerCountryCode\": \"<string>\",\n      \"PassengerPhone\": \"<string>\",\n      \"PassengerEmail\": \"<string>\",\n      \"FlightNumber\": \"<string>\",\n      \"DestinationAirportCode\": \"<string>\"\n    }\n  ],\n  \"ReporterDSGN\": \"<string>\",\n  \"ReporterEmail\": \"<string>\",\n  \"ReporterName\": \"<string>\",\n  \"ReporterPhone\": \"<string>\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "id": "a656a774-cb07-4900-a2a7-f6fe94f55256",
+          "name": "200 response",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "axhsubmitdiscrepancies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ReporterName\": \"Al\",\n  \"AirCarrierName\": \"Al's Airline\",\n  \"ReporterPhone\": \"1234567890\",\n  \"ReporterEmail\": \"al@al.com\",\n  \"ReporterDSGN\": \"ALLA\",\n  \"Discrepancies\": [\n    {\n      \"AirCarrierDSGN\": \"SWAA\",\n      \"FlightOperatedByDSGN\": \"SWAA\",\n      \"CarrierRecordId\": \"B123\",\n      \"AirportCode\": \"BOS\",\n      \"LocationOfDiscovery\": \"handbag\",\n      \"DiscrepancyDate\": \"08/15/2019\",\n      \"PnrLocator\": \"\",\n      \"PassengerFullName\": \"Juan Smith\",\n      \"PassengerAddress\": \"123 Fake St\",\n      \"PassengerCity\": \"town\",\n      \"PassengerStateCode\": \"MA\",\n      \"PassengerZipCode\": 2909,\n      \"PassengerCountryCode\": \"US\",\n      \"PassengerPhone\": \"\",\n      \"PassengerEmail\": \"test@test.com\",\n      \"FlightNumber\": \"bla123\",\n      \"DestinationAirportCode\": \"LAX\",\n      \"HazmatItems\": [\n        {\n          \"HazmatDescription\": \"Cans of beer\",\n          \"Quantity\": \"Forty\",\n          \"HazmatType\": \"ALCOHOL\",\n          \"HazmatClass\": \"Class 6: Toxic Substances and Infectious Substances\"\n        },\n        {\n          \"HazmatDescription\": \"Unknown\",\n          \"Quantity\": \"15\",\n          \"HazmatType\": \"DE-ICER\",\n          \"HazmatClass\": \"Class 9: Miscellaneous Hazardous Materials\"\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"confirmationMessage\": \"confirmation message for successful transaction\",\n  \"totalDiscrepanciesImported\": 2,\n  \"discrepanciesImportedWithErrors\": \"record failed due to data issues\",\n  \"errorMessage\": \"error message, if any\"\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "220e6da5-d40c-42b0-a387-7012e85362a8",
+    "name": "sas-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

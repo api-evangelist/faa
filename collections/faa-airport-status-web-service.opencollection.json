@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Airport Status Web Service",
+    "version": "1.2.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "FAA Airport Status Service",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get airport delay summary for major US national airports.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://external.apic4e.faa.gov/api/airport/delays"
+          },
+          "docs": "The airport status is retrieved from fly.faa.gov and is provided in a format that can be used by applications that require airport status data.Delays will be returned for the following airports: BOS, LGA, TEB, EWR, JFK, PHL, PIT, IAD, BWI, DCA, RDU, CLT, ATL, MCO, TPA, MCO, FLL, MIA, DTW, CLE, MDW, ORD, IND, CVG, BNA, MEM, STL, MCI, MSP, DFW, IAH, DEN, SLC, PHX, LAS, SAN, LAX, SJC, SFO, PDX, SEA"
+        },
+        {
+          "info": {
+            "name": "Get airport status based on path parameter provided on the API call. The path parameter is an IATA airport code.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://external.apic4e.faa.gov/api/airport/status/:airportCode",
+            "params": [
+              {
+                "name": "airportCode",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "The airport status is retrieved from fly.faa.gov and is provided in a format that can be used by applications that require airport status data.Available airports include the following: BOS, LGA, TEB, EWR, JFK, PHL, PIT, IAD, BWI, DCA, RDU, CLT, ATL, MCO, TPA, MCO, FLL, MIA, DTW, CLE, MDW, ORD, IND, CVG, BNA, MEM, STL, MCI, MSP, DFW, IAH, DEN, SLC, PHX, LAS, SAN, LAX, SJC, SFO, PDX, SEA"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,24 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "sas-api",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "POST /axhsubmitdiscrepancies",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "/axhsubmitdiscrepancies",
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      }
+    }
+  ],
+  "bundled": true
+}
