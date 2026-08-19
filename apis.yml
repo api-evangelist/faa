@@ -34,7 +34,7 @@ tags:
 - Aeronautical Information
 created: '2026-07-28'
 modified: '2026-07-28'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: faa:faa-aeronautic-product-release-api
   name: FAA Aeronautic Product Release API (APRA)
