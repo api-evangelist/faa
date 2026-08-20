@@ -202,6 +202,11 @@ apis:
   baseURL: https://nms.aim.faa.gov/data/content.json
   tags:
   - Metrics
+  - NOTAM
+  - Open Data
+  - Observability
+  tags_raw:
+  - Metrics
   - Operations
   - NOTAM
   - Open Data
