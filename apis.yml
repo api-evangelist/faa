@@ -36,85 +36,6 @@ created: '2026-07-28'
 modified: '2026-07-28'
 specificationVersion: '0.23'
 apis:
-- aid: faa:faa-aeronautic-product-release-api
-  name: FAA Aeronautic Product Release API (APRA)
-  description: >-
-    Chart publication metadata and download API from FAA Aeronautical Information Services. Thirty-four
-    operations across VFR sectionals, terminal area charts, IFR enroute and oceanic charts, terminal procedures
-    (dTPP), digital obstacle files, chart supplements, CIFP and the NFDC NASR 28-day subscription — each
-    exposed as an /info edition lookup and a /chart download. Answers unauthenticated; responses use the
-    FAA-proprietary arpa_response XML namespace. Verified live 2026-07-28 (HTTP 200).
-  humanURL: https://api.faa.gov/
-  baseURL: https://external-api.faa.gov/apra
-  tags:
-  - Aeronautical Charts
-  - Aviation
-  - NASR
-  - Open Data
-  - Airports
-  properties:
-  - type: OpenAPI
-    url: openapi/faa-aeronautic-product-release-api-openapi.yml
-  - type: Overlay
-    url: overlays/faa-aeronautic-product-release-api-overlay.yaml
-  - type: AgentSkill
-    name: Track and download the NASR 28-day subscription
-    url: skills/faa-track-nasr-28-day-cycle.md
-  - type: AgentSkill
-    name: Fetch FAA terminal procedures and VFR/IFR charts
-    url: skills/faa-fetch-terminal-procedures-and-charts.md
-  - type: Documentation
-    url: https://api.faa.gov/
-  - type: Website
-    url: https://www.faa.gov/air_traffic/flight_info/aeronav
-- aid: faa:faa-air-carrier-prd-api
-  name: FAA Air Carrier PRD API
-  description: >-
-    Machine interface for submitting and searching pilot records in the FAA Pilot Records Database, the
-    reporting obligation created for air carriers by 14 CFR Part 111. Requires client_id and client_secret
-    request headers. The FAA's own portal listing states access is restricted to operators under Part
-    121, 135, 125, 91K, Air Tour, Public Aircraft or 91 Corporate and that other public or private entities
-    will not be authorized.
-  humanURL: https://api.faa.gov/
-  baseURL: https://external.apic4e.faa.gov
-  tags:
-  - Pilot Records
-  - Airlines
-  - Compliance
-  - Aviation Safety
-  - Regulator
-  properties:
-  - type: OpenAPI
-    url: openapi/faa-air-carrier-prd-api-openapi.yml
-  - type: Overlay
-    url: overlays/faa-air-carrier-prd-api-overlay.yaml
-  - type: RateLimits
-    name: 1 request per 10 seconds per subscription (FAA Gravitee plan)
-    url: rate-limits/faa-rate-limits.yml
-  - type: Documentation
-    url: https://api.faa.gov/
-  - type: Website
-    url: https://www.faa.gov/regulations_policies/pilot_records_database/
-- aid: faa:faa-safety-assurance-system-api
-  name: FAA Safety Assurance System (SAS) API
-  description: >-
-    Single-operation API for submitting passenger discrepancy reports into the FAA Safety Assurance System.
-    The harvested OpenAPI declares apiKey and appId header security schemes and carries a relative server
-    URL; the portal lists external and internal Gravitee entrypoints.
-  humanURL: https://api.faa.gov/
-  baseURL: https://external.apic4e.faa.gov/axh-sasp-api/sas
-  tags:
-  - Aviation Safety
-  - Compliance
-  - Reporting
-  - Regulator
-  properties:
-  - type: OpenAPI
-    url: openapi/faa-safety-assurance-system-api-openapi.yml
-  - type: Overlay
-    url: overlays/faa-safety-assurance-system-api-overlay.yaml
-  - type: Documentation
-    url: https://api.faa.gov/
 - aid: faa:faa-notam-api
   name: FAA NOTAM API
   description: >-
@@ -327,17 +248,393 @@ apis:
   properties:
   - type: Website
     url: https://tfr.faa.gov/
-- aid: faa:faa-airport-status-web-service-openapi
-  name: Federal Aviation Administration Airport Status Web Service
+- aid: faa:faa-aircarrierapi-api
+  name: Federal Aviation Administration Air Carrier API
   description: >-
-    Federal Aviation Administration Airport Status Web Service from Federal Aviation Administration —
-    2 path(s) described in OpenAPI.
+    The AirCarrierApi API from Federal Aviation Administration — 4 operation(s) for aircarrierapi.
   humanURL: https://api.faa.gov/
   baseURL: https://external-api.faa.gov/apra
+  tags:
+  - AirCarrierApi
   properties:
   - type: OpenAPI
-    url: openapi/faa-airport-status-web-service-openapi.yml
+    url: openapi/faa-aircarrierapi-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-axhsubmitdiscrepancies-api
+  name: Federal Aviation Administration Axhsubmitdiscrepancies API
+  description: >-
+    The Axhsubmitdiscrepancies API from Federal Aviation Administration — 1 operation(s) for axhsubmitdiscrepancies.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Axhsubmitdiscrepancies
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-axhsubmitdiscrepancies-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-coded-instrument-flight-procedures-cifp-api
+  name: Federal Aviation Administration Coded Instrument Flight Procedures (CIFP) API
+  description: >-
+    The Coded Instrument Flight Procedures (CIFP) API from Federal Aviation Administration — 2 operation(s)
+    for coded instrument flight procedures (cifp).
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Coded Instrument Flight Procedures (CIFP)
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-coded-instrument-flight-procedures-cifp-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-daily-digital-obstacle-file-ddof-api
+  name: Federal Aviation Administration Daily Digital Obstacle File (DDOF) API
+  description: >-
+    The Daily Digital Obstacle File (DDOF) API from Federal Aviation Administration — 2 operation(s) for
+    daily digital obstacle file (ddof).
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Daily Digital Obstacle File (DDOF)
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-daily-digital-obstacle-file-ddof-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-digital-enroute-charts-us-ddecus-api
+  name: Federal Aviation Administration Digital Enroute Charts US (DDECUS) API
+  description: >-
+    The Digital Enroute Charts US (DDECUS) API from Federal Aviation Administration — 2 operation(s) for
+    digital enroute charts us (ddecus).
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Digital Enroute Charts US (DDECUS)
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-digital-enroute-charts-us-ddecus-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-digital-enroute-supplement-ders-api
+  name: Federal Aviation Administration Digital Enroute Supplement (DERS) API
+  description: >-
+    The Digital Enroute Supplement (DERS) API from Federal Aviation Administration — 2 operation(s) for
+    digital enroute supplement (ders).
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Digital Enroute Supplement (DERS)
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-digital-enroute-supplement-ders-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-faa-airport-status-service-api
+  name: Federal Aviation Administration FAA Airport Status Service API
+  description: >-
+    The FAA Airport Status Service API from Federal Aviation Administration — 2 operation(s) for faa airport
+    status service.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - FAA Airport Status Service
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-faa-airport-status-service-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-grand-canyon-vfr-chart-api
+  name: Federal Aviation Administration Grand Canyon VFR Chart API
+  description: >-
+    The Grand Canyon VFR Chart API from Federal Aviation Administration — 2 operation(s) for grand canyon
+    vfr chart.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Grand Canyon VFR Chart
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-grand-canyon-vfr-chart-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-gulf-of-mexico-ifr-enroute-chart-api
+  name: Federal Aviation Administration Gulf of Mexico IFR Enroute Chart API
+  description: >-
+    The Gulf of Mexico IFR Enroute Chart API from Federal Aviation Administration — 2 operation(s) for
+    gulf of mexico ifr enroute chart.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Gulf of Mexico IFR Enroute Chart
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-gulf-of-mexico-ifr-enroute-chart-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-ifr-enroute-charts-api
+  name: Federal Aviation Administration IFR Enroute Charts API
+  description: >-
+    The IFR Enroute Charts API from Federal Aviation Administration — 2 operation(s) for ifr enroute charts.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - IFR Enroute Charts
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-ifr-enroute-charts-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-ifr-planning-charts-api
+  name: Federal Aviation Administration IFR Planning Charts API
+  description: >-
+    The IFR Planning Charts API from Federal Aviation Administration — 2 operation(s) for ifr planning
+    charts.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - IFR Planning Charts
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-ifr-planning-charts-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-nasr-28-day-subscription-api
+  name: Federal Aviation Administration NASR 28 Day Subscription API
+  description: >-
+    The NASR 28 Day Subscription API from Federal Aviation Administration — 2 operation(s) for nasr 28
+    day subscription.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - NASR 28 Day Subscription
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-nasr-28-day-subscription-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-oceanic-route-charts-api
+  name: Federal Aviation Administration Oceanic Route Charts API
+  description: >-
+    The Oceanic Route Charts API from Federal Aviation Administration — 2 operation(s) for oceanic route
+    charts.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Oceanic Route Charts
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-oceanic-route-charts-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-sectional-charts-api
+  name: Federal Aviation Administration Sectional Charts API
+  description: >-
+    The Sectional Charts API from Federal Aviation Administration — 2 operation(s) for sectional charts.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Sectional Charts
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-sectional-charts-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-supplement-chart-api
+  name: Federal Aviation Administration Supplement Chart API
+  description: >-
+    The Supplement Chart  API from Federal Aviation Administration — 2 operation(s) for supplement chart
+    .
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - 'Supplement Chart '
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-supplement-chart-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-terminal-area-charts-api
+  name: Federal Aviation Administration Terminal Area Charts API
+  description: >-
+    The Terminal Area Charts API from Federal Aviation Administration — 2 operation(s) for terminal area
+    charts.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - Terminal Area Charts
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-terminal-area-charts-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-us-terminal-procedures-publication-tpp-api
+  name: Federal Aviation Administration US Terminal Procedures Publication (TPP) API
+  description: >-
+    The US Terminal Procedures Publication (TPP) API from Federal Aviation Administration — 2 operation(s)
+    for us terminal procedures publication (tpp).
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - US Terminal Procedures Publication (TPP)
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-us-terminal-procedures-publication-tpp-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-us-vfr-wall-planning-chart-api
+  name: Federal Aviation Administration US VFR Wall Planning Chart API
+  description: >-
+    The US VFR Wall Planning Chart API from Federal Aviation Administration — 2 operation(s) for us vfr
+    wall planning chart.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - US VFR Wall Planning Chart
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-us-vfr-wall-planning-chart-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
+- aid: faa:faa-vfr-helicopter-route-chart-api
+  name: Federal Aviation Administration VFR Helicopter Route Chart API
+  description: >-
+    The VFR Helicopter Route Chart API from Federal Aviation Administration — 4 operation(s) for vfr helicopter
+    route chart.
+  humanURL: https://api.faa.gov/
+  baseURL: https://external-api.faa.gov/apra
+  tags:
+  - VFR Helicopter Route Chart
+  properties:
+  - type: OpenAPI
+    url: openapi/faa-vfr-helicopter-route-chart-api-openapi.yml
+  - type: Documentation
+    url: https://api.faa.gov/
+  - type: Website
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav
+  - type: RateLimits
+    url: rate-limits/faa-rate-limits.yml
+  - type: Website
+    url: https://www.faa.gov/regulations_policies/pilot_records_database/
 common:
+- type: Overlay
+  url: overlays/faa-aeronautic-product-release-api-overlay.yaml
+- type: AgentSkill
+  url: skills/faa-track-nasr-28-day-cycle.md
+- type: AgentSkill
+  url: skills/faa-fetch-terminal-procedures-and-charts.md
+- type: Overlay
+  url: overlays/faa-air-carrier-prd-api-overlay.yaml
+- type: Overlay
+  url: overlays/faa-safety-assurance-system-api-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/faa-agentic-access.yml
 - type: DomainSecurity
