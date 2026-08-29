@@ -20,6 +20,20 @@ description: The Federal Aviation Administration (FAA) is the United States civi
   Database API and SWIM are gated — client_id/client_secret headers, operator eligibility
   restricted by regulation, or an executed SWIM agreement — and LAANC drone authorization
   is reachable only through FAA-approved UAS Service Suppliers, never directly.
+deliveryModel:
+  model: saas
+  license: Creative Commons Zero (CC0) — declared in the ASWS and APRA OpenAPI
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - license
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.faa.gov/themes/custom/faa/favicon.png
 tags:
 - Travel
