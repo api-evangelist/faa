@@ -1,0 +1,77 @@
+openapi: 3.2.0
+info:
+  title: Aeronautic Product Release Digital Enroute Charts US (DDECUS) API
+  description: FAA Aeronautic chart publication download API
+  contact:
+    name: Aeronautic Product Release API (APRA)
+    url: http://www.faa.gov/got_data
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.4.0
+servers:
+- url: https://external-api.faa.gov/apra
+tags:
+- name: Digital Enroute Charts US (DDECUS)
+paths:
+  /dec/chart:
+    get:
+      tags:
+      - Digital Enroute Charts US (DDECUS)
+      summary: Get Digital Enroute Chart download link by edition type of current or next. If edition is left blank or null, the default edition of current is used.
+      description: The DEC US release is distributed as a zip file containing charts.
+      operationId: getDECRelease
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /dec/info:
+    get:
+      tags:
+      - Digital Enroute Charts US (DDECUS)
+      summary: Get CIFP edition date and edition number by edition type of current or next. If the edition is left blank or null, the default edition of current is used.
+      operationId: getDECEdition
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+x-original-swagger-version: '2.0'

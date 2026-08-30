@@ -1,0 +1,62 @@
+openapi: 3.2.0
+info:
+  title: Aeronautic Product Release Digital Enroute Supplement (DERS) API
+  description: FAA Aeronautic chart publication download API
+  contact:
+    name: Aeronautic Product Release API (APRA)
+    url: http://www.faa.gov/got_data
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.4.0
+servers:
+- url: https://external-api.faa.gov/apra
+tags:
+- name: Digital Enroute Supplement (DERS)
+paths:
+  /ders/chart:
+    get:
+      tags:
+      - Digital Enroute Supplement (DERS)
+      summary: Get Digital Enroute Supplement download link.
+      description: The Digital Enroute Supplement release has been deprecated and is no longer published by the FAA..
+      operationId: getDERSRelease
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      responses:
+        '404':
+          description: This product has been deprecated and is no longer published by the FAA.
+          content: {}
+      deprecated: true
+  /ders/info:
+    get:
+      tags:
+      - Digital Enroute Supplement (DERS)
+      summary: Get Digital Enroute Supplement edition information.
+      description: The Digital Enroute Supplement release has been deprecated and is no longer published by the FAA.
+      operationId: getDERSEdition
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      responses:
+        '404':
+          description: This product has been deprecated and is no longer published by the FAA.
+          content: {}
+      deprecated: true
+x-original-swagger-version: '2.0'

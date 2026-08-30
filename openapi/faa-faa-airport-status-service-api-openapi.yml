@@ -1,0 +1,325 @@
+openapi: 3.2.0
+info:
+  title: Airport Status Web Service FAA Airport Status Service API
+  description: FAA Airport Status Web Service API
+  contact:
+    name: Airport Status Web Service (ASWS)
+    url: http://fly.faa.gov
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.2.1
+servers:
+- url: https://external.apic4e.faa.gov
+- url: https://external-api.faa.gov
+tags:
+- name: FAA Airport Status Service
+paths:
+  /api/airport/delays:
+    get:
+      tags:
+      - FAA Airport Status Service
+      summary: Get airport delay summary for major US national airports.
+      description: 'The airport status is retrieved from fly.faa.gov and is provided in a format that can be used by applications that require airport status data.Delays will be returned for the following airports: BOS, LGA, TEB, EWR, JFK, PHL, PIT, IAD, BWI, DCA, RDU, CLT, ATL, MCO, TPA, MCO, FLL, MIA, DTW, CLE, MDW, ORD, IND, CVG, BNA, MEM, STL, MCI, MSP, DFW, IAH, DEN, SLC, PHX, LAS, SAN, LAX, SJC, SFO, PDX, SEA'
+      operationId: getDelays
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delays'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Delays'
+        '404':
+          description: Airport delays from http://www.fly.faa.gov are unavailable
+          content: {}
+        '500':
+          description: Airport information from http://www.fly.faa.gov returned an error response
+          content: {}
+  /api/airport/status/{airportCode}:
+    get:
+      tags:
+      - FAA Airport Status Service
+      summary: Get airport status based on path parameter provided on the API call. The path parameter is an IATA airport code.
+      description: 'The airport status is retrieved from fly.faa.gov and is provided in a format that can be used by applications that require airport status data.Available airports include the following: BOS, LGA, TEB, EWR, JFK, PHL, PIT, IAD, BWI, DCA, RDU, CLT, ATL, MCO, TPA, MCO, FLL, MIA, DTW, CLE, MDW, ORD, IND, CVG, BNA, MEM, STL, MCI, MSP, DFW, IAH, DEN, SLC, PHX, LAS, SAN, LAX, SJC, SFO, PDX, SEA'
+      operationId: getAirportStatus
+      parameters:
+      - name: airportCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirportStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AirportStatus'
+        '404':
+          description: Delays are available only for major United States airports
+          content: {}
+components:
+  schemas:
+    Weather:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+            properties: {}
+      xml:
+        name: Weather
+    ArriveDepartDelay:
+      required:
+      - airport
+      - maxTime
+      - minTime
+      - reason
+      type: object
+      properties:
+        airport:
+          type: string
+          xml:
+            name: airport
+        maxTime:
+          type: string
+          xml:
+            name: maxTime
+        reason:
+          type: string
+          xml:
+            name: reason
+        minTime:
+          type: string
+          xml:
+            name: minTime
+      xml:
+        name: ArriveDepartDelay
+    GroundStop:
+      required:
+      - airport
+      - endTime
+      - reason
+      type: object
+      properties:
+        airport:
+          type: string
+          xml:
+            name: airport
+        endTime:
+          type: string
+          xml:
+            name: endTime
+        reason:
+          type: string
+          xml:
+            name: reason
+      xml:
+        name: GroundStop
+    Status:
+      required:
+      - avgDelay
+      - closureBegin
+      - closureEnd
+      - endTime
+      - maxDelay
+      - minDelay
+      - reason
+      - trend
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          xml:
+            name: Type
+        reason:
+          type: string
+          xml:
+            name: Reason
+        avgDelay:
+          type: string
+          xml:
+            name: AvgDelay
+        closureEnd:
+          type: string
+          xml:
+            name: ClosureEnd
+        closureBegin:
+          type: string
+          xml:
+            name: ClosureBegin
+        minDelay:
+          type: string
+          xml:
+            name: MinDelay
+        trend:
+          type: string
+          xml:
+            name: Trend
+        maxDelay:
+          type: string
+          xml:
+            name: MaxDelay
+        endTime:
+          type: string
+          xml:
+            name: EndTime
+      xml:
+        name: Status
+    Delays:
+      type: object
+      properties:
+        GroundDelays:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroundDelays'
+        GroundStops:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroundStops'
+        ArriveDepartDelays:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArriveDepartDelays'
+        Closures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Closures'
+      xml:
+        name: Delays
+    Closures:
+      type: object
+      properties:
+        Closure:
+          type: array
+          items:
+            $ref: '#/components/schemas/Closure'
+    GroundDelay:
+      required:
+      - airport
+      - avgTime
+      - reason
+      type: object
+      properties:
+        airport:
+          type: string
+          xml:
+            name: airport
+        avgTime:
+          type: string
+          xml:
+            name: avgTime
+        reason:
+          type: string
+          xml:
+            name: reason
+      xml:
+        name: GroundDelay
+    GroundDelays:
+      type: object
+      properties:
+        GroundDelay:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroundDelay'
+    GroundStops:
+      type: object
+      properties:
+        GroundStop:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroundStop'
+    AirportStatus:
+      required:
+      - city
+      - delay
+      - delayCount
+      - iata
+      - icao
+      - name
+      - state
+      - supportedAirport
+      - weather
+      type: object
+      properties:
+        name:
+          type: string
+          xml:
+            name: Name
+        city:
+          type: string
+          xml:
+            name: City
+        state:
+          type: string
+          xml:
+            name: State
+        icao:
+          type: string
+          xml:
+            name: ICAO
+        iata:
+          type: string
+          xml:
+            name: IATA
+        supportedAirport:
+          type: boolean
+          xml:
+            name: SupportedAirport
+        delay:
+          type: boolean
+          xml:
+            name: Delay
+          default: false
+        delayCount:
+          type: integer
+          xml:
+            name: DelayCount
+        status:
+          type: array
+          xml:
+            name: Status
+          items:
+            $ref: '#/components/schemas/Status'
+        weather:
+          $ref: '#/components/schemas/Weather'
+      xml:
+        name: AirportStatus
+    ArriveDepartDelays:
+      type: object
+      properties:
+        ArriveDepartDelay:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArriveDepartDelay'
+    Closure:
+      required:
+      - airport
+      - reason
+      - reopen
+      type: object
+      properties:
+        airport:
+          type: string
+          xml:
+            name: airport
+        reason:
+          type: string
+          xml:
+            name: reason
+        reopen:
+          type: string
+          xml:
+            name: reopen
+      xml:
+        name: closure
+x-original-swagger-version: '2.0'

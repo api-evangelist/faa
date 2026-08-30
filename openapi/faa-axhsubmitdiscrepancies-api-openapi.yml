@@ -1,0 +1,156 @@
+openapi: 3.2.0
+info:
+  title: sas-api Axhsubmitdiscrepancies API
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: Axhsubmitdiscrepancies
+paths:
+  /axhsubmitdiscrepancies:
+    post:
+      requestBody:
+        description: description
+        content:
+          application/json:
+            schema:
+              required:
+              - AirCarrierName
+              - Discrepancies
+              - ReporterDSGN
+              - ReporterEmail
+              - ReporterName
+              type: object
+              properties:
+                ReporterName:
+                  type: string
+                AirCarrierName:
+                  type: string
+                ReporterPhone:
+                  type: string
+                ReporterEmail:
+                  type: string
+                ReporterDSGN:
+                  type: string
+                Discrepancies:
+                  type: array
+                  items:
+                    required:
+                    - HazmatItems
+                    type: object
+                    properties:
+                      AirCarrierDSGN:
+                        type: string
+                      FlightOperatedByDSGN:
+                        type: string
+                      CarrierRecordId:
+                        type: string
+                      AirportCode:
+                        type: string
+                      LocationOfDiscovery:
+                        type: string
+                      DiscrepancyDate:
+                        type: string
+                      PnrLocator:
+                        type: string
+                      PassengerFullName:
+                        type: string
+                      PassengerAddress:
+                        type: string
+                      PassengerCity:
+                        type: string
+                      PassengerStateCode:
+                        type: string
+                      PassengerZipCode:
+                        type: string
+                      PassengerCountryCode:
+                        type: string
+                      PassengerPhone:
+                        type: string
+                      PassengerEmail:
+                        type: string
+                      FlightNumber:
+                        type: string
+                      DestinationAirportCode:
+                        type: string
+                      HazmatItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            HazmatDescription:
+                              type: string
+                            Quantity:
+                              type: string
+                            HazmatType:
+                              type: string
+                            HazmatClass:
+                              type: string
+            example:
+              ReporterName: Al
+              AirCarrierName: Al's Airline
+              ReporterPhone: '1234567890'
+              ReporterEmail: al@al.com
+              ReporterDSGN: ALLA
+              Discrepancies:
+              - AirCarrierDSGN: SWAA
+                FlightOperatedByDSGN: SWAA
+                CarrierRecordId: B123
+                AirportCode: BOS
+                LocationOfDiscovery: handbag
+                DiscrepancyDate: 08/15/2019
+                PnrLocator: ''
+                PassengerFullName: Juan Smith
+                PassengerAddress: 123 Fake St
+                PassengerCity: town
+                PassengerStateCode: MA
+                PassengerZipCode: 02909
+                PassengerCountryCode: US
+                PassengerPhone: ''
+                PassengerEmail: test@test.com
+                FlightNumber: bla123
+                DestinationAirportCode: LAX
+                HazmatItems:
+                - HazmatDescription: Cans of beer
+                  Quantity: Forty
+                  HazmatType: ALCOHOL
+                  HazmatClass: 'Class 6: Toxic Substances and Infectious Substances'
+                - HazmatDescription: Unknown
+                  Quantity: '15'
+                  HazmatType: DE-ICER
+                  HazmatClass: 'Class 9: Miscellaneous Hazardous Materials'
+        required: true
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  confirmationMessage:
+                    type: string
+                  totalDiscrepanciesImported:
+                    type: integer
+                    format: int32
+                  discrepanciesImportedWithErrors:
+                    type: string
+                  errorMessage:
+                    type: string
+              example:
+                confirmationMessage: confirmation message for successful transaction
+                totalDiscrepanciesImported: 2
+                discrepanciesImportedWithErrors: record failed due to data issues
+                errorMessage: error message, if any
+      tags:
+      - Axhsubmitdiscrepancies
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+    appId:
+      type: apiKey
+      name: X-APP-ID
+      in: header

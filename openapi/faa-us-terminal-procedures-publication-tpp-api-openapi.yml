@@ -1,0 +1,91 @@
+openapi: 3.2.0
+info:
+  title: Aeronautic Product Release US Terminal Procedures Publication (TPP) API
+  description: FAA Aeronautic chart publication download API
+  contact:
+    name: Aeronautic Product Release API (APRA)
+    url: http://www.faa.gov/got_data
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.4.0
+servers:
+- url: https://external-api.faa.gov/apra
+tags:
+- name: US Terminal Procedures Publication (TPP)
+paths:
+  /dtpp/chart:
+    get:
+      tags:
+      - US Terminal Procedures Publication (TPP)
+      summary: Get Terminal Procedure Publication chart download information by requesting an edition with geographic area of United States or a valid US State Name.
+      description: 'The complete United States Terminal Procedure Publication (TPP) release is distributed as a set of zip files containing charts and verification software. Requests for charts by state returns a list of download URLs which can be quite extensive.  All 50 US states are valid for requesting chart publication download URLs. The special ''changeset'' edition operates against the current release and returns the charts that were changed since the previous release. '
+      operationId: getTPPRelease
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          - changeset
+          default: current
+      - name: geoname
+        in: query
+        description: Requested geographic region of Terminal Procedures Publication chart set. Specify either US or a valid full state name such as Alaska. If omitted, the default US complete set is returned.
+        schema:
+          type: string
+          default: US
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /dtpp/info:
+    get:
+      tags:
+      - US Terminal Procedures Publication (TPP)
+      summary: Get Terminal Procedure Publication chart edition information by requesting an edition with geographic area of United States or one of the 50 US states
+      description: The US Terminal Procedure Publication is released on a 28 day airspace cycle. Edition information is identical regardless of the geographic area or format of the desired charts.
+      operationId: getTPPEdition
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition information is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      - name: geoname
+        in: query
+        description: Requested geographic region of Terminal Procedures Publication chart set. Specify US or a valid full US state name such as Alaska. If omitted, edition information for the complete US set is returned.
+        schema:
+          type: string
+          default: US
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+x-original-swagger-version: '2.0'

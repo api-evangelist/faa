@@ -1,0 +1,58 @@
+openapi: 3.2.0
+info:
+  title: Aeronautic Product Release Daily Digital Obstacle File (DDOF) API
+  description: FAA Aeronautic chart publication download API
+  contact:
+    name: Aeronautic Product Release API (APRA)
+    url: http://www.faa.gov/got_data
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.4.0
+servers:
+- url: https://external-api.faa.gov/apra
+tags:
+- name: Daily Digital Obstacle File (DDOF)
+paths:
+  /ddof/chart:
+    get:
+      tags:
+      - Daily Digital Obstacle File (DDOF)
+      summary: Get Daily Digital Obstacle File download link.
+      description: The Daily Digital Obstacle File release is distributed as a zip file containing the latest obstacle information from the FAA database.
+      operationId: getDDOFRelease
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /ddof/info:
+    get:
+      tags:
+      - Daily Digital Obstacle File (DDOF)
+      summary: Get Daily Digital Obstacle File edition information.
+      description: The Daily Digital Obstacle File is released by the FAA on a daily basis.
+      operationId: getDDOFEdition
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+x-original-swagger-version: '2.0'

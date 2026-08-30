@@ -1,0 +1,107 @@
+openapi: 3.2.0
+info:
+  title: Aeronautic Product Release Supplement Chart API
+  description: FAA Aeronautic chart publication download API
+  contact:
+    name: Aeronautic Product Release API (APRA)
+    url: http://www.faa.gov/got_data
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.4.0
+servers:
+- url: https://external-api.faa.gov/apra
+tags:
+- name: 'Supplement Chart '
+paths:
+  /supplement/chart:
+    get:
+      tags:
+      - 'Supplement Chart '
+      summary: Get Supplement chart download information by requesting an edition with a valid US volume.
+      description: The Supplement chart is distributed in two formats - zip and pdf. The US complete set is returned as a ZIP file while all other volumes consist of individual PDF files.Requests for charts by volume other than US complete set returns a list of download URLs which can be quite extensive.
+      operationId: getSupplementRelease
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      - name: volume
+        in: query
+        description: Requested volume of Supplement chart set. If omitted, the complete US set is returned.
+        schema:
+          type: string
+          enum:
+          - NORTHWEST
+          - SOUTHWEST
+          - NORTH CENTRAL
+          - SOUTH CENTRAL
+          - EAST CENTRAL
+          - SOUTHEAST
+          - NORTHEAST
+          - PACIFIC
+          - ALASKA
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /supplement/info:
+    get:
+      tags:
+      - 'Supplement Chart '
+      summary: Get Supplement chart edition information by requesting an edition and volume.
+      operationId: getSupplementEdition
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      - name: volume
+        in: query
+        description: Requested volume of Supplement chart set. If omitted, the edition information for the complete US set is returned.
+        schema:
+          type: string
+          enum:
+          - NORTHWEST
+          - SOUTHWEST
+          - NORTH CENTRAL
+          - SOUTH CENTRAL
+          - EAST CENTRAL
+          - SOUTHEAST
+          - NORTHEAST
+          - PACIFIC
+          - ALASKA
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+x-original-swagger-version: '2.0'

@@ -1,0 +1,107 @@
+openapi: 3.2.0
+info:
+  title: Aeronautic Product Release IFR Enroute Charts API
+  description: FAA Aeronautic chart publication download API
+  contact:
+    name: Aeronautic Product Release API (APRA)
+    url: http://www.faa.gov/got_data
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.4.0
+servers:
+- url: https://external-api.faa.gov/apra
+tags:
+- name: IFR Enroute Charts
+paths:
+  /enroute/chart:
+    get:
+      tags:
+      - IFR Enroute Charts
+      summary: Get IFR Enroute Charts download link by edition, format, geoname, and seriesType
+      description: TIFF formatted files are geo-referenced while PDF format is not geo-referenced. Geoname is either US, Alaska, Pacific, or Caribbean, depending on the desired chart. A list of available charts by format, geoname, and series type can be found on the FAA public web site at FAA Home > Air Traffic > Flight Information > Aeronautical Information Services  > Digital Products > IFR Charts and DERS > Low, High Areas tab.  The valid values for seriesType are Low, High, or Area.
+      operationId: getIFREnrouteRelease
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      - name: format
+        in: query
+        description: Format of the requested chart. TIFF is georeferenced and PDF is not georeferencedIf omitted, the default format of PDF is returned.
+        schema:
+          type: string
+          enum:
+          - tiff
+          - pdf
+          default: pdf
+      - name: geoname
+        in: query
+        description: Geographic region for requested chart
+        required: true
+        schema:
+          type: string
+          enum:
+          - US
+          - Alaska
+          - Pacific
+          - Caribbean
+      - name: seriesType
+        in: query
+        description: The series type
+        required: true
+        schema:
+          type: string
+          enum:
+          - low
+          - high
+          - area
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /enroute/info:
+    get:
+      tags:
+      - IFR Enroute Charts
+      summary: Get IFR Enroute Charts edition date and edition number by edition type of current or next
+      operationId: getIFREnrouteEdition
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+x-original-swagger-version: '2.0'

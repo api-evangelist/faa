@@ -1,0 +1,480 @@
+openapi: 3.2.0
+info:
+  title: PRD Air Carrier Air Carrier API
+  version: v1
+servers:
+- url: https://external.apic4e.faa.gov
+  description: Production environment
+- url: https://external-api.faa.gov/AirCarrierApi
+  description: Production deprecated url.
+- url: https://dev-external.apic4e.faa.gov/Test/AirCarrierApi
+  description: Staging environment
+tags:
+- name: AirCarrierApi
+paths:
+  /AirCarrierApi/Pilot:
+    put:
+      description: update existing pilot record database Air carrier Api
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pilotData_example'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example: success
+      tags:
+      - AirCarrierApi
+    post:
+      description: add new records pilot record database Air carrier Api
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pilotData_example'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example: success
+      tags:
+      - AirCarrierApi
+    delete:
+      description: performs delete on pilot record database air carrier api
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example: success
+      tags:
+      - AirCarrierApi
+  /AirCarrierApi/PilotDataTracking:
+    put:
+      description: update existing pilot tracking record database Air carrier Api
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/trackingData_example'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example:
+                  IsTrackingNumberCallValid: true
+                  ErrorMessage: null
+                  ResultPayload:
+                    Id: f5b04f98-72ba-43f5-babf-39aaacfa14a2
+                    UserName: TST2022Fall
+                    AirCarrierName: Test, INC. LEJR910X
+                    AirCarrierCertificate: CE07ICTECOLEARJET,
+                    AirCarrierCode: CE07ICTECOLEARJET,
+                    CreateDate: 11/7/2022 9:35:10 AM
+                    IsProcessed: true
+                    ProcessedDate: 11/7/2022 9:39:01 AM
+                    HasErrors: false
+                    ErrorDescription: null
+                    Pilots:
+                    - Id: b191b212-23c4-4444-b1be-00019346d9e6
+                      CertificateNumber: '3890818'
+                      LastName: Test
+                      FirstName: FALL 202
+                      CreateDate: 11/7/2022 9:35:10 AM
+                      IsProcessed: true
+                      ProcessedDate: 11/7/2022 9:36:08 AM
+                      HasErrors: false
+                      ErrorDescription: null
+                      EmploymentRecords:
+                      - Id: 1018b854-2394-4c36-a4dd-1791f6ebb749
+                        ExistingPrdRecordId: null
+                        AirCarrierUniqueRecordId: EM_CE07ICTECOLEARJET,195
+                        PrdDateOfHire: null
+                        CompleteDate: null
+                        FinalRecordsDate: null
+                        SeparationDate: null
+                        KnownSeparationType: null
+                        SeparationTypeDetail: null
+                        RelevantDocuments: null
+                        AssignmentToDuties: null
+                        Suppressed: null
+                        CreateDate: 11/7/2022 9:35:10 AM
+                        IsProcessed: true
+                        ProcessedDate: 11/7/2022 9:36:08 AM
+                        HasErrors: true
+                        ErrorDescription: Duplicate Record Exists
+                      - Id: e51e63a6-9f58-43d7-856d-1c082323ce13
+                        ExistingPrdRecordId: null
+                        AirCarrierUniqueRecordId: EM_CE07ICTECOLEARJET,1B0
+                        PrdDateOfHire: null
+                        CompleteDate: null
+                        FinalRecordsDate: null
+                        SeparationDate: null
+                        KnownSeparationType: null
+                        SeparationTypeDetail: null
+                        RelevantDocuments: null
+                        AssignmentToDuties: null
+                        Suppressed: null
+                        CreateDate: 11/7/2022 9:35:10 AM
+                        IsProcessed: true
+                        ProcessedDate: 11/7/2022 9:36:08 AM
+                        HasErrors: true
+                        ErrorDescription: Duplicate Record Exists
+                      - Id: ed64e48a-485f-4173-9aae-2caf6ca921fb
+                        ExistingPrdRecordId: null
+                        AirCarrierUniqueRecordId: EM_CE07ICTECOLEARJET,942
+                        PrdDateOfHire: null
+                        CompleteDate: null
+                        FinalRecordsDate: null
+                        SeparationDate: null
+                        KnownSeparationType: null
+                        SeparationTypeDetail: null
+                        RelevantDocuments: null
+                        AssignmentToDuties:
+                        - Id: 324b3b34-e61f-4d83-9687-293e30da9332
+                          ExistingPrdRecordId: null
+                          AirCarrierUniqueRecordId: EMATD_CE07ICTECOLEARJET,0AA
+                          StartDate: null
+                          EndDate: null
+                          KnownAircraftMakeModel: null
+                          KnownDutyPosition: null
+                          Suppressed: null
+                          CreateDate: 11/7/2022 9:35:10 AM
+                          IsProcessed: false
+                          ProcessedDate: null
+                          HasErrors: false
+                          ErrorDescription: null
+                        - Id: 7b444391-899d-4d94-9260-d1b2fb590768
+                          ExistingPrdRecordId: null
+                          AirCarrierUniqueRecordId: EMATD_CE07ICTECOLEARJET,D4B
+                          StartDate: null
+                          EndDate: null
+                          KnownAircraftMakeModel: null
+                          KnownDutyPosition: null
+                          Suppressed: null
+                          CreateDate: 11/7/2022 9:35:10 AM
+                          IsProcessed: false
+                          ProcessedDate: null
+                          HasErrors: false
+                          ErrorDescription: null
+                        Suppressed: null
+                        CreateDate: 11/7/2022 9:35:10 AM
+                        IsProcessed: true
+                        ProcessedDate: 11/7/2022 9:36:08 AM
+                        HasErrors: true
+                        ErrorDescription: Duplicate Record Exists
+                      TrainingRecords: null
+                      DrugAlcoholRecords: null
+                      FinalDisciplinaryActions: null
+                      NDRRecords: null
+      tags:
+      - AirCarrierApi
+    post:
+      description: query pilot tracking record database air carrier api details
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/trackingData_example'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example:
+                  IsTrackingNumberCallValid: true
+                  ErrorMessage: null
+                  ResultPayload:
+                    Id: f5b04f98-72ba-43f5-babf-39aaacfa14a2
+                    UserName: TST2022Fall
+                    AirCarrierName: Test, INC. LEJR910X
+                    AirCarrierCertificate: CE07ICTECOLEARJET,
+                    AirCarrierCode: CE07ICTECOLEARJET,
+                    CreateDate: 11/7/2022 9:35:10 AM
+                    IsProcessed: true
+                    ProcessedDate: 11/7/2022 9:39:01 AM
+                    HasErrors: false
+                    ErrorDescription: null
+                    Pilots:
+                    - Id: b191b212-23c4-4444-b1be-00019346d9e6
+                      CertificateNumber: '3890818'
+                      LastName: Test
+                      FirstName: FALL 202
+                      CreateDate: 11/7/2022 9:35:10 AM
+                      IsProcessed: true
+                      ProcessedDate: 11/7/2022 9:36:08 AM
+                      HasErrors: false
+                      ErrorDescription: null
+                      EmploymentRecords:
+                      - Id: 1018b854-2394-4c36-a4dd-1791f6ebb749
+                        ExistingPrdRecordId: null
+                        AirCarrierUniqueRecordId: EM_CE07ICTECOLEARJET,195
+                        PrdDateOfHire: null
+                        CompleteDate: null
+                        FinalRecordsDate: null
+                        SeparationDate: null
+                        KnownSeparationType: null
+                        SeparationTypeDetail: null
+                        RelevantDocuments: null
+                        AssignmentToDuties: null
+                        Suppressed: null
+                        CreateDate: 11/7/2022 9:35:10 AM
+                        IsProcessed: true
+                        ProcessedDate: 11/7/2022 9:36:08 AM
+                        HasErrors: true
+                        ErrorDescription: Duplicate Record Exists
+                      - Id: e51e63a6-9f58-43d7-856d-1c082323ce13
+                        ExistingPrdRecordId: null
+                        AirCarrierUniqueRecordId: EM_CE07ICTECOLEARJET,1B0
+                        PrdDateOfHire: null
+                        CompleteDate: null
+                        FinalRecordsDate: null
+                        SeparationDate: null
+                        KnownSeparationType: null
+                        SeparationTypeDetail: null
+                        RelevantDocuments: null
+                        AssignmentToDuties: null
+                        Suppressed: null
+                        CreateDate: 11/7/2022 9:35:10 AM
+                        IsProcessed: true
+                        ProcessedDate: 11/7/2022 9:36:08 AM
+                        HasErrors: true
+                        ErrorDescription: Duplicate Record Exists
+                      - Id: ed64e48a-485f-4173-9aae-2caf6ca921fb
+                        ExistingPrdRecordId: null
+                        AirCarrierUniqueRecordId: EM_CE07ICTECOLEARJET,942
+                        PrdDateOfHire: null
+                        CompleteDate: null
+                        FinalRecordsDate: null
+                        SeparationDate: null
+                        KnownSeparationType: null
+                        SeparationTypeDetail: null
+                        RelevantDocuments: null
+                        AssignmentToDuties:
+                        - Id: 324b3b34-e61f-4d83-9687-293e30da9332
+                          ExistingPrdRecordId: null
+                          AirCarrierUniqueRecordId: EMATD_CE07ICTECOLEARJET,0AA
+                          StartDate: null
+                          EndDate: null
+                          KnownAircraftMakeModel: null
+                          KnownDutyPosition: null
+                          Suppressed: null
+                          CreateDate: 11/7/2022 9:35:10 AM
+                          IsProcessed: false
+                          ProcessedDate: null
+                          HasErrors: false
+                          ErrorDescription: null
+                        - Id: 7b444391-899d-4d94-9260-d1b2fb590768
+                          ExistingPrdRecordId: null
+                          AirCarrierUniqueRecordId: EMATD_CE07ICTECOLEARJET,D4B
+                          StartDate: null
+                          EndDate: null
+                          KnownAircraftMakeModel: null
+                          KnownDutyPosition: null
+                          Suppressed: null
+                          CreateDate: 11/7/2022 9:35:10 AM
+                          IsProcessed: false
+                          ProcessedDate: null
+                          HasErrors: false
+                          ErrorDescription: null
+                        Suppressed: null
+                        CreateDate: 11/7/2022 9:35:10 AM
+                        IsProcessed: true
+                        ProcessedDate: 11/7/2022 9:36:08 AM
+                        HasErrors: true
+                        ErrorDescription: Duplicate Record Exists
+                      TrainingRecords: null
+                      DrugAlcoholRecords: null
+                      FinalDisciplinaryActions: null
+                      NDRRecords: null
+      tags:
+      - AirCarrierApi
+    delete:
+      description: performs delete on pilot tracking record database air carrier api
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example: success
+      tags:
+      - AirCarrierApi
+  /AirCarrierApi/AcPilotDataSearchRequest:
+    post:
+      description: add new records pilot record database Air carrier Api
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pilotDataSearch_example'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example: success
+      tags:
+      - AirCarrierApi
+  /AirCarrierApi/AcPilotDataSearchResponse:
+    post:
+      description: add new records pilot record database Air carrier Api
+      parameters:
+      - name: client_id
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_secret
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pilotDataSearchResponse_example'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example: success
+      tags:
+      - AirCarrierApi
+components:
+  schemas:
+    pilotData_example: {}
+    pilotDataSearchResponse_example: {}
+    pilotDataSearch_example: {}
+    trackingData_example: {}
+x-amf-baseUriParameters:
+  domain:
+    displayName: Domain name (By enviornment)
+    default: external-api.faa.gov
+    enum:
+    - internal-dev-alb-4H3B7sPn-936573718.us-gov-east-1.elb.amazonaws.com
+    - external-api.faa.gov
+    type: string

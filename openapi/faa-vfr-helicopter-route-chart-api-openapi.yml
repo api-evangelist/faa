@@ -1,0 +1,184 @@
+openapi: 3.2.0
+info:
+  title: Aeronautic Product Release VFR Helicopter Route Chart API
+  description: FAA Aeronautic chart publication download API
+  contact:
+    name: Aeronautic Product Release API (APRA)
+    url: http://www.faa.gov/got_data
+    email: edai-aero@faa.gov
+  license:
+    name: Creative Commons 0 (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.4.0
+servers:
+- url: https://external-api.faa.gov/apra
+tags:
+- name: VFR Helicopter Route Chart
+paths:
+  /vfr/helicopter/chart:
+    get:
+      tags:
+      - VFR Helicopter Route Chart
+      summary: Get VFR Helicopter Route Chart download link by edition and geoname
+      description: Geoname is a city for which the chart is requested. Valid cities can be found on the FAA public web site under FAA Home > Air Traffic > Flight Information > Aeronautical Information Services > Digital Products > VFR Charts > Helicopter tab
+      operationId: getHelicopterRelease
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      - name: format
+        in: query
+        description: Format of the requested chart. TIFF is georeferenced and PDF is not georeferenced. If omitted, the default format of PDF is returned.
+        schema:
+          type: string
+          enum:
+          - tiff
+          - pdf
+          default: pdf
+      - name: geoname
+        in: query
+        description: Geoname which is a city for which the chart is requested. If omitted, charts for all cities are returned.
+        schema:
+          type: string
+          enum:
+          - Baltimore Washington Heli
+          - Boston Heli
+          - Chicago Heli
+          - Dallas Ft. Worth Heli
+          - Detroit Heli
+          - Houston Heli
+          - Los Angeles Heli
+          - New York Heli
+          - U.S Gulf Coast
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /vfr/helicopter/gulf/chart:
+    get:
+      tags:
+      - VFR Helicopter Route Chart
+      summary: Get GulfCoast Route Chart download link by edition
+      description: The geoname is absent from this operation and defaults to U.S Gulf Coast
+      operationId: getGulfCoastRelease
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      - name: format
+        in: query
+        description: Format of the requested chart. TIFF is georeferenced and PDF is not georeferenced. If omitted, the default format of PDF is returned.
+        schema:
+          type: string
+          enum:
+          - tiff
+          - pdf
+          default: pdf
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /vfr/helicopter/gulf/info:
+    get:
+      tags:
+      - VFR Helicopter Route Chart
+      summary: 'Get VFR GulfCoast Route Chart edition date and edition number by edition type of ''current'' or ''next'' '
+      operationId: getGulfCoastEdition
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+  /vfr/helicopter/info:
+    get:
+      tags:
+      - VFR Helicopter Route Chart
+      summary: Get VFR Helicopter Route Chart edition date and edition number by edition type of current or next and geoname
+      operationId: getHelicopterEdition
+      parameters:
+      - name: edition
+        in: query
+        description: Requested product edition. If omitted, the default current edition is returned.
+        schema:
+          type: string
+          enum:
+          - current
+          - next
+          default: current
+      - name: geoname
+        in: query
+        description: Geoname which is a city for which the chart is requested. If omitted, charts for all cities are returned.
+        schema:
+          type: string
+          enum:
+          - Baltimore Washington Heli
+          - Boston Heli
+          - Chicago Heli
+          - Dallas Ft. Worth Heli
+          - Detroit Heli
+          - Houston Heli
+          - Los Angeles Heli
+          - New York Heli
+          - U.S Gulf Coast
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Illegal arguments provided to service. One or more of the service parameter values is invalid
+          content: {}
+        '404':
+          description: Requested edition has not been released for download or could not be found on the FAA aeronav web site.
+          content: {}
+        '500':
+          description: Internal service error occurred which prevented a valid response from being returned.
+          content: {}
+x-original-swagger-version: '2.0'
