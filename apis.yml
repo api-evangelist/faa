@@ -639,6 +639,9 @@ apis:
   - type: Website
     url: https://www.faa.gov/regulations_policies/pilot_records_database/
 common:
+- type: CapabilityMap
+  url: capabilities/faa-capability-edges.yml
+  name: Federal Aviation Administration Business Capability Map
 - type: Overlay
   url: overlays/faa-aeronautic-product-release-api-overlay.yaml
 - type: AgentSkill

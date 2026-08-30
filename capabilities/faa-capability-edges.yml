@@ -1,0 +1,173 @@
+slug: faa
+provider: Federal Aviation Administration
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Air Traffic Control
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 16
+edges:
+- tag: US Terminal Procedures Publication (TPP)
+  spec_file: faa-us-terminal-procedures-publication-tpp-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.82
+  evidence: '"Get Terminal Procedure Publication chart download information by requesting an edition with
+    geographic area of United States or a valid US State Name."'
+  reason: Terminal instrument procedure charts publication — charting and instrument flight procedure
+    publication under Aeronautical Information Management.
+- tag: Grand Canyon VFR Chart
+  spec_file: faa-grand-canyon-vfr-chart-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.8
+  evidence: getGrandCanyonRelease — 'Get VFR Grand Canyon chart edition information and download link'
+  reason: Publication and edition management of a VFR aeronautical chart — aeronautical charting within
+    Aeronautical Information Management.
+- tag: Gulf of Mexico IFR Enroute Chart
+  spec_file: faa-gulf-of-mexico-ifr-enroute-chart-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.8
+  evidence: GET /enroute/gom/chart getGOMRelease "Get Gulf of Mexico IFR enroute chart edition date, edition
+    number, and product download URL"; description "FAA Aeronautic chart publication download API"
+  reason: The operations publish and distribute an aeronautical enroute chart product with edition/cycle
+    information, which is aeronautical information management, specifically the charting product line.
+- tag: IFR Enroute Charts
+  spec_file: faa-ifr-enroute-charts-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.8
+  evidence: '"Get IFR Enroute Charts download link by edition, format, geoname, and seriesType" / "Get
+    IFR Enroute Charts edition date and edition number"'
+  reason: Aeronautical chart publication and edition management by the civil aviation authority — charting
+    management under Aeronautical Information Management.
+- tag: Sectional Charts
+  spec_file: faa-sectional-charts-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.8
+  evidence: '"Get Sectional Chart download link by edition, format, and geoname"; "FAA Aeronautic chart
+    publication download API"'
+  reason: VFR sectional chart publication and edition information — aeronautical chart production/publication
+    capability.
+- tag: Terminal Area Charts
+  spec_file: faa-terminal-area-charts-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.8
+  evidence: '"Get Terminal Area Chart download link by edition, format, and geoname"'
+  reason: Publication and edition management of the official VFR terminal area chart product — aeronautical
+    charting.
+- tag: VFR Helicopter Route Chart
+  spec_file: faa-vfr-helicopter-route-chart-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.8
+  evidence: '"Get VFR Helicopter Route Chart download link by edition and geoname"; "Get GulfCoast Route
+    Chart download link by edition"'
+  reason: Publication and edition management of official helicopter route charts — aeronautical charting
+    product distribution.
+- tag: IFR Planning Charts
+  spec_file: faa-ifr-planning-charts-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.78
+  evidence: '"Get IFR planning download link by edition and format"; "Get Planning Chart edition date
+    and edition number by edition type"'
+  reason: Distribution and edition tracking of an official IFR planning chart product — aeronautical charting
+    publication, not a generic file download service.
+- tag: Oceanic Route Charts
+  spec_file: faa-oceanic-route-charts-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.78
+  evidence: '"Get Oceanic Route Chart download link by edition, format, and geoname"'
+  reason: Publication of an official oceanic route chart product with edition cycles — aeronautical charting,
+    not oceanic ATC service delivery.
+- tag: Digital Enroute Charts US (DDECUS)
+  spec_file: faa-digital-enroute-charts-us-ddecus-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.75
+  evidence: getDECRelease — 'Get Digital Enroute Chart download link by edition type of current or next'
+  reason: Distribution of digital enroute aeronautical charts with edition/cycle information — clearly
+    aeronautical charting within Aeronautical Information Management.
+- tag: Digital Enroute Supplement (DERS)
+  spec_file: faa-digital-enroute-supplement-ders-api-openapi.yml
+  capability_id: BC-1230
+  capability_id_l1: BC-1230
+  capability_name: Aeronautical Information Management
+  confidence: 0.75
+  evidence: getDERSRelease — 'Get Digital Enroute Supplement download link'; getDERSEdition — 'Get Digital
+    Enroute Supplement edition information'
+  reason: Edition-based publication of an enroute aeronautical supplement — Aeronautical Information Management.
+    Ambiguous between AIP/supplement publication and digital AIM products, so L1 only.
+- tag: NASR 28 Day Subscription
+  spec_file: faa-nasr-28-day-subscription-api-openapi.yml
+  capability_id: BC-1230.30
+  capability_id_l1: BC-1230
+  capability_name: Aeronautical Database Management
+  confidence: 0.75
+  evidence: '"Get the National Flight Data Center NASR 28 day subscription file" and "...NASR 28 day subscription
+    file edition information"'
+  reason: NASR is the FAA's aeronautical source dataset issued on the 28-day (AIRAC) cycle; the operations
+    expose the aeronautical database subscription and its edition, i.e. aeronautical database management.
+- tag: US VFR Wall Planning Chart
+  spec_file: faa-us-vfr-wall-planning-chart-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.75
+  evidence: '"Get WallPlan Chart release information with download link by edition and format"'
+  reason: Release and edition information for an official VFR planning chart product — aeronautical chart
+    publication.
+- tag: Coded Instrument Flight Procedures (CIFP)
+  spec_file: faa-coded-instrument-flight-procedures-cifp-api-openapi.yml
+  capability_id: BC-1230.40
+  capability_id_l1: BC-1230
+  capability_name: Charting & Procedure Design Management
+  confidence: 0.7
+  evidence: getCIFPRelease — 'Get CIFP chart download link by edition type of current or next'; 'FAA Aeronautic
+    chart publication download API'
+  reason: Publication/release of Coded Instrument Flight Procedures data on an edition (AIRAC-style) cycle
+    — aeronautical information management, specifically instrument flight procedure and chart products.
+    Could arguably be digital AIM data products, hence 0.7.
+- tag: FAA Airport Status Service
+  spec_file: faa-faa-airport-status-service-api-openapi.yml
+  capability_id: BC-1220.20
+  capability_id_l1: BC-1220
+  capability_name: Flow Regulation Management
+  confidence: 0.7
+  evidence: getDelays — 'Get airport delay summary for major US national airports'; schemas GroundStop,
+    GroundDelay, GroundDelays, Closures, ArriveDepartDelays
+  reason: Exposes ground stops, ground delay programmes, closures and arrival/departure delays at US airports
+    — these are traffic flow management measures. Reporting-oriented rather than measure-issuing, so 0.7
+    on flow regulation.
+- tag: 'Supplement Chart '
+  spec_file: faa-supplement-chart-api-openapi.yml
+  capability_id: BC-1230
+  capability_id_l1: BC-1230
+  capability_name: Aeronautical Information Management
+  confidence: 0.7
+  evidence: '"Get Supplement chart download information by requesting an edition with a valid US volume."
+    / "Get Supplement chart edition information"'
+  reason: Chart Supplement is an official aeronautical information publication issued in volumes and editions;
+    clearly Aeronautical Information Management, but the evidence does not cleanly distinguish AIP publication
+    from charting sub-capability.
