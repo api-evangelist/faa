@@ -34,6 +34,21 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: free
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Free · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  - rate-limits
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://www.faa.gov/themes/custom/faa/favicon.png
 tags:
 - Travel
@@ -695,9 +710,10 @@ common:
 - type: APICatalog
   name: FAA Gravitee developer-portal catalog API (unauthenticated, machine-readable)
   url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis
-- type: MCPServer
+- type: X-MCPServerCandidate
   name: Candidate MCP tool manifest derived from the FAA CC0 OpenAPIs — not published by the FAA
   url: mcp/faa-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
 - type: AgentSkill
   url: skills/_index.yml
 - type: LLMsTxt
