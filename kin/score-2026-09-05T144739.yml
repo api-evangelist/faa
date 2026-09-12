@@ -1,32 +1,34 @@
-# Kin Score artifact — faa — 2026-08-12T193225
+# Kin Score artifact — faa — 2026-09-05T144739
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: faa
-  schema_version: 0.11.0
-  scored_at: '2026-08-12'
-  run_ts: 2026-08-12T193225
-  composite: 55.8
-  band: developing
+  schema_version: 0.18.3
+  scored_at: '2026-09-05'
+  run_ts: 2026-09-05T144739
+  composite: 56.4
+  band: strong
   facets:
-    discoverability: 72.2
-    contract_quality: 53.4
-    governance: 11.5
+    discoverability: 75.9
+    contract_quality: 52.8
+    governance: 4.5
     operational_transparency: 60.5
-    developer_ergonomics: 62.5
-    commercial_clarity: 65.8
+    developer_ergonomics: 56.5
+    commercial_clarity: 52.6
+    contract_governance: 4.5
+    access_clarity: 52.6
   agent_readiness:
-    score: 49.8
+    score: 30.4
     band: agent-ready
-    band_gated_from: agent-native
     dimensions:
       spec_presence: true
       agentic_access: derived
-      mcp_server: derived
-      auth_clarity: true
+      reversibility_documented: false
+      mcp_server: false
+      auth_clarity: bearer
       idempotency: false
       error_semantics: documented
-      openapi_examples: verified
+      openapi_examples: partial
       rate_limit_signal: documented
       event_surface_described: true
       agent_skills: derived
@@ -34,6 +36,10 @@ kin_score:
       consent_identity: false
       agent_card: false
       dry_run_mode: false
+      delegated_identity: false
+      protected_resource_metadata: false
+      dynamic_client_registration: false
+      agentic_commerce: false
   regulatory:
     applies: true
     regime: Government & Public Sector
@@ -46,7 +52,7 @@ kin_score:
     agentic_access: derived
     conformance: derived
     contracts:
-      total: 4
+      total: 19
       derived: 0
       coverage: 0.0
-      callable: 75.0
+      callable: 94.7
