@@ -20,7 +20,7 @@ paths:
       tags:
       - IFR Planning Charts
       summary: Get IFR planning download link by edition and format
-      description: TIFF formatted files are geo-referenced while PDF format is not geo-referenced.  The specific chart returned by this operation is the IFR PLANNING chart found on the FAA public web site at FAA Home > Air Traffic > Flight Information > Aeronautical Information Services > Digital Products > IFR Charts and DERS > Planning tab
+      description: TIFF formatted files are geo-referenced while PDF format is not geo-referenced. The specific chart returned by this operation is the IFR PLANNING chart found on the FAA public web site at FAA Home > Air Traffic > Flight Information > Aeronautical Information Services > Digital Products > IFR Charts and DERS > Planning tab
       operationId: getIfrPlanningChart
       parameters:
       - name: edition

@@ -20,7 +20,7 @@ paths:
       tags:
       - IFR Enroute Charts
       summary: Get IFR Enroute Charts download link by edition, format, geoname, and seriesType
-      description: TIFF formatted files are geo-referenced while PDF format is not geo-referenced. Geoname is either US, Alaska, Pacific, or Caribbean, depending on the desired chart. A list of available charts by format, geoname, and series type can be found on the FAA public web site at FAA Home > Air Traffic > Flight Information > Aeronautical Information Services  > Digital Products > IFR Charts and DERS > Low, High Areas tab.  The valid values for seriesType are Low, High, or Area.
+      description: TIFF formatted files are geo-referenced while PDF format is not geo-referenced. Geoname is either US, Alaska, Pacific, or Caribbean, depending on the desired chart. A list of available charts by format, geoname, and series type can be found on the FAA public web site at FAA Home > Air Traffic > Flight Information > Aeronautical Information Services > Digital Products > IFR Charts and DERS > Low, High Areas tab. The valid values for seriesType are Low, High, or Area.
       operationId: getIFREnrouteRelease
       parameters:
       - name: edition
@@ -79,7 +79,7 @@ paths:
     get:
       tags:
       - IFR Enroute Charts
-      summary: Get IFR Enroute Charts edition date and edition number by edition type of current or next
+      summary: Get IFR Enroute Charts edition date and edition number by edition type of…
       operationId: getIFREnrouteEdition
       parameters:
       - name: edition

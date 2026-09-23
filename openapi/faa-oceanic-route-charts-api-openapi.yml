@@ -20,7 +20,7 @@ paths:
       tags:
       - Oceanic Route Charts
       summary: Get Oceanic Route Chart download link by edition, format, and geoname
-      description: 'TIFF formatted files are geo-referenced while PDF format is not geo-referenced. Geoname is a geographic area for which the chart is requested. Valid geographic names are Pacific (PORC), North Atlantic (NARC), and Wester Atlantic (WATRS) '
+      description: TIFF formatted files are geo-referenced while PDF format is not geo-referenced. Geoname is a geographic area for which the chart is requested. Valid geographic names are Pacific (PORC), North Atlantic (NARC), and Wester Atlantic (WATRS)
       operationId: getOceanicRouteChart
       parameters:
       - name: edition

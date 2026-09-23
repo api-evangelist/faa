@@ -95,7 +95,7 @@ paths:
     get:
       tags:
       - Terminal Area Charts
-      summary: Get Terminal Area Chart edition date and edition number by edition type and geoname
+      summary: Get Terminal Area Chart edition date and edition number by edition type and…
       description: Geoname is a city for which the chart is requested. Valid cities can be found on the FAA public web site at FAA Home > Air Traffic > Flight Information > Aeronautical Information Services > Digital Products > VFR Charts > Terminal Area Chart tab
       operationId: getTACEdition
       parameters:

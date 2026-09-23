@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Aeronautic Product Release Digital Enroute Supplement (DERS) API
+  title: Aeronautic Product Release Digital Enroute Supplement…
   description: FAA Aeronautic chart publication download API
   contact:
     name: Aeronautic Product Release API (APRA)
@@ -19,7 +19,7 @@ paths:
     get:
       tags:
       - Digital Enroute Supplement (DERS)
-      summary: Get Digital Enroute Supplement download link.
+      summary: Get Digital Enroute Supplement download link
       description: The Digital Enroute Supplement release has been deprecated and is no longer published by the FAA..
       operationId: getDERSRelease
       parameters:
@@ -41,7 +41,7 @@ paths:
     get:
       tags:
       - Digital Enroute Supplement (DERS)
-      summary: Get Digital Enroute Supplement edition information.
+      summary: Get Digital Enroute Supplement edition information
       description: The Digital Enroute Supplement release has been deprecated and is no longer published by the FAA.
       operationId: getDERSEdition
       parameters:

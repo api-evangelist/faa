@@ -144,6 +144,10 @@ paths:
                 errorMessage: error message, if any
       tags:
       - Axhsubmitdiscrepancies
+      summary: Create axhsubmitdiscrepancies
+      x-summary-source: derived
+      operationId: postAxhsubmitdiscrepancies
+      x-operation-id-source: derived
 components:
   securitySchemes:
     apiKey:

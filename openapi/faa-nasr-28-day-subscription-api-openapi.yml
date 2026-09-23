@@ -48,7 +48,7 @@ paths:
     get:
       tags:
       - NASR 28 Day Subscription
-      summary: Get the National Flight Data Center NASR 28 day subscription file edition information
+      summary: Get the National Flight Data Center NASR 28 day subscription file edition…
       operationId: getNASREdition
       parameters:
       - name: edition

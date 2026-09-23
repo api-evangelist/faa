@@ -44,6 +44,10 @@ paths:
                 example: success
       tags:
       - AirCarrierApi
+      summary: Replace air carrier api pilot
+      x-summary-source: derived
+      operationId: putAirCarrierApiPilot
+      x-operation-id-source: derived
     post:
       description: add new records pilot record database Air carrier Api
       parameters:
@@ -75,6 +79,10 @@ paths:
                 example: success
       tags:
       - AirCarrierApi
+      summary: Create air carrier api pilot
+      x-summary-source: derived
+      operationId: postAirCarrierApiPilot
+      x-operation-id-source: derived
     delete:
       description: performs delete on pilot record database air carrier api
       parameters:
@@ -101,6 +109,10 @@ paths:
                 example: success
       tags:
       - AirCarrierApi
+      summary: Delete air carrier api pilot
+      x-summary-source: derived
+      operationId: deleteAirCarrierApiPilot
+      x-operation-id-source: derived
   /AirCarrierApi/PilotDataTracking:
     put:
       description: update existing pilot tracking record database Air carrier Api
@@ -238,6 +250,10 @@ paths:
                       NDRRecords: null
       tags:
       - AirCarrierApi
+      summary: Replace air carrier api pilot data tracking
+      x-summary-source: derived
+      operationId: putAirCarrierApiPilotDataTracking
+      x-operation-id-source: derived
     post:
       description: query pilot tracking record database air carrier api details
       parameters:
@@ -374,6 +390,10 @@ paths:
                       NDRRecords: null
       tags:
       - AirCarrierApi
+      summary: Create air carrier api pilot data tracking
+      x-summary-source: derived
+      operationId: postAirCarrierApiPilotDataTracking
+      x-operation-id-source: derived
     delete:
       description: performs delete on pilot tracking record database air carrier api
       parameters:
@@ -400,6 +420,10 @@ paths:
                 example: success
       tags:
       - AirCarrierApi
+      summary: Delete air carrier api pilot data tracking
+      x-summary-source: derived
+      operationId: deleteAirCarrierApiPilotDataTracking
+      x-operation-id-source: derived
   /AirCarrierApi/AcPilotDataSearchRequest:
     post:
       description: add new records pilot record database Air carrier Api
@@ -432,6 +456,10 @@ paths:
                 example: success
       tags:
       - AirCarrierApi
+      summary: Create air carrier api ac pilot data search request
+      x-summary-source: derived
+      operationId: postAirCarrierApiAcPilotDataSearchRequest
+      x-operation-id-source: derived
   /AirCarrierApi/AcPilotDataSearchResponse:
     post:
       description: add new records pilot record database Air carrier Api
@@ -464,12 +492,16 @@ paths:
                 example: success
       tags:
       - AirCarrierApi
+      summary: Create air carrier api ac pilot data search response
+      x-summary-source: derived
+      operationId: postAirCarrierApiAcPilotDataSearchResponse
+      x-operation-id-source: derived
 components:
   schemas:
-    pilotData_example: {}
-    pilotDataSearchResponse_example: {}
     pilotDataSearch_example: {}
+    pilotDataSearchResponse_example: {}
     trackingData_example: {}
+    pilotData_example: {}
 x-amf-baseUriParameters:
   domain:
     displayName: Domain name (By enviornment)

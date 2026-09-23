@@ -19,7 +19,7 @@ paths:
     get:
       tags:
       - 'Supplement Chart '
-      summary: Get Supplement chart download information by requesting an edition with a valid US volume.
+      summary: Get Supplement chart download information by requesting an edition with a valid…
       description: The Supplement chart is distributed in two formats - zip and pdf. The US complete set is returned as a ZIP file while all other volumes consist of individual PDF files.Requests for charts by volume other than US complete set returns a list of download URLs which can be quite extensive.
       operationId: getSupplementRelease
       parameters:
@@ -64,7 +64,7 @@ paths:
     get:
       tags:
       - 'Supplement Chart '
-      summary: Get Supplement chart edition information by requesting an edition and volume.
+      summary: Get Supplement chart edition information by requesting an edition and volume
       operationId: getSupplementEdition
       parameters:
       - name: edition

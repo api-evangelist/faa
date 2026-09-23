@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Aeronautic Product Release Daily Digital Obstacle File (DDOF) API
+  title: Aeronautic Product Release Daily Digital Obstacle File…
   description: FAA Aeronautic chart publication download API
   contact:
     name: Aeronautic Product Release API (APRA)
@@ -19,7 +19,7 @@ paths:
     get:
       tags:
       - Daily Digital Obstacle File (DDOF)
-      summary: Get Daily Digital Obstacle File download link.
+      summary: Get Daily Digital Obstacle File download link
       description: The Daily Digital Obstacle File release is distributed as a zip file containing the latest obstacle information from the FAA database.
       operationId: getDDOFRelease
       responses:
@@ -39,7 +39,7 @@ paths:
     get:
       tags:
       - Daily Digital Obstacle File (DDOF)
-      summary: Get Daily Digital Obstacle File edition information.
+      summary: Get Daily Digital Obstacle File edition information
       description: The Daily Digital Obstacle File is released by the FAA on a daily basis.
       operationId: getDDOFEdition
       responses:

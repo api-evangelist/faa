@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Aeronautic Product Release Gulf of Mexico IFR Enroute Chart API
+  title: Aeronautic Product Release Gulf of Mexico IFR Enroute Chart…
   description: FAA Aeronautic chart publication download API
   contact:
     name: Aeronautic Product Release API (APRA)
@@ -19,7 +19,7 @@ paths:
     get:
       tags:
       - Gulf of Mexico IFR Enroute Chart
-      summary: Get Gulf of Mexico IFR enroute chart edition date, edition number, and product download URL
+      summary: Get Gulf of Mexico IFR enroute chart edition date, edition number, and product…
       description: The Gulf of Mexico IFR enroute chart is distributed as a zip file that contains multiple PDF charts.
       operationId: getGOMRelease
       parameters:

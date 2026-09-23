@@ -112,7 +112,7 @@ paths:
     get:
       tags:
       - VFR Helicopter Route Chart
-      summary: 'Get VFR GulfCoast Route Chart edition date and edition number by edition type of ''current'' or ''next'' '
+      summary: Get VFR GulfCoast Route Chart edition date and edition number by edition type…
       operationId: getGulfCoastEdition
       parameters:
       - name: edition
@@ -141,7 +141,7 @@ paths:
     get:
       tags:
       - VFR Helicopter Route Chart
-      summary: Get VFR Helicopter Route Chart edition date and edition number by edition type of current or next and geoname
+      summary: Get VFR Helicopter Route Chart edition date and edition number by edition type…
       operationId: getHelicopterEdition
       parameters:
       - name: edition

@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Aeronautic Product Release Coded Instrument Flight Procedures (CIFP) API
+  title: Aeronautic Product Release Coded Instrument Flight…
   description: FAA Aeronautic chart publication download API
   contact:
     name: Aeronautic Product Release API (APRA)
@@ -19,7 +19,7 @@ paths:
     get:
       tags:
       - Coded Instrument Flight Procedures (CIFP)
-      summary: Get CIFP chart download link by edition type of current or next. If edition is left blank or null, the default edition of current is used.
+      summary: Get CIFP chart download link by edition type of current or next.
       description: The CIFP release is distributed as a zip file containing charts and verification software.
       operationId: getCIFPRelease
       parameters:
@@ -49,7 +49,7 @@ paths:
     get:
       tags:
       - Coded Instrument Flight Procedures (CIFP)
-      summary: Get CIFP edition date and edition number by edition type of current or next. If the edition is left blank or null, the default edition of current is used.
+      summary: Get CIFP edition date and edition number by edition type of current or next.
       operationId: getCIFPEdition
       parameters:
       - name: edition
