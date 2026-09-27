@@ -33,7 +33,6 @@
   "notes": [
     "sourced from openapi/_original/ (4 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "faa-aeronautic-product-release-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "faa-aeronautic-product-release-api-openapi.yml: declared missing tag: Supplement Chart ",
     "faa-air-carrier-prd-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "faa-air-carrier-prd-api-openapi.yml: tagged paths PUT /AirCarrierApi/Pilot -> AirCarrierApi",
     "faa-air-carrier-prd-api-openapi.yml: tagged paths POST /AirCarrierApi/Pilot -> AirCarrierApi",

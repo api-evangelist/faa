@@ -13,12 +13,12 @@ info:
 servers:
 - url: https://external-api.faa.gov/apra
 tags:
-- name: 'Supplement Chart '
+- name: Supplement Chart
 paths:
   /supplement/chart:
     get:
       tags:
-      - 'Supplement Chart '
+      - Supplement Chart
       summary: Get Supplement chart download information by requesting an edition with a valid…
       description: The Supplement chart is distributed in two formats - zip and pdf. The US complete set is returned as a ZIP file while all other volumes consist of individual PDF files.Requests for charts by volume other than US complete set returns a list of download URLs which can be quite extensive.
       operationId: getSupplementRelease
@@ -63,7 +63,7 @@ paths:
   /supplement/info:
     get:
       tags:
-      - 'Supplement Chart '
+      - Supplement Chart
       summary: Get Supplement chart edition information by requesting an edition and volume
       operationId: getSupplementEdition
       parameters:
