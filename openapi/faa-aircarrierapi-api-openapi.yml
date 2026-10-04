@@ -498,9 +498,9 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    pilotDataSearchResponse_example: {}
     trackingData_example: {}
     pilotDataSearch_example: {}
-    pilotDataSearchResponse_example: {}
     pilotData_example: {}
 x-amf-baseUriParameters:
   domain:
