@@ -33,6 +33,9 @@ accessModel:
   generated: '2026-09-03'
   method: derived
 image: https://www.faa.gov/themes/custom/faa/favicon.png
+x-docs-platform: redocly
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
 tags:
 - Travel
 - United States
