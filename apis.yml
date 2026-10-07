@@ -636,6 +636,8 @@ apis:
   - type: Documentation
     url: https://www.faa.gov/air_traffic/technology/swim
 common:
+- type: Pricing
+  url: https://apim-api.apic4e.faa.gov/portal/environments/DEFAULT/apis/{id}/plans
 - type: CapabilityMap
   url: capabilities/faa-capability-edges.yml
   name: Federal Aviation Administration Business Capability Map
