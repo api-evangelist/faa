@@ -115,3 +115,40 @@ not_covered_by_a_portal_plan:
   reason: Available only through FAA-Approved UAS Service Suppliers, never directly.
 - api: CKAN data catalog, AIS and UDDS ArcGIS Open Data hubs, TFR list, NAS status feed
   reason: Open platforms outside the API gateway; no plan and no credential.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  units: []
+  plans:
+  - name: asws keyless plan
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: default keyless plan
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: API Key Plan
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: SAS APIKey Plan
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: DMS Dev Key Plan
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
