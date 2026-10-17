@@ -67,10 +67,18 @@ paths:
           content: {}
 components:
   schemas:
-    GroundStop:
+    ArriveDepartDelays:
+      type: object
+      properties:
+        ArriveDepartDelay:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArriveDepartDelay'
+    ArriveDepartDelay:
       required:
       - airport
-      - endTime
+      - maxTime
+      - minTime
       - reason
       type: object
       properties:
@@ -78,16 +86,30 @@ components:
           type: string
           xml:
             name: airport
-        endTime:
+        maxTime:
           type: string
           xml:
-            name: endTime
+            name: maxTime
         reason:
           type: string
           xml:
             name: reason
+        minTime:
+          type: string
+          xml:
+            name: minTime
       xml:
-        name: GroundStop
+        name: ArriveDepartDelay
+    Weather:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+            properties: {}
+      xml:
+        name: Weather
     AirportStatus:
       required:
       - city
@@ -144,16 +166,34 @@ components:
           $ref: '#/components/schemas/Weather'
       xml:
         name: AirportStatus
-    Weather:
+    Closures:
       type: object
       properties:
-        content:
+        Closure:
           type: array
           items:
-            type: object
-            properties: {}
+            $ref: '#/components/schemas/Closure'
+    GroundStop:
+      required:
+      - airport
+      - endTime
+      - reason
+      type: object
+      properties:
+        airport:
+          type: string
+          xml:
+            name: airport
+        endTime:
+          type: string
+          xml:
+            name: endTime
+        reason:
+          type: string
+          xml:
+            name: reason
       xml:
-        name: Weather
+        name: GroundStop
     GroundDelays:
       type: object
       properties:
@@ -161,6 +201,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroundDelay'
+    Closure:
+      required:
+      - airport
+      - reason
+      - reopen
+      type: object
+      properties:
+        airport:
+          type: string
+          xml:
+            name: airport
+        reason:
+          type: string
+          xml:
+            name: reason
+        reopen:
+          type: string
+          xml:
+            name: reopen
+      xml:
+        name: closure
     Status:
       required:
       - avgDelay
@@ -212,74 +273,6 @@ components:
             name: EndTime
       xml:
         name: Status
-    ArriveDepartDelay:
-      required:
-      - airport
-      - maxTime
-      - minTime
-      - reason
-      type: object
-      properties:
-        airport:
-          type: string
-          xml:
-            name: airport
-        maxTime:
-          type: string
-          xml:
-            name: maxTime
-        reason:
-          type: string
-          xml:
-            name: reason
-        minTime:
-          type: string
-          xml:
-            name: minTime
-      xml:
-        name: ArriveDepartDelay
-    Closures:
-      type: object
-      properties:
-        Closure:
-          type: array
-          items:
-            $ref: '#/components/schemas/Closure'
-    GroundStops:
-      type: object
-      properties:
-        GroundStop:
-          type: array
-          items:
-            $ref: '#/components/schemas/GroundStop'
-    Closure:
-      required:
-      - airport
-      - reason
-      - reopen
-      type: object
-      properties:
-        airport:
-          type: string
-          xml:
-            name: airport
-        reason:
-          type: string
-          xml:
-            name: reason
-        reopen:
-          type: string
-          xml:
-            name: reopen
-      xml:
-        name: closure
-    ArriveDepartDelays:
-      type: object
-      properties:
-        ArriveDepartDelay:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArriveDepartDelay'
     Delays:
       type: object
       properties:
@@ -301,6 +294,13 @@ components:
             $ref: '#/components/schemas/Closures'
       xml:
         name: Delays
+    GroundStops:
+      type: object
+      properties:
+        GroundStop:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroundStop'
     GroundDelay:
       required:
       - airport

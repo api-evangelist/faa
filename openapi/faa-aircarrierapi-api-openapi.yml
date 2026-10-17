@@ -498,10 +498,10 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    pilotDataSearchResponse_example: {}
     trackingData_example: {}
     pilotDataSearch_example: {}
     pilotData_example: {}
+    pilotDataSearchResponse_example: {}
 x-amf-baseUriParameters:
   domain:
     displayName: Domain name (By enviornment)
