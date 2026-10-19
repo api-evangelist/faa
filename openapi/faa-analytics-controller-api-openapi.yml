@@ -1,0 +1,29 @@
+openapi: 3.2.0
+info:
+  title: Faa Analytics Controller API
+servers:
+- url: https://nasstatus.faa.gov
+  description: Generated server url
+tags:
+- name: analytics-controller
+paths:
+  /api/metric-log:
+    post:
+      tags:
+      - analytics-controller
+      operationId: metricLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Metric log
+      x-summary-source: derived

@@ -1,0 +1,322 @@
+openapi: 3.2.0
+info:
+  title: Faa Airport Events Controller API
+servers:
+- url: https://nasstatus.faa.gov
+  description: Generated server url
+tags:
+- name: airport-events-controller
+paths:
+  /api/airport-events:
+    get:
+      tags:
+      - airport-events-controller
+      operationId: getAirportEvent_1
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AirportEvent'
+      summary: Get airport event 1
+      x-summary-source: derived
+components:
+  schemas:
+    AirportEvent:
+      type: object
+      properties:
+        airportId:
+          type: string
+        groundStop:
+          $ref: '#/components/schemas/GroundStopEntity'
+        groundDelay:
+          $ref: '#/components/schemas/GroundDelayProgramEntity'
+        airportClosure:
+          $ref: '#/components/schemas/AirportClosureEntity'
+        freeForm:
+          $ref: '#/components/schemas/FreeFormEntity'
+        arrivalDelay:
+          $ref: '#/components/schemas/ArrivalDepartureDelay'
+        departureDelay:
+          $ref: '#/components/schemas/ArrivalDepartureDelay'
+        airportConfig:
+          $ref: '#/components/schemas/AirportConfigEntity'
+        deicing:
+          $ref: '#/components/schemas/DeicingEntity'
+        airportLongName:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string
+    DasDelayBlock:
+      type: object
+      properties:
+        delayTimeAmount:
+          type: string
+          format: date-time
+        dasDelay:
+          type: array
+          items:
+            $ref: '#/components/schemas/DasDelay'
+    GroundDelayProgramEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        airportId:
+          type: string
+        sourceTimeStamp:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        impactingCondition:
+          type: string
+        avgDelay:
+          type: number
+          format: float
+        maxDelay:
+          type: integer
+          format: int32
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        center:
+          type: string
+        advisoryUrl:
+          type: string
+        departureScope:
+          type: number
+          format: double
+        includedFacilities:
+          type: array
+          items:
+            type: string
+        fuelFlowAdvisoryDelayTime:
+          $ref: '#/components/schemas/FuelFlowAdvisoryDelayTimeEntity'
+        includedFlights:
+          type: string
+        fadtParamType:
+          type: string
+          enum:
+          - AFP
+          - GDP
+          - GS
+          - BLKT
+          - COMP
+        gsCancelReceivedTs:
+          type: string
+          format: date-time
+        gsCancelSourceTs:
+          type: string
+          format: date-time
+        compression:
+          type: boolean
+        blanket:
+          type: boolean
+    ArrivalDeparture:
+      type: object
+      properties:
+        type:
+          type: string
+        min:
+          type: string
+        max:
+          type: string
+        trend:
+          type: string
+    FreeFormEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        airportId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        simpleText:
+          type: string
+        text:
+          type: string
+        notamNumber:
+          type: integer
+          format: int32
+        issuedDate:
+          type: string
+          format: date-time
+    FuelFlowAdvisoryDelayTimeEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        controlElement:
+          type: string
+        delayProgramType:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        dasDelays:
+          $ref: '#/components/schemas/DasDelayBlock'
+        sourceTimeStamp:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    DeicingEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        airportId:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        eventTime:
+          type: string
+          format: date-time
+        expTime:
+          type: string
+          format: date-time
+    ArrivalDepartureDelay:
+      type: object
+      properties:
+        airportId:
+          type: string
+        reason:
+          type: string
+        arrivalDeparture:
+          $ref: '#/components/schemas/ArrivalDeparture'
+        updateTime:
+          type: string
+        averageDelay:
+          type: string
+        trend:
+          type: string
+    GroundStopEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        airportId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        sourceTimeStamp:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        impactingCondition:
+          type: string
+        programExpirationTime:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        center:
+          type: string
+        advisoryUrl:
+          type: string
+        includedFacilities:
+          type: array
+          items:
+            type: string
+        includedFlights:
+          type: string
+        probabilityOfExtension:
+          type: string
+    AirportConfigEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        airportId:
+          type: string
+        arrivalRunwayConfig:
+          type: string
+        departureRunwayConfig:
+          type: string
+        arrivalRate:
+          type: integer
+          format: int32
+        sourceTimeStamp:
+          type: string
+          format: date-time
+    AirportClosureEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        airportId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        simpleText:
+          type: string
+        text:
+          type: string
+        notamNumber:
+          type: integer
+          format: int32
+        issuedDate:
+          type: string
+          format: date-time
+    DasDelay:
+      type: object
+      properties:
+        delay:
+          type: integer
+        seq:
+          type: integer

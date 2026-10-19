@@ -1,0 +1,23 @@
+openapi: 3.2.0
+info:
+  title: Faa Reset Db Controller API
+servers:
+- url: https://nasstatus.faa.gov
+  description: Generated server url
+tags:
+- name: reset-db-controller
+paths:
+  /api/fixtures/reset-db:
+    get:
+      tags:
+      - reset-db-controller
+      operationId: resetDb
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      summary: Reset db
+      x-summary-source: derived

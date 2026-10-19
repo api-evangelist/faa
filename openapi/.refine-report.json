@@ -4,6 +4,7 @@
     "_original/faa-aeronautic-product-release-api-openapi.yml",
     "_original/faa-air-carrier-prd-api-openapi.yml",
     "_original/faa-airport-status-web-service-openapi.yml",
+    "_original/faa-openapi.json",
     "_original/faa-safety-assurance-system-api-openapi.yml"
   ],
   "outputs": [
@@ -25,13 +26,21 @@
     "faa-vfr-helicopter-route-chart-api-openapi.yml",
     "faa-aircarrierapi-api-openapi.yml",
     "faa-faa-airport-status-service-api-openapi.yml",
+    "faa-airport-events-controller-api-openapi.yml",
+    "faa-airport-status-information-controller-api-openapi.yml",
+    "faa-analytics-controller-api-openapi.yml",
+    "faa-artcc-boundary-controller-api-openapi.yml",
+    "faa-operations-plan-controller-api-openapi.yml",
+    "faa-reset-db-controller-api-openapi.yml",
     "faa-axhsubmitdiscrepancies-api-openapi.yml"
   ],
   "archived": [],
-  "errors": [],
+  "errors": [
+    "faa-openapi.json: missing info object"
+  ],
   "warnings": [],
   "notes": [
-    "sourced from openapi/_original/ (4 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sourced from openapi/_original/ (5 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "faa-aeronautic-product-release-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
     "faa-air-carrier-prd-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "faa-air-carrier-prd-api-openapi.yml: tagged paths PUT /AirCarrierApi/Pilot -> AirCarrierApi",
@@ -44,10 +53,17 @@
     "faa-air-carrier-prd-api-openapi.yml: tagged paths POST /AirCarrierApi/AcPilotDataSearchResponse -> AirCarrierApi",
     "faa-air-carrier-prd-api-openapi.yml: declared missing tag: AirCarrierApi",
     "faa-airport-status-web-service-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "faa-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "faa-openapi.json: declared missing tag: airport-events-controller",
+    "faa-openapi.json: declared missing tag: airport-status-information-controller",
+    "faa-openapi.json: declared missing tag: analytics-controller",
+    "faa-openapi.json: declared missing tag: artcc-boundary-controller",
+    "faa-openapi.json: declared missing tag: operations-plan-controller",
+    "faa-openapi.json: declared missing tag: reset-db-controller",
     "faa-safety-assurance-system-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "faa-safety-assurance-system-api-openapi.yml: tagged paths POST /axhsubmitdiscrepancies -> Axhsubmitdiscrepancies",
     "faa-safety-assurance-system-api-openapi.yml: declared missing tag: Axhsubmitdiscrepancies",
-    "apis.yml register: already-registered"
+    "apis.yml register: written (+6 apis, 41 total)"
   ],
   "skipped": [
     "faa-aircarrierapi-api-openapi.yml: previously refined output, superseded by openapi/_original/",

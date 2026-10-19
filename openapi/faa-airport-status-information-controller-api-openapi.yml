@@ -1,0 +1,171 @@
+openapi: 3.2.0
+info:
+  title: Faa Airport Status Information Controller API
+servers:
+- url: https://nasstatus.faa.gov
+  description: Generated server url
+tags:
+- name: airport-status-information-controller
+paths:
+  /api/airport-status-information:
+    get:
+      tags:
+      - airport-status-information-controller
+      operationId: getAirportStatusInformation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AIRPORT_STATUS_INFORMATION'
+      summary: Get airport status information
+      x-summary-source: derived
+components:
+  schemas:
+    Airspace_Flow:
+      type: object
+      properties:
+        CTL_Element:
+          type: string
+        Reason:
+          type: string
+        AFP_StartTime:
+          type: string
+        AFP_EndTime:
+          type: string
+        FCA_StartDateTime:
+          type: string
+          format: date-time
+        FCA_EndDateTime:
+          type: string
+          format: date-time
+        Avg:
+          type: string
+        Floor:
+          type: string
+        Ceiling:
+          type: string
+        Circle:
+          $ref: '#/components/schemas/Circle'
+        Line:
+          $ref: '#/components/schemas/Line'
+        Polygon:
+          $ref: '#/components/schemas/Polygon'
+    Airport:
+      type: object
+      properties:
+        ARPT:
+          type: string
+        Reason:
+          type: string
+        Start:
+          type: string
+        Reopen:
+          type: string
+    Ground_Delay:
+      type: object
+      properties:
+        ARPT:
+          type: string
+        Reason:
+          type: string
+        Avg:
+          type: string
+        Max:
+          type: string
+    Point:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+    Polygon:
+      type: object
+      properties:
+        pointsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point'
+    AIRPORT_STATUS_INFORMATION:
+      type: object
+      properties:
+        Update_Time:
+          type: string
+        Dtd_File:
+          type: string
+        Delay_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/Delay_type'
+    ArrivalDeparture:
+      type: object
+      properties:
+        type:
+          type: string
+        min:
+          type: string
+        max:
+          type: string
+        trend:
+          type: string
+    AirportDelayInfo:
+      type: object
+      properties:
+        airportId:
+          type: string
+        reason:
+          type: string
+        arrivalDeparture:
+          $ref: '#/components/schemas/ArrivalDeparture'
+    Delay_type:
+      type: object
+      properties:
+        airportClosureList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Airport'
+        groundStopList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Program'
+        groundDelayList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ground_Delay'
+        airspaceFlowList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Airspace_Flow'
+        airportDelayInfoList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AirportDelayInfo'
+        Name:
+          type: string
+    Circle:
+      type: object
+      properties:
+        radius:
+          type: string
+        Center:
+          $ref: '#/components/schemas/Point'
+    Line:
+      type: object
+      properties:
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point'
+    Program:
+      type: object
+      properties:
+        ARPT:
+          type: string
+        Reason:
+          type: string
+        End_Time:
+          type: string

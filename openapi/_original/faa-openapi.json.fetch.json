@@ -1,0 +1,12 @@
+{
+ "url": "https://nasstatus.faa.gov/v3/api-docs",
+ "final": "https://nasstatus.faa.gov/v3/api-docs",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 9603,
+ "sha256": "861b96026944224cbeb6151a9398cd9216d649c26a7e3f01264b0c8b42bab2f0",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

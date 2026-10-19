@@ -1,0 +1,45 @@
+openapi: 3.2.0
+info:
+  title: Faa Operations Plan Controller API
+servers:
+- url: https://nasstatus.faa.gov
+  description: Generated server url
+tags:
+- name: operations-plan-controller
+paths:
+  /api/operations-plan:
+    get:
+      tags:
+      - operations-plan-controller
+      operationId: getOperationsPlan
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OperationsPlan'
+      summary: Get operations plan
+      x-summary-source: derived
+components:
+  schemas:
+    OperationsPlanEvent:
+      type: object
+      properties:
+        time:
+          type: string
+        event:
+          type: string
+    OperationsPlan:
+      type: object
+      properties:
+        link:
+          type: string
+        terminalPlanned:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperationsPlanEvent'
+        enRoutePlanned:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperationsPlanEvent'
