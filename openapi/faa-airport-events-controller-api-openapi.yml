@@ -320,3 +320,9 @@ components:
           type: integer
         seq:
           type: integer
+x-provenance:
+  method: harvested
+  publisher: Federal Aviation Administration
+  source: https://nasstatus.faa.gov/v3/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
